@@ -8,5 +8,9 @@
  *
  * Created Spring, 2013
  */
+void goForward(){				//Function gets called as part of the predestined movement
+	digitalWrite(RIGHT_MOTOR, STATE);	//Writes the current state to the RIGHT_MOTOR
+	digitalWrite(LEFT_MOTOR, STATE);	//Writes the current state to the LEFT_MOTOR
+}
 
 //END file forward.c

@@ -8,5 +8,8 @@
  *
  * Created Spring, 2013
  */
-
+void goLeft(){					//Function gets called as part of the predestined movement
+	digitalWrite(RIGHT_MOTOR, STATE);	//Writes the current state to the RIGHT_MOTOR
+	digitalWrite(LEFT_MOTOR, !STATE);	//Writes the opposite state to the LEFT_MOTOR (disabling the motor)
+}
 //END file left.c
