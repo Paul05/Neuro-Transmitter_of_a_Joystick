@@ -8,18 +8,16 @@
  *
  * Created Spring, 2013
  *
-	ORIGINAL AUTHOR: Darryl Monroe
-	EDITOR: Michael Berg
 	DESCRIPTION: This code is designed to have an arduino go in a pattern of *Forward->Left->Right* and it will continue
 			this pattern every 5 seconds.
-	VERSION: 1.0.2
+	VERSION: 1.0.4
 	DATE: Friday, February 15, 2013
 */
 
 const int BUTTON = 12;				//States that the BUTTON is connected to pin 12.
 const int LEFT_MOTOR = 7;			//States that the left MOTOR is connected to pin 7.
-const int RIGHT_MOTOR = 4;			//States that the right MOTOR is connected to pin 4.
-const int TOGGLE_SWITCH = 8;        //Current default value of the toggle switch being pin 8.
+const int RIGHT_MOTOR = 8;			//States that the right MOTOR is connected to pin 4.
+const int TOGGLE_SWITCH = 4;        //Current default value of the toggle switch being pin 8.
 const int INTERRUPT = 0;			//Uses '0' as the interrupt number, which is set up with pin 2.
 const int INTERRUPT_TWO = 1;        //Uses '1' as the interrupt number, which is set up with pin 3.
 volatile int STATE = LOW;			//Gives the variable STATE which will change between HIGH and LOW allowing for movement.
