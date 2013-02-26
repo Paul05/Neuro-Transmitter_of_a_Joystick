@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<project name="Neuro-Transmitter of a Joystick Control Normalization Algorithm"
+         default="targets" basedir="."
+         xmlns:dn="antlib:org.apache.ant.dotnet"
+         xmlns="antlib:org.apache.tools.ant"
+		 xmlns:cpptasks="antlib:net.sf.antcontrib.cpptasks">       
+   <property file="build.properties"/>
+   <property environment="env"/>
+   <property name="user" value="${env.USERNAME}"/>
+
+   <target name="targets">
+      <echo message="Targets are clean, compile, execute and targets"/>
+	  <echo message="Note: need cpptasks jar in ant lib folder as well as env vars set for C compiler!"/>
+   </target>
+
+   <target name="clean">
+      <delete dir="${dist.dir}" failonerror="false"/>
+	  <delete dir="${build.dir}" />
+   </target>
+   
+   <target name="prepare">
+	  <mkdir dir="${dist.dir}" />
+	  <mkdir dir="${build.dir}"/> 
+   </target>
+
+   <taskdef resource="cpptasks.tasks"/>
+   <target name="compile" depends="prepare">
+	  <cpptasks:cc outtype="executable" subsystem="console" outfile="dist.dir" objdir="build.dir">
+			<fileset dir="src/" includes="*.c"/>
+	  </cpptasks:cc>
+   </target>
+    
+   <!--<cpptasks:compiler/> and <cpptasks:linker/>-->
+   <!-- target for java compile-->
+	
+	
+   <target name="execute" depends="compile">
+         <exec osfamily="windows"
+               executable="make">
+         </exec>
+         <exec osfamily="mac"
+               executable="./xcruncmd">
+         </exec>
+   </target>
+
+</project>
+
+
