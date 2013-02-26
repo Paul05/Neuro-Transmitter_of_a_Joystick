@@ -27,6 +27,10 @@ int main(int argc, char** argv)
 
     printf("\nGoodbye!\n\n");
 
+	printf("\n\nPlease press 'ENTER' to exit.\n\n\n");
+	fflush(stdout);
+	(void)getchar();
+	
     return (EXIT_SUCCESS);
 } //end main
 

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="Neuro-Transmitter of a Joystick Control Normalization Algorithm"
+<project name="Neuro-Transmitter of a Joystick Control Normalization Algorithm and Program"
          default="targets" basedir="."
          xmlns:dn="antlib:org.apache.ant.dotnet"
          xmlns="antlib:org.apache.tools.ant"
@@ -9,7 +9,7 @@
    <property name="user" value="${env.USERNAME}"/>
 
    <target name="targets">
-      <echo message="Targets are clean, compile, execute and targets"/>
+      <echo message="Targets are clean, build, execute and targets"/>
 	  <echo message="Note: need cpptasks jar in ant lib folder as well as env vars set for C compiler!"/>
    </target>
 
@@ -24,23 +24,18 @@
    </target>
 
    <taskdef resource="cpptasks.tasks"/>
-   <target name="compile" depends="prepare">
-	  <cpptasks:cc outtype="executable" subsystem="console" outfile="dist.dir" objdir="build.dir">
+   <target name="build" depends="prepare">
+	  <cpptasks:cc outtype="executable" subsystem="console" outfile="dist/NeuroControlProgram" objdir="build">
 			<fileset dir="src/" includes="*.c"/>
 	  </cpptasks:cc>
    </target>
     
    <!--<cpptasks:compiler/> and <cpptasks:linker/>-->
-   <!-- target for java compile-->
-	
-	
-   <target name="execute" depends="compile">
+   	
+   <target name="execute" depends="build">
          <exec osfamily="windows"
-               executable="make">
-         </exec>
-         <exec osfamily="mac"
-               executable="./xcruncmd">
-         </exec>
+               executable="./dist/NeuroControlProgram.exe">
+         </exec>    
    </target>
 
 </project>
