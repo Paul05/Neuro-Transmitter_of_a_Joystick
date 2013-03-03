@@ -4,7 +4,8 @@
  *         Frank Liu, Darryl Monroe, Michael Berg, Paul Spaude
  * Class: CST315 & CST316 ASU Polytechnic
  *
- * Purpose:
+ * Purpose: Using Windows OS, contains functions to communicate with a serial port
+ * which is intended to be an arduino connected via USB.
  *
  * Created Spring, 2013
  */
@@ -23,11 +24,10 @@ One to close the serial port when you are done.
  */
 
 
-void setupCommunication()
+int setupCommunication(const char portName[], const int portBaudRate)
 {
     HANDLE hDevice = CreateFile(L"COM2",GENERIC_READ | GENERIC_WRITE,FILE_SHARE_READ | FILE_SHARE_WRITE,NULL,OPEN_EXISTING,0,0);
 
-    char test[10] = "crap";
     if (hDevice !=INVALID_HANDLE_VALUE)
     {
         printf("Port opened! \n");
@@ -41,19 +41,19 @@ void setupCommunication()
 
         DWORD btsIO;
 
-        WriteFile(hDevice,test,strlen(test),&btsIO,NULL);
+      //  WriteFile(hDevice,test,strlen(test),&btsIO,NULL);
 
         CloseHandle(hDevice);
+
+        return 1;
+    }
+    else
+    {
+        printf("FAILED\n");
+        return 0;
     }
 
 
 }
 
-
-
-
-void usbSerialComm()
-{
-    printf("usbSerialComm\n");
-}
 //END file usbSerialComm.c

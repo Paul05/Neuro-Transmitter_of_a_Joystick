@@ -12,7 +12,7 @@
 #ifndef USBSERIALCOMM_H
 #define	USBSERIALCOMM_H
 
-void usbSerialComm();
+int usbSerialComm();
 
 #endif	/* USBSERIALCOMM_H */
 
