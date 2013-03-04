@@ -25,7 +25,7 @@
 
    <taskdef resource="cpptasks.tasks"/>
    <target name="build" depends="prepare">
-	  <cpptasks:cc outtype="executable" subsystem="console" outfile="dist/NeuroControlProgram" objdir="build">
+	  <cpptasks:cc outtype="executable" subsystem="console" outfile="dist/NeuroControlProgram" objdir="../build">
 			<fileset dir="src/" includes="*.c"/>
 	  </cpptasks:cc>
    </target>
