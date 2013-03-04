@@ -60,6 +60,31 @@ void exitMessage(void)
 
 }//end exitMessage
 
+/*
+ *This is the switch statement to send the signal to go left or right.
+ */
+void motor_func(char key){ 
+    switch (key) {
+            /*
+             * The commented out code below would only be uncommented if we
+             * plan to implement going forward/backward with mind instead of
+             * just left/right.
+             */
+//        case 'w':
+//            goForward();
+//            break;
+//        case 's': 
+//            goBack();
+//            break;
+        case 'a':
+            goLeft();
+            break;
+        case 'd':
+            goRight();
+            break;
+    }
+}
+
 
 
 /**
@@ -139,6 +164,7 @@ int main(int argc, char** argv)
 
     if (successFlag < 1)
     {
+        successFlag = closeCommunication();
         exitMessage();
         return(EXIT_SUCCESS);
     }
@@ -166,7 +192,8 @@ int main(int argc, char** argv)
             printf("\nUnexpected character or action found! Last char: %c. "
                     "Now Exiting!\n\n", emotivInput);
         }
-
+        
+        successFlag = closeCommunication();
         exitMessage();
         return (EXIT_SUCCESS);
         
