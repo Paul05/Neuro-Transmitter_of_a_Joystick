@@ -78,7 +78,7 @@ int setupCommunication(const char inPortName[], const int inPortBaudRate)
     }
     else
     {
-        printf("\n*Error opening serial port %c at rate %i! Communication not established. \n\n",
+        printf("\n*Error opening serial port %s at rate %i! Communication not established. \n\n",
                 inPortName,inPortBaudRate);
         return 0; //failure
     }
