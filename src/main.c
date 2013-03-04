@@ -111,7 +111,7 @@ int main(int argc, char** argv)
     } //end if else check cmd args or get user input
 
 
-    if (successFlag == -1 || successFlag == 0) //functions to get input from user failed or user wished to exit
+    if (successFlag < 1) //functions to get input from user failed or user wished to exit
     {
         exitMessage(); //exit message
         return(EXIT_FAILURE); //exit program with failure
@@ -119,17 +119,25 @@ int main(int argc, char** argv)
     else
     {
         printf("\nSetting up communication with Arduino on port: %s at rate %i... \n\n", portName, baudRate);
+       
+        successFlag = setupCommunication(portName, baudRate); //setup communications with arduino
+        
+        if (successFlag > 0) 
+        {
+            successFlag = testCommunication(); //test communications with arduino
+        }
 
-        //Setup Comm (Open port make sure all is ok)
-
-        //Test Comm  (Send something and recieve something)  char T for example
-
-        //Test Actual Movement (Wheelchair turns left then right for example, test functions etc.)
+        if (successFlag > 0)
+        {
+            sendIntToArduino(2);     //Test Actual Movement (Wheelchair turns left then right for example, test functions etc.)
+            //delay
+            sendIntToArduino(3);
+        }
         
     } //end if else check if inputs completed and setup communications/test communications
 
 
-    if (successFlag == -1 || successFlag == 0)
+    if (successFlag < 1)
     {
         exitMessage();
         return(EXIT_SUCCESS);
@@ -142,12 +150,14 @@ int main(int argc, char** argv)
         {
             emotivInput = getCharConsole(); //get input from console
 
+            printf("\n(REMOVE) Char recieved: %c. \n\n",emotivInput);
+
             //Switch Statement
 
-        } while( emotivInput != 'x' ); //end loop get input from console from emotiv device
+        } while( emotivInput != 'x' && emotivInput != 'X' ); //end loop get input from console from emotiv device
 
 
-        if (emotivInput == 'x')
+        if ( tolower(emotivInput) == 'x' )
         {
             printf("\nExit character found now exiting the program! \n\n");
         }
