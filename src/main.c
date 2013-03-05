@@ -179,6 +179,7 @@ int main(int argc, char** argv)
             printf("\n(REMOVE) Char recieved: %c. \n\n",emotivInput);
 
             //Switch Statement
+            motor_func(emotivInput);
 
         } while( emotivInput != 'x' && emotivInput != 'X' ); //end loop get input from console from emotiv device
 
