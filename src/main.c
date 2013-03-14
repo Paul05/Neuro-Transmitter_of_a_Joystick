@@ -1,28 +1,28 @@
-/* 
- * File:   main.c
- * Author: Neuro-Transmitter Group
- *         Frank Liu, Darryl Monroe, Michael Berg, Paul Spaude
- * Class: CST315 & CST316 ASU Polytechnic
- *
- * Inputs: Main takes two inputs the first is the name of the serial port the
- *    Arduino is connected to and the next is the baud rate for the connection/
- *    Standard baud rate is 9600. If not found on the cmd line, the program will
- *    ask the user to enter those values with more error checking.
- *
- * This program then sets up communication via serial to an arduino. The
- * connection may in fact be USB but this program uses serial as Arduino
- * uses USB but mimics a serial port and communication. If the tests complete
- * and communication works, then this program takes inputs from the keyboard
- * (wasd) or others depending on specifications.
- * It then sends that input to the Arduino after it normalizes the input
- * to provide a consistent and usable user experience for an Emotiv controlled
- * wheelchair. In essence the Emotiv program will use "keystrokes" to communicate
- * with the Arduino after normalization and the Arduino will convert the input
- * into usable turning and movement instructions which trip various relays on
- * an electric wheelchair.
- *
- * Created Spring, 2013
- */
+/*
+* File: main.c
+* Author: Neuro-Transmitter Group
+* Frank Liu, Darryl Monroe, Michael Berg, Paul Spaude
+* Class: CST315 & CST316 ASU Polytechnic
+*
+* Inputs: Main takes two inputs the first is the name of the serial port the
+* Arduino is connected to and the next is the baud rate for the connection/
+* Standard baud rate is 9600. If not found on the cmd line, the program will
+* ask the user to enter those values with more error checking.
+*
+* This program then sets up communication via serial to an arduino. The
+* connection may in fact be USB but this program uses serial as Arduino
+* uses USB but mimics a serial port and communication. If the tests complete
+* and communication works, then this program takes inputs from the keyboard
+* (wasd) or others depending on specifications.
+* It then sends that input to the Arduino after it normalizes the input
+* to provide a consistent and usable user experience for an Emotiv controlled
+* wheelchair. In essence the Emotiv program will use "keystrokes" to communicate
+* with the Arduino after normalization and the Arduino will convert the input
+* into usable turning and movement instructions which trip various relays on
+* an electric wheelchair.
+*
+* Created Spring, 2013
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,8 +34,8 @@
 
 
 /**
- * Welcome message function that displays a welcome message on the console.
- */
+* Welcome message function that displays a welcome message on the console.
+*/
 void welcomeMessage(void)
 {
     printf("Welcome to the 'Neuro-Trasmitter Of A Joystick' Group's "
@@ -45,36 +45,61 @@ void welcomeMessage(void)
 
 
 /**
- * Exit message function that displays exit message and keeps console open
- * until key is pressed on keyboard.
- *
- * Note: Is platform specific and uses getchar()!
- * 
- */
+* Exit message function that displays exit message and keeps console open
+* until key is pressed on keyboard.
+*
+* Note: Is platform specific and uses getchar()!
+*
+*/
 void exitMessage(void)
 {
     printf("\n\nGoodbye\n\n");
     printf("\n\nPlease press 'ENTER' to exit.\n\n\n");
-    fflush(stdout);     //need to flush stdout before using getchar
-    (void)getchar();    //keeps console open until user presses key on keyboard
+    fflush(stdout); //need to flush stdout before using getchar
+    (void)getchar(); //keeps console open until user presses key on keyboard
 
 }//end exitMessage
+
+/*
+*This is the switch statement to send the signal to go left or right.
+*/
+void motor_func(char key){
+    switch (key) {
+            /*
+* The commented out code below would only be uncommented if we
+* plan to implement going forward/backward with mind instead of
+* just left/right.
+*/
+// case 'w':
+// goForward();
+// break;
+// case 's':
+// goBack();
+// break;
+        case 'a':
+            goLeft();
+            break;
+        case 'd':
+            goRight();
+            break;
+    }
+}
 
 
 
 /**
- * This is the Main function that calls other functions and 'runs' the program.
- * It needs two arguments on the command line.
- * First is serial port name (string) and the next is the baud rate (integer -
- *   9600 is standard).
- * @param argc
- * @param argv
- * @return
- */
+* This is the Main function that calls other functions and 'runs' the program.
+* It needs two arguments on the command line.
+* First is serial port name (string) and the next is the baud rate (integer -
+* 9600 is standard).
+* @param argc
+* @param argv
+* @return
+*/
 int main(int argc, char** argv)
-{   
+{
     char portName[13];
-    int  baudRate = 0;
+    int baudRate = 0;
     int successFlag = 0;
     char emotivInput = '\0';
 
@@ -122,14 +147,14 @@ int main(int argc, char** argv)
        
         successFlag = setupCommunication(portName, baudRate); //setup communications with arduino
         
-        if (successFlag > 0) 
+        if (successFlag > 0)
         {
             successFlag = testCommunication(); //test communications with arduino
         }
 
         if (successFlag > 0)
         {
-            sendIntToArduino(2);     //Test Actual Movement (Wheelchair turns left then right for example, test functions etc.)
+            sendIntToArduino(2); //Test Actual Movement (Wheelchair turns left then right for example, test functions etc.)
             //delay
             sendIntToArduino(3);
         }
@@ -139,6 +164,7 @@ int main(int argc, char** argv)
 
     if (successFlag < 1)
     {
+        successFlag = closeCommunication();
         exitMessage();
         return(EXIT_SUCCESS);
     }
@@ -153,6 +179,7 @@ int main(int argc, char** argv)
             printf("\n(REMOVE) Char recieved: %c. \n\n",emotivInput);
 
             //Switch Statement
+            motor_func(emotivInput);
 
         } while( emotivInput != 'x' && emotivInput != 'X' ); //end loop get input from console from emotiv device
 
@@ -166,7 +193,8 @@ int main(int argc, char** argv)
             printf("\nUnexpected character or action found! Last char: %c. "
                     "Now Exiting!\n\n", emotivInput);
         }
-
+        
+        successFlag = closeCommunication();
         exitMessage();
         return (EXIT_SUCCESS);
         

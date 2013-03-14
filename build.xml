@@ -25,14 +25,14 @@
 	</target>   
 	
 	<target name="setUnix" if="isUnix">
-		<echo>Warning: This program is designed for windows! You can build but Arduino connection functionality will be lost!</echo>
+		<echo message="Warning: This program is designed for windows! You can build but Arduino connection functionality will be lost!"/>
 		<!-- Use special file for jenkins build, over time may actually put posix calls into that file -->
 		<move file="${src.dir}/usbSerialComm.c" tofile="${src.dir}/usbSerialComm.c.txt"/>
 		<move file="${src.dir}/usbSerialCommJenkins.c" tofile="${src.dir}/usbSerialComm.c"/>	 
 	</target>
  
 	<target name="setWindows" if="isWindows">
-		<echo>Windows machine detected. Please make sure Arduino and Emotiv Headset are connected and ready!</echo>
+		<echo message="Windows machine detected. Please make sure Arduino and Emotiv Headset are connected and ready!"/>
 		<move file="${src.dir}/usbSerialCommJenkins.c" tofile="${src.dir}/usbSerialCommJenkins.c.txt"/>
 	</target>
 
@@ -54,7 +54,7 @@
    <taskdef resource="cpptasks.tasks"/>
    <target name="build" depends="prepare">
 	  <cpptasks:cc outtype="executable" subsystem="console" outfile="dist/NeuroControlProgram" objdir="${build.dir}">
-			<fileset dir="${src.dir}/" includes="*.c"/>
+      <fileset dir="${src.dir}/" includes="*.c"/>
 	  </cpptasks:cc>
    </target>
     
