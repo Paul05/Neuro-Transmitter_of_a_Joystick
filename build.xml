@@ -37,7 +37,7 @@
 	</target>
 
    <target name="targets">
-      <echo message="Targets are clean, build, execute, restore and targets"/>
+      <echo message="Targets are clean, build, execute, restoreUnix, restoreWin and targets"/>
 	  <echo message="Note: need cpptasks jar in ant lib folder as well as env vars set for C compiler!"/>
    </target>
 
@@ -66,10 +66,12 @@
          </exec>    
    </target>
 
-   <target name="restore" description="Designed for Unix based systems to restore changes made for that system.">	
+   <target name="restoreUnix" description="Designed for Unix based systems to restore changes made for that system.">	
 		<move file="${src.dir}/usbSerialComm.c" tofile="${src.dir}/usbSerialCommJenkins.c" />	
 		<move file="${src.dir}/usbSerialComm.c.txt" tofile="${src.dir}/usbSerialComm.c"/>
    </target>
+   
+    <target name="restoreWin" description="Designed for Unix based systems to restore changes made for that system.">	
+		<move file="${src.dir}/usbSerialCommJenkins.c.txt" tofile="${src.dir}/usbSerialCommJenkins.c"/>
+   </target>   
 </project>
-
-
