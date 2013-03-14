@@ -15,7 +15,6 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <conio.h>
 #include "userInput.h"
 #include "usbSerialComm.h"
 
