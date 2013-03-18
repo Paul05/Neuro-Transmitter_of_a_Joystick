@@ -13,7 +13,8 @@
 
  void goLeft()
  {
-     printf("Left\n");
+     sendInToArduino(2);
+     printf("You are going left.\n");
  }
 
 //END file left.c

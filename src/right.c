@@ -13,7 +13,8 @@
 
 void goRight()
 {
-   printf("Right\n");
+    sendInToArduino(3);
+    printf("You are going right.\n");
 }
 
 //END file right.c
