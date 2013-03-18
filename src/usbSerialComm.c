@@ -119,6 +119,7 @@ int testCommunication(void)
  */
 void sendIntToArduino(int toSend)
 {
+    
     /*
      * We could set something up:
      *  w = 1 forward
