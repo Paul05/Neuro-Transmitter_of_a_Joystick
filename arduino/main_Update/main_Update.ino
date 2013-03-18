@@ -13,7 +13,7 @@
 	VERSION: 1.0.4
 	DATE: Friday, February 15, 2013
 */
-const int LED = 13;
+const int LED = 13;					//States that the LED is connected to pin 13 (Built-in)
 const int BUTTON = 12;				//States that the BUTTON is connected to pin 12.
 const int LEFT_MOTOR = 7;			//States that the left MOTOR is connected to pin 7.
 const int RIGHT_MOTOR = 8;			//States that the right MOTOR is connected to pin 4.
@@ -21,46 +21,48 @@ const int TOGGLE_SWITCH = 4;        //Current default value of the toggle switch
 const int INTERRUPT = 0;			//Uses '0' as the interrupt number, which is set up with pin 2.
 const int INTERRUPT_TWO = 1;        //Uses '1' as the interrupt number, which is set up with pin 3.
 volatile int STATE = LOW;			//Gives the variable STATE which will change between HIGH and LOW allowing for movement.
-volatile int SWITCH = HIGH;
-int number;
+volatile int SWITCH = HIGH;			//Initializes the state of SWITCH to HIGH
+int number;							//Number used for communication between the Arduino and Keyboard via Serial Monitor
 
-void setup(){	
-        Serial.begin(9600);						//Initial setup process for pins on input and output.
-  	pinMode(BUTTON, INPUT);	 				//Sets pin 12 as an input
+void setup(){							//Initial setup process for pins on input and output.
+  	Serial.begin(9600);					//Allows for use of the Serial Monitor
+	pinMode(BUTTON, INPUT);	 				//Sets pin 12 as an input
     pinMode(TOGGLE_SWITCH, INPUT);          //sets pin 8 as another input.
 	pinMode(RIGHT_MOTOR, OUTPUT);				//Sets pin 4 as an output
-  	pinMode(LEFT_MOTOR, OUTPUT);
-        pinMode(LED, OUTPUT);	 			//Sets pin 7 as an output
+  	pinMode(LEFT_MOTOR, OUTPUT);	 			//Sets pin 7 as an output
   	attachInterrupt(INTERRUPT, buttonPressed, RISING);	//Sets up the interrupt pin, specifices the called function and what mode to use
     attachInterrupt(INTERRUPT_TWO, toggleSwitch, CHANGE); //Sets the interrupte of the toggle
 }
 
-void loop(){	
-    number = 0;     // zero the incoming number ready for a new read
-//  Serial.flush(); // clear any 'junk' out of the serial buffer before waiting
+void loop(){						//Main loop which is constantly being run on the arduino
+  number = 0;     					// zero the incoming number ready for a new read
   while (Serial.available() == 0)
   {
     // do nothing until something enters the serial buffer
   } 
   while (Serial.available() > 0)
   {
-    number = Serial.read() - '0'; 
-    // read the number in the serial buffer, 
-    // remove the ASCII text offset for zero: '0'
+    number = Serial.read() - '0';   // read the number in the serial buffer, 
+									// remove the ASCII text offset for zero: '0'
   }
-  // Show me the number!
+
   Serial.println("You entered: ");
-  Serial.println(number);
-    if (number == 1){
-       Serial.print("Turning the LED on");
-       digitalWrite(LED, HIGH);}
-    else if (number == 2){
-       Serial.println("Turning the LED off");
-      digitalWrite(LED, LOW);
-    }
- 
+  Serial.print(number);
   
-  Serial.flush();					//Main loop which is constantly being run on the arduino
+  if (number == 1){
+    Serial.println("Turning the Right Motor off");
+	Serial.println("Turning the Left Motor on");
+	digitalWrite(RIGHT_MOTOR, LOW);
+	digitalWrite(LEFT_MOTOR, HIGH);
+	}
+  else if (number == 2){
+    Serial.println("Turning the Left Motor off");
+	Serial.println("Turning the Right Motor on");
+	digitalWrite(LEFT_MOTOR, LOW);
+	digitalWrite(RIGHT_MOTOR, HIGH);
+	}
+  Serial.flush();
+	
 	digitalRead(BUTTON);				//Reads the state of digital pin 12
     digitalRead(TOGGLE_SWITCH);         //Reads the state of digital pin 8.
     if(STATE == HIGH)
@@ -102,5 +104,4 @@ void goForward(){				//Function gets called as part of the predestined movement
 }
  
 //END file arduinoCode.c
-
 
