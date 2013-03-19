@@ -15,6 +15,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <conio.h>
 #include "userInput.h"
 #include "usbSerialComm.h"
 
@@ -168,12 +169,12 @@ int getBaudRate(void)
  *          since a machine would be entering data at the point this function
  *          is used.
  * Note2: This function is platform dependent to certain compilers and environments
- *          due to getch function which needs to be in conio.h.
+ *          due to getchar function which needs to be in conio.h.
  *
  */
 char getCharConsole(void)
 {    
-    return getch(); //call to getch to get char without enter being pressed
+    return getch(); //call to getchar to get char without enter being pressed
     //done for speed and not to use custom keyboard lib, not compatible with all systems
     //TODO: May need to flush stdin after!
 

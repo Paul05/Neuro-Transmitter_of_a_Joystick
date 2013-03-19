@@ -10,10 +10,11 @@
 */
 #include <stdio.h>
 #include <stdlib.h>
+#include "usbSerialComm.h"
 
 void goRight()
 {
-    sendInToArduino(3);
+    sendIntToArduino(3);
     printf("You are going right.\n");
 }
 

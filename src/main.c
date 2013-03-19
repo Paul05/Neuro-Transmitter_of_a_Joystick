@@ -26,6 +26,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "usbSerialComm.h"
 #include "userInput.h"
 #include "left.h"
