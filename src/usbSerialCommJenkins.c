@@ -86,8 +86,6 @@ void sendIntToArduino(int toSend)
      */
 
     //WriteFile(g_arduinoDevice,test,strlen(test),&btsIO,NULL);
-
-    return 1;
 } //end sendIntToArduino function
 
 //END file usbSerialComm.c FOR JENKINS ONLY!!!
