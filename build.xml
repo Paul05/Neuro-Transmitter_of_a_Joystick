@@ -57,8 +57,7 @@
    <target name="build" depends="prepare">
 	  <cpptasks:cc outtype="executable" subsystem="console" outfile="${dist.dir}/NeuroControlProgram" objdir="${build.dir}">
       <fileset dir="src/" includes="*.c"/>
-	  </cpptasks:cc>
-	  <echo message="Test to see if jenkins succeeds with echo command!"/>
+	  </cpptasks:cc>	 
    </target>
     
    <!--<cpptasks:compiler/> and <cpptasks:linker/>-->
