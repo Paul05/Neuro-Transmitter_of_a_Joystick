@@ -29,8 +29,8 @@
 		<!-- Use special file for jenkins build, over time may actually put posix calls into that file -->
 		<move file="src/usbSerialComm.c" tofile="src/usbSerialComm.c.txt"/>
 		<move file="src/usbSerialCommJenkins.c" tofile="src/usbSerialComm.c"/>
-		<replace file="${src.dir}/userInput.c" token="#include &lt;conio.h&gt;" value="//#include &lt;conio.h&gt;"/>	
-		<replace file="${src.dir}/userInput.c" token="getch" value="getchar"/>
+		<replace file="src/userInput.c" token="#include &lt;conio.h&gt;" value="//#include &lt;conio.h&gt;"/>	
+		<replace file="src/userInput.c" token="getch" value="getchar"/>
 	</target>
  
 	<target name="setWindows" if="isWindows">
@@ -69,10 +69,10 @@
    </target>
 
    <target name="restoreUnix" description="Designed for Unix based systems to restore changes made for that system.">	
-		<move file="${src.dir}/usbSerialComm.c" tofile="${src.dir}/usbSerialCommJenkins.c" />	
-		<move file="${src.dir}/usbSerialComm.c.txt" tofile="${src.dir}/usbSerialComm.c"/>
-		<replace file="${src.dir}/userInput.c" token="//#include &lt;conio.h&gt;" value="#include &lt;conio.h&gt;"/>	
-		<replace file="${src.dir}/userInput.c" token="return getchar();" value="return getch();"/>
+		<move file="src/usbSerialComm.c" tofile="${src.dir}/usbSerialCommJenkins.c" />	
+		<move file="src/usbSerialComm.c.txt" tofile="${src.dir}/usbSerialComm.c"/>
+		<replace file="src/userInput.c" token="//#include &lt;conio.h&gt;" value="#include &lt;conio.h&gt;"/>	
+		<replace file="src/userInput.c" token="return getchar();" value="return getch();"/>
    </target>
    
     <target name="restoreWin" description="Designed for Windows based systems to restore changes made for that system.">	
