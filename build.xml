@@ -39,7 +39,7 @@
 	</target>
 
    <target name="targets">
-      <echo message="Targets are clean, build, execute, restoreUnix, restoreWin and targets"/>
+      <echo message="Targets are clean, build, execute, static_test, restoreUnix, restoreWin and targets"/>
 	  <echo message="Note: need cpptasks jar in ant lib folder as well as env vars set for C compiler!"/>
    </target>
 
@@ -78,4 +78,15 @@
     <target name="restoreWin" description="Designed for Windows based systems to restore changes made for that system.">	
 		<move file="${src.dir}/usbSerialCommJenkins.c.txt" tofile="${src.dir}/usbSerialCommJenkins.c"/>	
    </target>   
+   
+    <target name="static_test" description="Uses cppcheck, cppcheck must be installed and path set correctly! Tests and puts results into xml file.">
+		<exec executable="cmd" dir="${src.dir}" osfamily="windows" failonerror="true">			
+			<arg value="/C" />
+			<arg line="cppcheck --xml-version=2 --enable=all --inconclusive . 2&gt; errorsStaticCheck.xml" />
+		</exec>
+		<exec executable="/bin/sh" dir="${src.dir}" osfamily="unix" failonerror="true">			
+			<arg value="-c" />
+			<arg line="cppcheck --xml-version=2 --enable=all --inconclusive . 2&gt; errorsStaticCheck.xml" />
+		</exec>
+	</target>
 </project>
