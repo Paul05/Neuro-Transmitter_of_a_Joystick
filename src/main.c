@@ -49,6 +49,9 @@
 /**
 * Welcome message function that displays a welcome message on the console.
 */
+char arduinoLeft = 'a';
+char arduinoRight = 'd';
+
 void welcomeMessage(void)
 {
     printf("Welcome to the 'Neuro-Trasmitter Of A Joystick' Group's "
