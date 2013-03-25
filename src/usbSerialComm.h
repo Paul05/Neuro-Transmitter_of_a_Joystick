@@ -33,12 +33,20 @@
     #define UPPRBAUDRATE 256000  //upper possible baud rate
  #endif
 
+//Maybe add setup and let user define these? TODO
+#define arduinoTest "t"
+#define arduinoForward "w"
+#define arduinoBack "s"
+#define arduinoRight "d"
+#define arduinoLeft "a"
+
+
 #define	USBSERIALCOMM_H
 
 int setupCommunication(const char portName[], const int portBaudRate);
 int closeCommunication(void);
 int testCommunication(void);
-void sendIntToArduino(int toSend);
+void sendToArduino(char toSend[]);
 
 #endif	/* USBSERIALCOMM_H */
 

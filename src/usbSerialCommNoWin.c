@@ -13,23 +13,17 @@
  * Created Spring, 2013
  */
 
-//#include <Windows.h>
+#include <termios.h>
+#include <unistd.h>
 #include <stdio.h>
-//#include <conio.h>
 #include "usbSerialComm.h"
 
+//use unistd.h for delay, usleep() function
 
-//HANDLE g_arduinoDevice = NULL; //global variable that is a file handle to be used for Arduino Connection
-
-
-/** FOR JENKINS ONLY
+/**
  * Purpose: Sets up communication on port specified at baud rate specified if
  * possible and handles the details. It returns an integer where non-zero is
  * success meaning the connection was setup successfully.
- *
- * For more information on CreateFile see this link:
- * http://msdn.microsoft.com/en-us/library/windows/desktop/aa363858%28v=vs.85%29.aspx
- *
  * @param portName String name of port to open (if COM10+ needs to be DOS name \\.\COM10 etc.)
  * @param portBaudRate Int for the baud rate of connection (serial) to the Arduino 9600 is standard.
  * @return int for success 0 is failed and 1 is success
@@ -75,16 +69,7 @@ int testCommunication(void)
  */
 void sendIntToArduino(int toSend)
 {
-    /*
-     * We could set something up:
-     *  w = 1 forward
-     *  a = 2 left
-     *  d = 3 right
-     *  s = -1 reverse
-     *  ? = 0 neutral do nothing
-     *  t = 9 test
-     */
-
+  
     //WriteFile(g_arduinoDevice,test,strlen(test),&btsIO,NULL);
 } //end sendIntToArduino function
 

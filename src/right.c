@@ -14,8 +14,9 @@
 
 void goRight()
 {
-    sendIntToArduino(3);
+    sendToArduino(arduinoRight);
     printf("You are going right.\n");
-}
+
+} //end goRight function
 
 //END file right.c

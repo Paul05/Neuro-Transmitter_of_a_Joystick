@@ -21,13 +21,12 @@
 
 
 /**
- * If the portName and baudRate are not specified on the command line,
- * this function is designed to get the port name from the user on the console.
+ * This function is designed to get a port name from the user on the console.
  * Return: It returns a -1 if the user wishes to exit, 0 for failure and
  *          1 for success.
- * Furthrmore, the input parameters of the string will be returned to the
- * calling function.
- * Note: It should reasonbly be free of improper
+ * Furthermore, the inputed string (as a parameter to this function)
+ * will be returned to the calling function.
+ * Note: It should be reasonably free of improper and extraneous
  *          input unless the input line is longer than the buffer.
  */
 int getPortName(char outPortName[])
@@ -39,7 +38,7 @@ int getPortName(char outPortName[])
     do
     {
         errorFlag = 0;
-        printf("\nPlease enter the port name to connect with the Arduino: ");
+        printf("\nPlease enter the port name the Arduino is connected on: ");
 
         if (fgets(inputLine, sizeof(inputLine), stdin))
         {
@@ -71,10 +70,10 @@ int getPortName(char outPortName[])
             }
             else
             {
-                printf("\n*Please enter one string for the port being used by "
-                        "the arduino of the proper length. "
-                        "\n\t*Example: 'COM1'. \n\n");
-                errorFlag = 1; //too many strings entered or too long etc.
+                printf("\n*Error in port name being entered. "
+                        "Make sure it's the proper length and format. \n\t"
+                        "Example: 'COM1' or type 'exit' to end the program. \n\n");
+                errorFlag = 1; //too many strings entered or too long or improper format.
             }
         }
         else
@@ -92,12 +91,11 @@ int getPortName(char outPortName[])
 
 
 /**
- * If the portName and baudRate are not specified on the command line,
- * this function will get the baud rate from the user and try to get the
- * correct input within reason.
+ * This function is designed to get the baud rate from the user
+ * and reduces erroneous and extraneous input within reason.
  * Return: It returns a -1 if the user wishes to exit, 0
  *          for failure and above 1 for success.
- * Note: It should reasonbly be free of improper
+ * Note: It should be reasonably free of improper
  *          input unless the input line is longer than the buffer.
  */
 int getBaudRate(void)
@@ -109,7 +107,7 @@ int getBaudRate(void)
     do
     {
         outBaudRate = 1;
-        printf("\nPlease enter the intended baud rate of the connection to "
+        printf("\nPlease enter the baud rate of the connection to "
                 "the Arduino: ");
 
         if (fgets(inputLine, sizeof(inputLine), stdin))
@@ -127,8 +125,6 @@ int getBaudRate(void)
             }
             else if (1 == sscanf(inputLine, "%d", &outBaudRate))  //int is found
             {
-                printf("Output Baud Rate= %d. \n", outBaudRate);
-
                 if (outBaudRate < LWRBAUDRATE || outBaudRate > UPPRBAUDRATE ) //check upper and lower possible baud rate bounds
                 {
                     printf("*Please enter a valid baud rate. "
@@ -165,19 +161,20 @@ int getBaudRate(void)
  * This function gets a single character (without pressing enter after)
  *   from the console and returns it.
  * Returns: Single char from console input.
- * Note: This is not reasonbly free of improper input and is excepted to be so
+ * Note: This is not reasonably free of improper input. It is excepted to be so,
  *          since a machine would be entering data at the point this function
  *          is used.
- * Note2: This function is platform dependent to certain compilers and environments
- *          due to getchar function which needs to be in conio.h.
+ * Warning: This function is platform dependent to certain compilers and
+ *          environments due to the getch function which needs to be in conio.h.
+ *          and is usually only found on Windows systems.
  *
  */
 char getCharConsole(void)
 {    
     return getch(); //call to getchar to get char without enter being pressed
-    //done for speed and not to use custom keyboard lib, not compatible with all systems
+    //This is done for speed and not to use a custom keyboard library.
+    //This is not compatible with all systems and will usually only work on Windows.
     //TODO: May need to flush stdin after!
-
 }//end function getCharConsole
 
 //END file userInput.c

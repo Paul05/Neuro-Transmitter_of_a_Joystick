@@ -9,19 +9,24 @@
    <property name="user" value="${env.USERNAME}"/>
    
     <target name="targets">
-      <echo message="Targets are clean, build, static_test, restoreUnix, restoreWin and targets"/>
-	  <echo message="  Note: Ant will need cpptasks jar in your system's ant/lib folder (jar is included in the lib directory of this repository)."/> 
-	  <echo message="	    Also, you will need a C compiler setup in your system or shell path (able to compile from command line)."/>
-	  <echo message="       To run this program, navigate to the dist directory and execute the executable: NeuroControlProgram after ant build is called."/>
+      <echo message="Targets are clean, build, static_test, restoreUnix, restoreWin and targets. "/>
+	  <echo message="  Note: Ant will need cpptasks jar in your system's ant/lib folder "/>
+	  <echo message="		           (jar is included in the lib directory of this repository)."/> 
+	  <echo message="	&#xa;Also, you will need a C compiler setup in your system or shell path "/>
+	  <echo message="		           (need to be able to compile from the  command line)."/>
+	  <echo message="   &#xa;To run this program, navigate to the dist directory and execute "/>
+	  <echo message="					the executable: NeuroControlProgram after 'ant build' is called."/>
     </target>
     
-	<target name="checkUsbSerialFile" description="Checks if files need to be renamed, or if already done on previous build.">
+	<!-- Checks if files need to be renamed, or if already done on previous build. -->
+	<target name="checkUsbSerialFile">
 		<available file="src/usbSerialCommNoWin.c" property="usbSerialUnmodified"/>
 	</target>
 	
     <!-- Only checks if checkUsbSerial File indicates it wasn't previously done based on filename. 
-		 Therefore, this will only run once unless restoreWin or restoreUnix targets are ran. -->
-    <target name="checkOS" depends="checkUsbSerialFile" if="usbSerialUnmodified" description="Checks which Operating System program will run on.">
+		 Therefore, this will only run once unless restoreWin or restoreUnix targets are ran. 
+		 Checks which OS is installed on build system and calls targets depending on OS. -->
+    <target name="checkOS" depends="checkUsbSerialFile" if="usbSerialUnmodified">
 		<condition property="isUnix">
 			<os family="unix" />
 		</condition>
@@ -32,6 +37,8 @@
 		<antcall target="setWindows" />
 	</target>   
 	
+	<!-- This is called if the OS is Unix, renames files to use Unix designated file for Serial Communication.
+			It also changes a specific call that is windows only in userInput -->
 	<target name="setUnix" if="isUnix">
 		<echo message="Unix OS detected. Please make sure Arduino and a Neuro-Headset are connected and ready!"/>
 		<move file="src/usbSerialCommWin.c" tofile="src/usbSerialCommWin.c.txt"/>
@@ -40,31 +47,37 @@
 		<replace file="src/userInput.c" token="getch" value="getchar"/>
 	</target>
  
+	<!-- This is called if the OS is Windows, renames files to use the Windows designated file for Serial Communication. -->			
 	<target name="setWindows" if="isWindows">	
 		<echo message="Windows OS detected. Please make sure the Arduino and the Emotiv Headset are connected and ready!"/>
 		<move file="src/usbSerialCommWin.c" tofile="src/usbSerialComm.c"/>
 		<move file="src/usbSerialCommNoWin.c" tofile="src/usbSerialCommNoWin.c.txt"/>		
 	</target>
 
-   <target name="clean">
+   <target name="clean" description="Cleans the directory of build and executable files.">
       <delete dir="${dist.dir}" failonerror="false"/>
 	  <delete dir="${build.dir}" />
    </target>
    
+   <!-- Creates directories needed in preparation for build and subsequentl compilation -->
    <target name="prepare" depends="checkOS">
 	  <mkdir dir="${dist.dir}" />
 	  <mkdir dir="${build.dir}"/> 
    </target>
 
-   <!--Note: need cpptasks.jar in the ant/lib folder on your machine! This jar file is in the lib directory in this repository. -->
-   <!--		If more information neeeded see documentation at: http://ant-contrib.sourceforge.net/cpptasks/index.html   -->
+   <!--Note: need cpptasks.jar in the ant/lib folder on your machine! This jar file is in the lib directory in this repository. 
+     		If more information neeeded see documentation at: http://ant-contrib.sourceforge.net/cpptasks/index.html   
+	    After building, navigate to the dist directory created and you will find the executable to run the program.  -->
    <taskdef resource="cpptasks.tasks"/>
-   <target name="build" depends="prepare">
+   <target name="build" depends="prepare" 
+	  description="Compiles the program. Run this target first, then you will find the executable in the dist directory.">	  
 	  <cpptasks:cc outtype="executable" subsystem="console" outfile="${dist.dir}/NeuroControlProgram" objdir="${build.dir}">
-      <fileset dir="src/" includes="*.c"/>
-	  </cpptasks:cc>	 
+		<fileset dir="src/" includes="*.c"/>
+	  </cpptasks:cc>	    
    </target>
        	
+   <!-- This restores the original structure of the code after it was built on Unix. See setUnix target above. 
+          To completely restore to original configuration run ant clean as well -->
    <target name="restoreUnix" description="Designed for Unix based systems to restore changes made for that system.">	
 		<move file="src/usbSerialComm.c" tofile="src/usbSerialCommNoWin.c" />	
 		<move file="src/usbSerialCommWin.c.txt" tofile="src/usbSerialCommWin.c"/>
@@ -72,16 +85,19 @@
 		<replace file="src/userInput.c" token="return getchar();" value="return getch();"/>
    </target>
    
+    <!-- This restores the original structure of the code after it was built on Windows. See setWindows target above.
+		   To completely restore to the original configuration run ant clean as well -->
     <target name="restoreWin" description="Designed for Windows based systems to restore changes made for that system.">	
 		<echo message="Please also run 'ant clean' before committing any changes!"/>
 		<move file="src/usbSerialComm.c" tofile="src/usbSerialCommWin.c"/>
 		<move file="src/usbSerialCommNoWin.c.txt" tofile="src/usbSerialCommNoWin.c"/>		
    </target>   
    
-    <!--Note: to static test need cppcheck installed and available on the system or shell path! -->
+    <!--Note: In order to static test, you will need cppcheck installed and available on the system or shell path. -->
 	<!--		See documentation at: http://cppcheck.sourceforge.net/  -->
     <target name="static_test" 
-			description="Uses cppcheck, cppcheck must be installed and path set correctly! Tests and puts results into xml file in the tests dir.">
+		description="Uses cppcheck, cppcheck must be installed and path set correctly! &#xa;
+	                 Cppcheck tests the source code and puts results into an xml file in the tests dir.">
 		<mkdir dir="${test.dir}" failonerror="true" />
 		<exec executable="cmd" dir="${test.dir}" osfamily="windows" failonerror="true">			
 			<arg value="/C" />

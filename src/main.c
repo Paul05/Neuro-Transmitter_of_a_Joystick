@@ -1,27 +1,38 @@
 /*
 * File: main.c
-* Author: Neuro-Transmitter Group
-* Frank Liu, Darryl Monroe, Michael Berg, Paul Spaude
+*
+* Author: The Neuro-Transmitter Group
+*         Frank Liu, Darryl Monroe, Michael Berg, Paul Spaude
+*
 * Class: CST315 & CST316 ASU Polytechnic
+*         Copyright ASU Polytechnic 2013 All Rights Reserved.
 *
-* Inputs: Main takes two inputs the first is the name of the serial port the
-* Arduino is connected to and the next is the baud rate for the connection/
-* Standard baud rate is 9600. If not found on the cmd line, the program will
-* ask the user to enter those values with more error checking.
+* Inputs: The program will ask the user to enter two inputs. The first is
+*         the name of the serial port the Arduino is connected on and the next
+*         input is the baud rate for that connection. Typical port names start
+*         with COM such as (COM1) for example. Standard baud rate is 9600 with
+*         typical Arduinos, but can be changed in the Arduino code.
 *
-* This program then sets up communication via serial to an arduino. The
-* connection may in fact be USB but this program uses serial as Arduino
-* uses USB but mimics a serial port and communication. If the tests complete
-* and communication works, then this program takes inputs from the keyboard
-* (wasd) or others depending on specifications.
-* It then sends that input to the Arduino after it normalizes the input
-* to provide a consistent and usable user experience for an Emotiv controlled
-* wheelchair. In essence the Emotiv program will use "keystrokes" to communicate
-* with the Arduino after normalization and the Arduino will convert the input
-* into usable turning and movement instructions which trip various relays on
-* an electric wheelchair.
+* Function: This program sets up communication with the Arduino. The
+*           connection may be USB, but this program uses serial as typical
+*           Arduino behavior is to mimic a serial port and communication.
+*           If the test completes and communication works, then this program
+*           takes inputs from the keyboard (wasd). t is reserved for testing
+*           and x is reserved for exiting. w is forward, s is back, d is right,
+*           and a is left. This is designed to be inputed from various neuro
+*           EEG headsets that can via their proprietary and other software write
+*           a char to the keyboard based on a brain or muscular face action.
 *
-* Created Spring, 2013
+*           This program then sends that input to the Arduino
+*           after it normalizes the input to provide a consistent and usable
+*           user experience. This version is in its infancy and is based on the
+*           the Emotiv EPOC headset and its nuances. The Arduino will convert
+*           the input (chars) or "strings" sent on the serial port into usable
+*           turning and movement commands to an electric wheelchair in the four
+*           standard directions.
+*
+* Created: Spring, 2013
+*
 */
 
 #include <stdio.h>
@@ -33,6 +44,7 @@
 #include "right.h"
 #include "forward.h"
 
+#define DEVTESTCMD "test"
 
 /**
 * Welcome message function that displays a welcome message on the console.
@@ -46,10 +58,8 @@ void welcomeMessage(void)
 
 
 /**
-* Exit message function that displays exit message and keeps console open
-* until key is pressed on keyboard.
-*
-* Note: Is platform specific and uses getchar()!
+* Exit message function that displays an exit message and keeps console open
+* until any key is pressed on the keyboard.
 *
 */
 void exitMessage(void)
@@ -61,31 +71,61 @@ void exitMessage(void)
 
 }//end exitMessage
 
+
+/**
+ * Prints to the screen instructions for the user on how to properly use
+ * this program with an EEG headset and an Arduino.
+ */
+void userInstructionMessage(void)
+{
+    printf("\nMake sure the neuro(EEG) headset is connected and that the software"
+    "points to this program. \n Actions for forward, back, left, and right,"
+    "must be translated to keyboard inputs to this program via your headset "
+    "software.\nCurrently w is forward, s is back, a is left, and d is right.\n"
+    "\nAlso, make sure the Arduino or other slave controller that is hooked up"
+    "to the wheelchair is connected and acting as a Serial port.\n You need to "
+    "know the name of the port (starts with COM and then a number). \n The Arduino"
+    "or other slave controller must accept char inputs on the serial connection "
+    "the same as what was described above. \n If that is all done, this program"
+    "will normalize inputs from your EEG and communicate with the wheelchair. \n\n"
+    "Enjoy!  \n\n");
+    
+}//end userInstructionMessage
+
+
 /*
-*This is the switch statement to send the signal to go left or right.
-*/
-void motor_func(char key){
-    switch (key) {
-            /*
-* The commented out code below would only be uncommented if we
-* plan to implement going forward/backward with mind instead of
-* just left/right.
-*/
-// case 'w':
-// goForward();
-// break;
-// case 's':
-// goBack();
-// break;
-        case 'a':
+ * This function hands off functionality to the appropriate normalization/direction
+ * functions based on an inputted char.
+ * @param char key 
+ */
+void callNormalizeDirectionFuncs(char key)
+{
+    switch (key)
+    {       
+        case 'w': case 'W':
+            goForward();
+            break;
+        case 's': case 'S':
+            goBackward();
+            break;
+        case 'a': case 'A':
             goLeft();
             break;
-        case 'd':
+        case 'd': case 'D':
             goRight();
             break;
-    }
-}
-
+        case 't': case 'T':
+            printf("*Test char recieved (t). Now testing communication with the Arduino... \n\n"); //TODO do we want to test movement or comms?
+            break;
+        case 'x': case 'X':
+            printf("*Exit char recieved (x). \n\n");
+            //exit command found, fall through (after this function) needs to take care of the actual exit
+            break;
+        default:                   
+            printf("\n*Error char not recognized! Char input: %c. \n\n", key); //char not recognized print error, will keep going though
+            break;
+    } //end switch on key
+} //end callNormalizeDirectionFuncs function
 
 
 /**
@@ -104,20 +144,31 @@ int main(int argc, char** argv)
     int successFlag = 0;
     char emotivInput = '\0';
 
-    welcomeMessage();
-
-    if (argc < 2)
-    {
-       successFlag = getPortName(portName); //inputs not on cmd line ask user
-
-       if (successFlag == 1)
+    welcomeMessage(); //let user know what they just executed
+    userInstructionMessage(); //inform the user how to use the program
+  
+    if (argc < 3)
+    { 
+       if (strcasecmp(argv[1],DEVTESTCMD) == 0) //see if cmd is same as cmd for dev test mode ignore case
        {
-            baudRate = getBaudRate(); //ask user for baud rate
-            successFlag = baudRate; //checks user input back from getBaudRate()
+           printf("\n**Secret Developer Testing Mode Enabled.** \n\n");
+           successFlag = 1000;
        }
+       else
+       {
+           successFlag = getPortName(portName); //inputs not on cmd line ask user
+
+           if (successFlag == 1)
+           {
+                baudRate = getBaudRate(); //ask user for baud rate
+                successFlag = baudRate; //checks user input back from getBaudRate()
+           }
+       } //end if/else check for dev mode
     }
     else
     {
+        successFlag = 2; //set flag for success since is set below only on failure
+        
         if (strlen(argv[1]) == LRGERPORTLENGTH)
         {
             strncpy(portName,DEVICENAMEAPPEND,strlen(DEVICENAMEAPPEND)); //put device name header first
@@ -129,12 +180,22 @@ int main(int argc, char** argv)
         }
         else
         {
-            printf("Warning invalid port name in: %s \n", argv[1]); //portname not correct length or otherwise invalid
+            printf("\n*Warning invalid port name on cmd line. Port entered: %s. \n\n",
+                    argv[1]); //portname not correct length or otherwise invalid
             successFlag = 0;
 
-        } //end if else get values from cmd line
+        } //end if else get port name from cmd line
 
-    } //end if else check cmd args or get user input
+        baudRate = atoi(argv[2]); //convert cmd line arg string into int and store in baudRate
+
+        if (baudRate < LWRBAUDRATE || baudRate > UPPRBAUDRATE ) //check upper and lower possible baud rate bounds
+        {
+            printf("\n*Warning invalid baud rate on cmd line. Rate entered: %i. \n\n",
+                    baudRate);
+            successFlag = 0; //baud rate is invalid
+        } //end if check baud rate from cmd line
+
+    } //end if else get user input or take from cmd line 
 
 
     if (successFlag < 1) //functions to get input from user failed or user wished to exit
@@ -142,9 +203,9 @@ int main(int argc, char** argv)
         exitMessage(); //exit message
         return(EXIT_FAILURE); //exit program with failure
     }
-    else
+    else if (successFlag != 1000) //not in test mode
     {
-        printf("\nSetting up communication with Arduino on port: %s at rate %i... \n\n", portName, baudRate);
+        printf("\n\nSetting up communication with Arduino on port: %s at rate %i... \n\n", portName, baudRate);
        
         successFlag = setupCommunication(portName, baudRate); //setup communications with arduino
         
@@ -154,10 +215,8 @@ int main(int argc, char** argv)
         }
 
         if (successFlag > 0)
-        {
-            sendIntToArduino(2); //Test Actual Movement (Wheelchair turns left then right for example, test functions etc.)
-            //delay
-            sendIntToArduino(3);
+        {            
+            testMotorMovement(); //tests everything is working correctly with predefined test pattern
         }
         
     } //end if else check if inputs completed and setup communications/test communications
@@ -177,21 +236,20 @@ int main(int argc, char** argv)
         {
             emotivInput = getCharConsole(); //get input from console
 
-            printf("\n(REMOVE) Char recieved: %c. \n\n",emotivInput);
-
-            //Switch Statement
-            motor_func(emotivInput);
+            printf("\n(DEBUG PURPOSES ONLY) Char recieved: %c. \n\n",emotivInput); //TODO: Remove this, for debug purposes only!
+           
+            callNormalizeDirectionFuncs(emotivInput);  //Call respective direction/normalization functions based on input
 
         } while( emotivInput != 'x' && emotivInput != 'X' ); //end loop get input from console from emotiv device
 
 
         if ( tolower(emotivInput) == 'x' )
         {
-            printf("\nExit character found now exiting the program! \n\n");
+            printf("\nExit character found! Now exiting the program. \n\n");
         }
         else
         {
-            printf("\nUnexpected character or action found! Last char: %c. "
+            printf("\nUnexpected character or action found! Char found: %c. "
                     "Now Exiting!\n\n", emotivInput);
         }
         
@@ -199,7 +257,7 @@ int main(int argc, char** argv)
         exitMessage();
         return (EXIT_SUCCESS);
         
-    } //end if else check tests complete and perform get input and normalization loop
+    } //end if else check tests complete and perform get input and function call loop
  
 } //end main
 

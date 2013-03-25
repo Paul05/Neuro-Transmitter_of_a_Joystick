@@ -8,14 +8,19 @@
 *
 * Created Spring, 2013
 */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "usbSerialComm.h"
 
+/**
+ * 
+ */
  void goLeft()
  {
-     sendIntToArduino(2);
+     sendToArduino(arduinoLeft);
      printf("You are going left.\n");
- }
+
+ }//end goLeft function
 
 //END file left.c

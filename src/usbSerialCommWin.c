@@ -1,12 +1,12 @@
 /*
- * File:   usbSerialComm.c
+ * File:   usbSerialComm.c   (Windows Version)
  * Author: Neuro-Transmitter Group
  *         Frank Liu, Darryl Monroe, Michael Berg, Paul Spaude
  * Class: CST315 & CST316 ASU Polytechnic
  *
  * Purpose: Contains functions to communicate with a serial port
  *          which is intended to be an arduino connected via USB.
- *  *
+ *  
  * Note: This is platform specific (Windows) and somewhat compiler specific.
  *       It uses Windows.h and conio.h header files.
  *
@@ -18,9 +18,9 @@
 #include <conio.h>
 #include "usbSerialComm.h"
 
-
 HANDLE g_arduinoDevice = NULL; //global variable that is a file handle to be used for Arduino Connection
-
+DWORD g_btsIO;   //global variable that is used by the writeFile cmd to record number of bytes written
+char g_stringToSend[] = "x"; //global variable used for string to send
 
 /**
  * Purpose: Sets up communication on port specified at baud rate specified if
@@ -41,7 +41,7 @@ int setupCommunication(const char inPortName[], const int inPortBaudRate)
 
     if (g_arduinoDevice != INVALID_HANDLE_VALUE && g_arduinoDevice != NULL) //if successfully opened
     {
-        printf("\nDevice Port opened! \n\n");
+        printf("\nSerial Port Opened! \n\n");
 
         DCB arduinoControlSettings; //DCB structure(Windows)
         arduinoControlSettings.DCBlength = sizeof(DCB);   //set length
@@ -51,11 +51,7 @@ int setupCommunication(const char inPortName[], const int inPortBaudRate)
         arduinoControlSettings.Parity = NOPARITY;   //set parity
         arduinoControlSettings.StopBits = ONESTOPBIT;   //set how many stop bits
 
-/*  We will have to see about this, char is 8 bits, we might have to use ints! Arduino has a weird timing issue.
- *  Also, need setup delay because Arduino resets when first connect. 
- *
- * Also: enum baudRates { ?? } for various baud rates
- 
+        /*Alternate section once Arduino exhibits failure to communicate, these turn off various port settings
         arduinoControlSettings.fBinary = FALSE;            // Binary mode; no EOF check
         arduinoControlSettings.fOutxCtsFlow = TRUE;         // No CTS output flow control
         arduinoControlSettings.fOutxDsrFlow = FALSE;         // No DSR output flow control
@@ -68,11 +64,13 @@ int setupCommunication(const char inPortName[], const int inPortBaudRate)
         arduinoControlSettings.fNull = FALSE;                // Disable null stripping
         //lpTest.fRtsControl = RTS_CONTROL_ENABLE; //// RTS flow control
         arduinoControlSettings.fAbortOnError = TRUE;        // Do not abort reads/writes on error
-*/
+        */
+
+        //Add enumeration for all baud rates? TODO
 
         SetCommState(g_arduinoDevice,&arduinoControlSettings); //set the current control settings for the device
 
-        printf("\nDevice Settings Established! \n");
+        printf("\nSerial Port Settings Established! \n");
         
         return 1; //success
     }
@@ -97,42 +95,44 @@ int closeCommunication(void)
 
 
 /**
- * Tests the connection (send and recieve) from the Arduino device
- * connected on the currently open connection.
+ * Tests the connection (send and recieve) to the Arduino device.
+ * Connected through the currently open "file". This function assumes
+ * that the Arduino may have just started, and as such has a delay built in.
  * @return  int 0 for failure and non-zero for success
  */
 int testCommunication(void)
 {
-     DWORD btsIO;
-     //Write in delay first then... 
-     //Send char T for example and arduino will communicate back
-     //WriteFile(g_arduinoDevice,test,strlen(test),&btsIO,NULL);
+    Sleep(1000);   
+    WriteFile(g_arduinoDevice,arduinoTest,strlen(arduinoTest),&g_btsIO,NULL);
 
-     return 1;
+    //TODO: Readfile here if we wish to do an 'ACK' from the Arduno
 
-} //end testCommunication function 
+    return 1;
+
+} //end testCommunication function
 
 
 /**
- * Sends an integer to the currently open device.
- * @param toSend integer to send to Arduino
+ * Test the connection and motor/wheelchair movment capability of the
+ * Arduino with a defined test. This can be used in a startup test or for
+ * troubleshooting issues.
+ * @return int 0 for failure and non-zero for success
  */
-void sendIntToArduino(int toSend)
+int testMotorMovement(void)
 {
-    
-    /*
-     * We could set something up:
-     *  w = 1 forward
-     *  a = 2 left
-     *  d = 3 right
-     *  s = -1 reverse
-     *  ? = 0 neutral do nothing
-     *  t = 9 test
-     */
+      sendToArduino(arduinoLeft); //Test Actual Movement (Wheelchair turns left then right for example, test functions etc.) //TODO
+      Sleep(500);
+      sendToArduino(arduinoRight);
+}
 
-    //WriteFile(g_arduinoDevice,test,strlen(test),&btsIO,NULL);
 
-   
+/**
+ * Sends a char to the currently open serial port.
+ * @param toSend char to send to Arduino
+ */
+void sendToArduino(char toSend[])
+{
+   WriteFile(g_arduinoDevice,toSend,strlen(toSend),&g_btsIO,NULL); //writes char to arduino
 } //end sendIntToArduino function
 
 //END file usbSerialComm.c

@@ -1,5 +1,5 @@
 /*
- * File:   forward.c
+ * File:   backward.c
  * Author: Neuro-Transmitter Group
  *         Frank Liu, Darryl Monroe, Michael Berg, Paul Spaude
  * Class: CST315 & CST316 ASU Polytechnic
@@ -13,12 +13,12 @@
 #include <stdlib.h>
 
 /**
- * 
+ *
  */
-void goForward()
+void goBackward()
 {
-    printf("Forward\n");
+    printf("Backward\n");
 
-} //end goForward function
+} //end goBackward function
 
-//END file forward.c
+//END file backward.c
