@@ -1,5 +1,5 @@
 /*
- * File:   usbSerialComm.c  FOR JENKINS ONLY!!!
+ * File:   usbSerialComm.c  FOR UNIX/Linux ONLY!!!
  * Author: Neuro-Transmitter Group
  *         Frank Liu, Darryl Monroe, Michael Berg, Paul Spaude
  * Class: CST315 & CST316 ASU Polytechnic
@@ -7,8 +7,8 @@
  * Purpose: Contains functions to communicate with a serial port
  *          which is intended to be an arduino connected via USB.
  *  *
- * Note: This is platform specific (Windows) and somewhat compiler specific.
- *       It uses Windows.h and conio.h header files.
+ * Note: This is platform specific to POSIX systems.
+ *       
  *
  * Created Spring, 2013
  */

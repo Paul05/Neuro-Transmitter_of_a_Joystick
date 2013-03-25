@@ -8,40 +8,43 @@
    <property environment="env"/>
    <property name="user" value="${env.USERNAME}"/>
    
-    <target name="checkUsbSerialFile">
-		<available file="src/usbSerialCommJenkins.c" property="usbSerialPres"/>
+    <target name="targets">
+      <echo message="Targets are clean, build, static_test, restoreUnix, restoreWin and targets"/>
+	  <echo message="  Note: Ant will need cpptasks jar in your system's ant/lib folder (jar is included in the lib directory of this repository)."/> 
+	  <echo message="	    Also, you will need a C compiler setup in your system or shell path (able to compile from command line)."/>
+	  <echo message="       To run this program, navigate to the dist directory and execute the executable: NeuroControlProgram after ant build is called."/>
+    </target>
+    
+	<target name="checkUsbSerialFile" description="Checks if files need to be renamed, or if already done on previous build.">
+		<available file="src/usbSerialCommNoWin.c" property="usbSerialUnmodified"/>
 	</target>
 	
-    <!-- Only check OS if Jenkins file is in dir. Thus, this will only run once on a non-windows machine and take care of Windows call issues on Jenkins. -->
-    <target name="checkOS" depends="checkUsbSerialFile" if="usbSerialPres" description="Check OS, used for Jenkins">
+    <!-- Only checks if checkUsbSerial File indicates it wasn't previously done based on filename. 
+		 Therefore, this will only run once unless restoreWin or restoreUnix targets are ran. -->
+    <target name="checkOS" depends="checkUsbSerialFile" if="usbSerialUnmodified" description="Checks which Operating System program will run on.">
 		<condition property="isUnix">
 			<os family="unix" />
 		</condition>
 		<condition property="isWindows">
-			<os family="windows" />
+			<os family="windows" />			
 		</condition>
 		<antcall target="setUnix" />
 		<antcall target="setWindows" />
 	</target>   
 	
 	<target name="setUnix" if="isUnix">
-		<echo message="Warning: This program is designed for windows! You can build but Arduino connection functionality will be lost!"/>
-		<!-- Use special file for jenkins build, over time may actually put posix calls into that file -->
-		<move file="src/usbSerialComm.c" tofile="src/usbSerialComm.c.txt"/>
-		<move file="src/usbSerialCommJenkins.c" tofile="src/usbSerialComm.c"/>
+		<echo message="Unix OS detected. Please make sure Arduino and a Neuro-Headset are connected and ready!"/>
+		<move file="src/usbSerialCommWin.c" tofile="src/usbSerialCommWin.c.txt"/>
+		<move file="src/usbSerialCommNoWin.c" tofile="src/usbSerialComm.c"/>
 		<replace file="src/userInput.c" token="#include &lt;conio.h&gt;" value="//#include &lt;conio.h&gt;"/>	
 		<replace file="src/userInput.c" token="getch" value="getchar"/>
 	</target>
  
-	<target name="setWindows" if="isWindows">
-		<echo message="Windows machine detected. Please make sure Arduino and Emotiv Headset are connected and ready!"/>
-		<move file="${src.dir}/usbSerialCommJenkins.c" tofile="${src.dir}/usbSerialCommJenkins.c.txt"/>
+	<target name="setWindows" if="isWindows">	
+		<echo message="Windows OS detected. Please make sure the Arduino and the Emotiv Headset are connected and ready!"/>
+		<move file="src/usbSerialCommWin.c" tofile="src/usbSerialComm.c"/>
+		<move file="src/usbSerialCommNoWin.c" tofile="src/usbSerialCommNoWin.c.txt"/>		
 	</target>
-
-   <target name="targets">
-      <echo message="Targets are clean, build, static_test, restoreUnix, restoreWin and targets"/>
-	  <echo message="Note: need cpptasks jar in ant lib folder as well as env vars set for C compiler!"/>
-   </target>
 
    <target name="clean">
       <delete dir="${dist.dir}" failonerror="false"/>
@@ -53,32 +56,38 @@
 	  <mkdir dir="${build.dir}"/> 
    </target>
 
+   <!--Note: need cpptasks.jar in the ant/lib folder on your machine! This jar file is in the lib directory in this repository. -->
+   <!--		If more information neeeded see documentation at: http://ant-contrib.sourceforge.net/cpptasks/index.html   -->
    <taskdef resource="cpptasks.tasks"/>
    <target name="build" depends="prepare">
 	  <cpptasks:cc outtype="executable" subsystem="console" outfile="${dist.dir}/NeuroControlProgram" objdir="${build.dir}">
       <fileset dir="src/" includes="*.c"/>
 	  </cpptasks:cc>	 
    </target>
-    
-   <!--<cpptasks:compiler/> and <cpptasks:linker/>-->
-   	
+       	
    <target name="restoreUnix" description="Designed for Unix based systems to restore changes made for that system.">	
-		<move file="src/usbSerialComm.c" tofile="${src.dir}/usbSerialCommJenkins.c" />	
-		<move file="src/usbSerialComm.c.txt" tofile="${src.dir}/usbSerialComm.c"/>
+		<move file="src/usbSerialComm.c" tofile="src/usbSerialCommNoWin.c" />	
+		<move file="src/usbSerialCommWin.c.txt" tofile="src/usbSerialCommWin.c"/>
 		<replace file="src/userInput.c" token="//#include &lt;conio.h&gt;" value="#include &lt;conio.h&gt;"/>	
 		<replace file="src/userInput.c" token="return getchar();" value="return getch();"/>
    </target>
    
     <target name="restoreWin" description="Designed for Windows based systems to restore changes made for that system.">	
-		<move file="${src.dir}/usbSerialCommJenkins.c.txt" tofile="${src.dir}/usbSerialCommJenkins.c"/>	
+		<echo message="Please also run 'ant clean' before committing any changes!"/>
+		<move file="src/usbSerialComm.c" tofile="src/usbSerialCommWin.c"/>
+		<move file="src/usbSerialCommNoWin.c.txt" tofile="src/usbSerialCommNoWin.c"/>		
    </target>   
    
-    <target name="static_test" description="Uses cppcheck, cppcheck must be installed and path set correctly! Tests and puts results into xml file.">
-		<exec executable="cmd" dir="${src.dir}" osfamily="windows" failonerror="true">			
+    <!--Note: to static test need cppcheck installed and available on the system or shell path! -->
+	<!--		See documentation at: http://cppcheck.sourceforge.net/  -->
+    <target name="static_test" 
+			description="Uses cppcheck, cppcheck must be installed and path set correctly! Tests and puts results into xml file in the tests dir.">
+		<mkdir dir="${test.dir}" failonerror="true" />
+		<exec executable="cmd" dir="${test.dir}" osfamily="windows" failonerror="true">			
 			<arg value="/C" />
 			<arg line="cppcheck --xml-version=2 --enable=all --inconclusive . 2&gt; errorsStaticCheck.xml" />
 		</exec>
-		<exec executable="/bin/sh" dir="${src.dir}" osfamily="unix" failonerror="true">			
+		<exec executable="/bin/sh" dir="${test.dir}" osfamily="unix" failonerror="true">			
 			<arg value="-c" />
 			<arg line="cppcheck --xml-version=2 --enable=all --inconclusive . 2&gt; errorsStaticCheck.xml" />
 		</exec>

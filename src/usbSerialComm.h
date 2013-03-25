@@ -7,8 +7,10 @@
  * Purpose: Contains functions to communicate with a serial port
  *          which is intended to be an arduino connected via USB.
  *  *
- * Note: This is platform specific (Windows) and somewhat compiler specific.
- *       It uses Windows.h and conio.h header files.
+ * Note: This header file is platform neutral and designed to be used with
+		  usbSerialCommNoWin and usbSerialCommWin depending. When installed
+		  or built the name will be changed to usbSerialComm.c depending on 
+		  the OS. 
  *
  * Created Spring, 2013
  */
