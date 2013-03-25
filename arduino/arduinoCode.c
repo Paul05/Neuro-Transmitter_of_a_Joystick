@@ -22,7 +22,10 @@ const int INTERRUPT = 0;			//Uses '0' as the interrupt number, which is set up w
 const int INTERRUPT_TWO = 1;        //Uses '1' as the interrupt number, which is set up with pin 3.
 volatile int STATE = LOW;			//Gives the variable STATE which will change between HIGH and LOW allowing for movement.
 volatile int SWITCH = HIGH;			//Initializes the state of SWITCH to HIGH
-int number;							//Number used for communication between the Arduino and Keyboard via Serial Monitor
+int number;
+char inputLeft = 'a';
+char inputRight = 'd';
+							//Number used for communication between the Arduino and Keyboard via Serial Monitor
 
 void setup(){							//Initial setup process for pins on input and output.
   	Serial.begin(9600);					//Allows for use of the Serial Monitor
@@ -35,27 +38,28 @@ void setup(){							//Initial setup process for pins on input and output.
 }
 
 void loop(){						//Main loop which is constantly being run on the arduino
-  number = 0;     					// zero the incoming number ready for a new read
+  number = 0;
+  					// zero the incoming number ready for a new read
   while (Serial.available() == 0)
   {
     // do nothing until something enters the serial buffer
   } 
   while (Serial.available() > 0)
   {
-    input = Serial.read();   // read the number in the serial buffer,
+    number = Serial.read();   // read the number in the serial buffer,
 									// remove the ASCII text offset for zero: '0'
   }
 
   Serial.print("You entered: ");
   Serial.println(number);
   
-  if (input.equals("a")){
+  if (number == inputLeft){
         Serial.println("Turning the Right Motor off");
 	Serial.println("Turning the Left Motor on");
 	digitalWrite(RIGHT_MOTOR, LOW);
 	digitalWrite(LEFT_MOTOR, HIGH);
 	}
-  else if (input.equals("d")){
+  else if (number == inputRight){
         Serial.println("Turning the Left Motor off");
 	Serial.println("Turning the Right Motor on");
 	digitalWrite(LEFT_MOTOR, LOW);
