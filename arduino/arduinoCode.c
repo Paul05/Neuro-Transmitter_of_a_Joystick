@@ -42,20 +42,20 @@ void loop(){						//Main loop which is constantly being run on the arduino
   } 
   while (Serial.available() > 0)
   {
-    number = Serial.read() - '0';   // read the number in the serial buffer, 
+    input = Serial.read();   // read the number in the serial buffer,
 									// remove the ASCII text offset for zero: '0'
   }
 
   Serial.print("You entered: ");
   Serial.println(number);
   
-  if (number == 1){
+  if (input.equals("a")){
         Serial.println("Turning the Right Motor off");
 	Serial.println("Turning the Left Motor on");
 	digitalWrite(RIGHT_MOTOR, LOW);
 	digitalWrite(LEFT_MOTOR, HIGH);
 	}
-  else if (number == 2){
+  else if (input.equals("d")){
         Serial.println("Turning the Left Motor off");
 	Serial.println("Turning the Right Motor on");
 	digitalWrite(LEFT_MOTOR, LOW);
