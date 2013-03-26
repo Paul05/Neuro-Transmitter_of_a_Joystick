@@ -40,9 +40,12 @@ void setup(){							//Initial setup process for pins on input and output.
 void loop(){						//Main loop which is constantly being run on the arduino
   number = 0;
   					// zero the incoming number ready for a new read
+    delay(5000);
   while (Serial.available() == 0)
   {
-    // do nothing until something enters the serial buffer
+      digitalWrite(LEFT_MOTOR, LOW);
+      digitalWrite(RIGHT_MOTOR, LOW);
+    //Disables the digital pins so that nothing is happening if you are not looking left or right. 
   } 
   while (Serial.available() > 0)
   {
