@@ -16,6 +16,7 @@ void goRight()
 {
     sendToArduino(arduinoRight);
     printf("You are going right.\n");
+    delayProgram(1000);
 
 } //end goRight function
 
