@@ -53,11 +53,7 @@ int closeCommunication(void)
  */
 int testCommunication(void)
 {
-   //  DWORD btsIO;
-     //Write in delay first then... 
-     //Send char T for example and arduino will communicate back
-     //WriteFile(g_arduinoDevice,test,strlen(test),&btsIO,NULL);
-
+   
      return 1;
 
 } //end testCommunication function 
@@ -67,10 +63,9 @@ int testCommunication(void)
  * Sends an integer to the currently open device.
  * @param toSend integer to send to Arduino
  */
-void sendIntToArduino(int toSend)
-{
-  
-    //WriteFile(g_arduinoDevice,test,strlen(test),&btsIO,NULL);
+void sendToArduino(char toSend)
+{  
+    
 } //end sendIntToArduino function
 
 //END file usbSerialComm.c FOR JENKINS ONLY!!!
