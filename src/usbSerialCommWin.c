@@ -135,4 +135,11 @@ void sendToArduino(char toSend[])
    WriteFile(g_arduinoDevice,toSend,strlen(toSend),&g_btsIO,NULL); //writes char to arduino
 } //end sendIntToArduino function
 
+void delayProgram(int time){
+#ifdef WIN32
+    sleep(time);
+#else
+#ifdef LINUX
+    usleep(time*1000);
+}
 //END file usbSerialComm.c

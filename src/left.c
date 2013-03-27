@@ -20,6 +20,7 @@
  {
      sendToArduino(arduinoLeft);
      printf("You are going left.\n");
+     delayProgram(1000);
 
  }//end goLeft function
 
