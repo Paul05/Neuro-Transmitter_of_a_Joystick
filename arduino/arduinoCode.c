@@ -40,7 +40,7 @@ void setup(){							//Initial setup process for pins on input and output.
 void loop(){						//Main loop which is constantly being run on the arduino
   number = 0;
   					// zero the incoming number ready for a new read
-    delay(5000);
+    delay(3000); //Keeps the previous motor spinning for 3 seconds
   while (Serial.available() == 0)
   {
       digitalWrite(LEFT_MOTOR, LOW);
