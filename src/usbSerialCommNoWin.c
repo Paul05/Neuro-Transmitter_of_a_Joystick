@@ -52,7 +52,6 @@ int closeCommunication(void)
 int testCommunication(void)
 {
       return 1;
-	  
 } //end testCommunication function 
 
 
@@ -72,7 +71,7 @@ int testCommunication(void)
  */
 void sendToArduino(char toSend[])
 {
-  
+
 } //end sendIntToArduino function
 
 /**
