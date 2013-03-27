@@ -46,7 +46,9 @@
 int setupCommunication(const char portName[], const int portBaudRate);
 int closeCommunication(void);
 int testCommunication(void);
+void testOperation(void);
 void sendToArduino(char toSend[]);
+void delayProgram(int time);
 
 #endif	/* USBSERIALCOMM_H */
 

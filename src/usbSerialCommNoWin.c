@@ -1,14 +1,14 @@
 /*
- * File:   usbSerialComm.c  FOR UNIX/Linux ONLY!!!
+ * File:   usbSerialCommNoWin.c  
+ *
  * Author: Neuro-Transmitter Group
  *         Frank Liu, Darryl Monroe, Michael Berg, Paul Spaude
  * Class: CST315 & CST316 ASU Polytechnic
  *
  * Purpose: Contains functions to communicate with a serial port
  *          which is intended to be an arduino connected via USB.
- *  *
- * Note: This is platform specific to POSIX systems.
- *       
+ *  
+ * Note: This is platform specific to UNIX/Linux.
  *
  * Created Spring, 2013
  */
@@ -17,8 +17,6 @@
 #include <unistd.h>
 #include <stdio.h>
 #include "usbSerialComm.h"
-
-//use unistd.h for delay, usleep() function
 
 /**
  * Purpose: Sets up communication on port specified at baud rate specified if
@@ -53,24 +51,37 @@ int closeCommunication(void)
  */
 int testCommunication(void)
 {
-   //  DWORD btsIO;
-     //Write in delay first then... 
-     //Send char T for example and arduino will communicate back
-     //WriteFile(g_arduinoDevice,test,strlen(test),&btsIO,NULL);
-
-     return 1;
-
+      return 1;
+	  
 } //end testCommunication function 
 
 
 /**
+ * Tests the operation of the device by sending brief 
+ * movement commands.
+ */
+ void testOperation(void)
+ {
+ 
+ } //end testOperation function
+
+ 
+/**
  * Sends an integer to the currently open device.
  * @param toSend integer to send to Arduino
  */
-void sendIntToArduino(int toSend)
+void sendToArduino(char toSend[])
 {
   
-    //WriteFile(g_arduinoDevice,test,strlen(test),&btsIO,NULL);
 } //end sendIntToArduino function
 
-//END file usbSerialComm.c FOR JENKINS ONLY!!!
+/**
+ * Delay function for program between serial communication.
+ * @param integer time where time is in microseconds
+ */
+void delayProgram(int time)
+{
+	usleep(time);
+}
+
+//END file usbSerialCommNoWin.c 

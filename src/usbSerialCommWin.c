@@ -114,16 +114,15 @@ int testCommunication(void)
 
 /**
  * Test the connection and motor/wheelchair movment capability of the
- * Arduino with a defined test. This can be used in a startup test or for
- * troubleshooting issues.
- * @return int 0 for failure and non-zero for success
+ * connected device with a defined test. 
+ * This can be used in a startup test or for troubleshooting issues.
  */
-int testMotorMovement(void)
+void testOperation(void)
 {
       sendToArduino(arduinoLeft); //Test Actual Movement (Wheelchair turns left then right for example, test functions etc.) //TODO
       Sleep(500);
       sendToArduino(arduinoRight);
-}
+} //end testOperaiton 
 
 
 /**
@@ -135,11 +134,13 @@ void sendToArduino(char toSend[])
    WriteFile(g_arduinoDevice,toSend,strlen(toSend),&g_btsIO,NULL); //writes char to arduino
 } //end sendIntToArduino function
 
-void delayProgram(int time){
-#ifdef WIN32
-    sleep(time);
-#else
-#ifdef LINUX
-    usleep(time*1000);
+
+/**
+ * Delays the program, used for delays between serial communication.
+ * @param time int that is a time unit in milliseconds
+ */
+void delayProgram(int time)
+{
+    Sleep(time);
 }
 //END file usbSerialComm.c

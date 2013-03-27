@@ -216,7 +216,7 @@ int main(int argc, char** argv)
 
         if (successFlag > 0)
         {            
-            testMotorMovement(); //tests everything is working correctly with predefined test pattern
+            testOperation(); //tests everything is working correctly with predefined test pattern
         }
         
     } //end if else check if inputs completed and setup communications/test communications
