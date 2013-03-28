@@ -43,18 +43,21 @@
 		<echo message="Unix OS detected. Please make sure Arduino and a Neuro-Headset are connected and ready!"/>
 		<move file="src/usbSerialCommWin.c" tofile="src/usbSerialCommWin.c.txt"/>
 		<move file="src/usbSerialCommNoWin.c" tofile="src/usbSerialComm.c"/>
-		<replace file="src/userInput.c" token="#include &lt;conio.h&gt;" value="//#include &lt;conio.h&gt;"/>	
-		<replace file="src/userInput.c" token="getch" value="getchar"/>
+		<move file="src/userInputWin.c" tofile="src/userInputWin.c.txt"/>
+		<move file="src/userInputNoWin.c" tofile="src/userInput.c"/>
 	</target>
  
 	<!-- This is called if the OS is Windows, renames files to use the Windows designated file for Serial Communication. -->			
 	<target name="setWindows" if="isWindows">	
 		<echo message="Windows OS detected. Please make sure the Arduino and the Emotiv Headset are connected and ready!"/>
 		<move file="src/usbSerialCommWin.c" tofile="src/usbSerialComm.c"/>
-		<move file="src/usbSerialCommNoWin.c" tofile="src/usbSerialCommNoWin.c.txt"/>		
+		<move file="src/usbSerialCommNoWin.c" tofile="src/usbSerialCommNoWin.c.txt"/>
+		<move file="src/userInputNoWin.c" tofile="src/userInputNoWin.c.txt"/>
+		<move file="src/userInputWin.c" tofile="src/userInput.c"/>		
 	</target>
 
    <target name="clean" description="Cleans the directory of build and executable files.">
+      <echo message="Please also run 'ant restoreWin' or 'ant restoreUnix', depending on OS, before committing any changes!"/>
       <delete dir="${dist.dir}" failonerror="false"/>
 	  <delete dir="${build.dir}" />
    </target>
@@ -79,10 +82,11 @@
    <!-- This restores the original structure of the code after it was built on Unix. See setUnix target above. 
           To completely restore to original configuration run ant clean as well -->
    <target name="restoreUnix" description="Designed for Unix based systems to restore changes made for that system.">	
+		<echo message="Please also run 'ant clean' before committing any changes!"/>
 		<move file="src/usbSerialComm.c" tofile="src/usbSerialCommNoWin.c" />	
 		<move file="src/usbSerialCommWin.c.txt" tofile="src/usbSerialCommWin.c"/>
-		<replace file="src/userInput.c" token="//#include &lt;conio.h&gt;" value="#include &lt;conio.h&gt;"/>	
-		<replace file="src/userInput.c" token="return getchar();" value="return getch();"/>
+		<move file="src/userInputWin.c.txt" tofile="src/userInputWin.c"/>
+		<move file="src/userInput.c" tofile="src/userInputNoWin.c"/>
    </target>
    
     <!-- This restores the original structure of the code after it was built on Windows. See setWindows target above.
@@ -91,6 +95,8 @@
 		<echo message="Please also run 'ant clean' before committing any changes!"/>
 		<move file="src/usbSerialComm.c" tofile="src/usbSerialCommWin.c"/>
 		<move file="src/usbSerialCommNoWin.c.txt" tofile="src/usbSerialCommNoWin.c"/>		
+		<move file="src/userInputNoWin.c.txt" tofile="src/userInputNoWin.c"/>
+		<move file="src/userInput.c" tofile="src/userInputWin.c"/>	
    </target>   
    
     <!--Note: In order to static test, you will need cppcheck installed and available on the system or shell path. -->

@@ -17,6 +17,7 @@
 
 #ifndef USBSERIALCOMM_H
 
+//May have to redo these for linux port, probably put these in the usbSerialCommWin.c file and make another for the Unix version
  #ifndef STDPORTLENGTH
     #define STDPORTLENGTH 5    //size of the standard 1-9 com ports plus null
  #endif

@@ -76,11 +76,13 @@ void sendToArduino(char toSend[])
 
 /**
  * Delay function for program between serial communication.
- * @param integer time where time is in microseconds
+ * @param integer time where time is in milliseconds
  */
 void delayProgram(int time)
 {
-	usleep(time);
+	int timeToMilliSecs = (time * 1000); 
+	//this converts the input (milliseconds to be same interface as windows) to the required microseconds by the unix cmd
+	usleep(timeToMilliSecs);
 }
 
 //END file usbSerialCommNoWin.c 
