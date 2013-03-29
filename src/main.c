@@ -45,6 +45,11 @@
 #include "forward.h"
 
 #define DEVTESTCMD "test"
+char arduinoForward = 'w';
+char arduinoBack = 's';
+char arduinoRight = 'd';
+char arduinoLeft = 'a';
+char arduinoExit = 'x';
 
 /**
 * Welcome message function that displays a welcome message on the console.
@@ -102,23 +107,23 @@ void callNormalizeDirectionFuncs(char key)
 {
     switch (key)
     {       
-        case 'w': case 'W':
+        case arduinoForward:
             goForward();
             break;
-        case 's': case 'S':
+        case arduinoBack:
             goBackward();
             break;
-        case 'a': case 'A':
+        case arduinoLeft:
             goLeft();
             break;
-        case 'd': case 'D':
+        case arduinoRight:
             goRight();
             break;
         case 't': case 'T':
             printf("*Test char recieved (t). Now testing communication with the Arduino... \n\n"); //TODO do we want to test movement or comms?
             break;
-        case 'x': case 'X':
-            printf("*Exit char recieved (x). \n\n");
+        case arduinoExit:
+            printf("*Exit char recieved %c. \n\n", arduinoExit);
             //exit command found, fall through (after this function) needs to take care of the actual exit
             break;
         default:                   
@@ -230,7 +235,8 @@ int main(int argc, char** argv)
     }
     else
     {
-        printf("\nProgram ready and in loop for Emotiv Input or press 'x' to exit! \n\n");
+        changeKeys();
+        printf("\nProgram ready and in loop for Emotiv Input or press %c to exit! \n\n", arduinoExit);
 
         do
         {
@@ -240,10 +246,10 @@ int main(int argc, char** argv)
            
             callNormalizeDirectionFuncs(emotivInput);  //Call respective direction/normalization functions based on input
 
-        } while( emotivInput != 'x' && emotivInput != 'X' ); //end loop get input from console from emotiv device
+        } while( emotivInput != arduinoExit); //end loop get input from console from emotiv device
 
 
-        if ( tolower(emotivInput) == 'x' )
+        if ( tolower(emotivInput) == arduinoExit)
         {
             printf("\nExit character found! Now exiting the program. \n\n");
         }

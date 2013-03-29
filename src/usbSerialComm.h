@@ -36,10 +36,6 @@
 
 //Maybe add setup and let user define these? TODO
 #define arduinoTest "t"
-#define arduinoForward "w"
-#define arduinoBack "s"
-#define arduinoRight "d"
-#define arduinoLeft "a"
 
 
 #define	USBSERIALCOMM_H
