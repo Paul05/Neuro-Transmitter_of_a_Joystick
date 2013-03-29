@@ -17,7 +17,9 @@
  */
 void goForward()
 {
-    printf("Forward\n");
+    sendToArduino(arduinoForward);
+    printf("You are going forward.\n");
+    delayProgram(1000);
 
 } //end goForward function
 

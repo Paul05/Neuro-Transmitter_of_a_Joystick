@@ -17,7 +17,9 @@
  */
 void goBackward()
 {
-    printf("Backward\n");
+    sendtoArduino(arduinoBack);
+    printf("You are going backwards.\n");
+    delayProgram(1000);
 
 } //end goBackward function
 
