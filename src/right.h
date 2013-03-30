@@ -12,7 +12,7 @@
 #ifndef RIGHT_H
 #define	RIGHT_H
 
-void right();
+void goRight();
 
 #endif	/* RIGHT_H */
 

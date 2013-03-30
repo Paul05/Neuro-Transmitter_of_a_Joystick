@@ -37,19 +37,17 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <string.h>
 #include "usbSerialComm.h"
 #include "userInput.h"
+#include "neuroInputSetup.h"
 #include "left.h"
 #include "right.h"
 #include "forward.h"
+#include "backward.h"
 
 #define DEVTESTCMD "test"
-char arduinoForward = 'w';
-char arduinoBack = 's';
-char arduinoRight = 'd';
-char arduinoLeft = 'a';
-char arduinoExit = 'x';
 
 /**
 * Welcome message function that displays a welcome message on the console.
@@ -105,31 +103,36 @@ void userInstructionMessage(void)
  */
 void callNormalizeDirectionFuncs(char key)
 {
-    switch (key)
-    {       
-        case arduinoForward:
-            goForward();
-            break;
-        case arduinoBack:
-            goBackward();
-            break;
-        case arduinoLeft:
-            goLeft();
-            break;
-        case arduinoRight:
-            goRight();
-            break;
-        case 't': case 'T':
-            printf("*Test char recieved (t). Now testing communication with the Arduino... \n\n"); //TODO do we want to test movement or comms?
-            break;
-        case arduinoExit:
-            printf("*Exit char recieved %c. \n\n", arduinoExit);
-            //exit command found, fall through (after this function) needs to take care of the actual exit
-            break;
-        default:                   
-            printf("\n*Error char not recognized! Char input: %c. \n\n", key); //char not recognized print error, will keep going though
-            break;
-    } //end switch on key
+    if ( key == extG_controllerForwardCmd )
+    {
+        goForward();
+    }
+    else if ( key == extG_controllerBackCmd )
+    {
+        goBackward();
+    }
+    else if ( key == extG_controllerLeftCmd )
+    {
+        goLeft();
+    }
+    else if ( key == extG_controllerRightCmd )
+    {
+        goRight();
+    }
+    else if ( key == extG_controllerTestCmd )
+    {
+        testCommunication();
+    }
+    else if ( key == extG_controllerExitCmd )
+    {
+        printf("*Exit char recieved %c. \n\n", extG_controllerExitCmd);
+        //exit command found, fall through (after this function) needs to take care of the actual exit
+    }
+    else
+    {
+         printf("\n*Error char not recognized! Char input: %c. \n\n", key); //char not recognized print error, will keep going though
+    }//end switch on key
+     
 } //end callNormalizeDirectionFuncs function
 
 
@@ -235,8 +238,8 @@ int main(int argc, char** argv)
     }
     else
     {
-        changeKeys();
-        printf("\nProgram ready and in loop for Emotiv Input or press %c to exit! \n\n", arduinoExit);
+        changeMovementCommands();
+        printf("\nProgram ready and in loop for Emotiv Input or press %c to exit! \n\n", extG_controllerExitCmd);
 
         do
         {
@@ -246,10 +249,10 @@ int main(int argc, char** argv)
            
             callNormalizeDirectionFuncs(emotivInput);  //Call respective direction/normalization functions based on input
 
-        } while( emotivInput != arduinoExit); //end loop get input from console from emotiv device
+        } while( emotivInput != extG_controllerExitCmd); //end loop get input from console from emotiv device
 
 
-        if ( tolower(emotivInput) == arduinoExit)
+        if ( tolower(emotivInput) == extG_controllerExitCmd)
         {
             printf("\nExit character found! Now exiting the program. \n\n");
         }

@@ -12,7 +12,7 @@
 #ifndef LEFT_H
 #define	LEFT_H
 
-void left();
+void goLeft();
 
 #endif	/* LEFT_H */
 

@@ -11,13 +11,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "usbSerialComm.h"
 
 /**
  *
  */
 void goBackward()
 {
-    sendtoArduino(arduinoBack);
+    sendToWheelChairController(extG_controllerBackCmd);
     printf("You are going backwards.\n");
     delayProgram(1000);
 

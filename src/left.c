@@ -18,7 +18,7 @@
  */
  void goLeft()
  {
-     sendToArduino(arduinoLeft);
+     sendToWheelChairController(extG_controllerLeftCmd);
      printf("You are going left.\n");
      delayProgram(1000);
 

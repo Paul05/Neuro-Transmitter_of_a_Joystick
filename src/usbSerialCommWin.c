@@ -5,7 +5,7 @@
  * Class: CST315 & CST316 ASU Polytechnic
  *
  * Purpose: Contains functions to communicate with a serial port
- *          which is intended to be an arduino connected via USB.
+ *          which is intended to be an control device connected via USB.
  *  
  * Note: This is platform specific (Windows) and somewhat compiler specific.
  *       It uses Windows.h and conio.h header files.
@@ -18,9 +18,17 @@
 #include <conio.h>
 #include "usbSerialComm.h"
 
-HANDLE g_arduinoDevice = NULL; //global variable that is a file handle to be used for Arduino Connection
+HANDLE g_controlDevice = NULL; //global variable that is a file handle to be used for Arduino Connection
 DWORD g_btsIO;   //global variable that is used by the writeFile cmd to record number of bytes written
-char g_stringToSend[] = "x"; //global variable used for string to send
+
+
+char extG_controllerTestCmd = 't';
+char extG_controllerForwardCmd = 'w';
+char extG_controllerBackCmd = 's';
+char extG_controllerRightCmd = 'd';
+char extG_controllerLeftCmd = 'a';
+char extG_controllerExitCmd = 'x';
+
 
 /**
  * Purpose: Sets up communication on port specified at baud rate specified if
@@ -36,39 +44,39 @@ char g_stringToSend[] = "x"; //global variable used for string to send
  */
 int setupCommunication(const char inPortName[], const int inPortBaudRate)
 {
-     g_arduinoDevice = CreateFile(inPortName, GENERIC_READ | GENERIC_WRITE,
+     g_controlDevice = CreateFile(inPortName, GENERIC_READ | GENERIC_WRITE,
             FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, 0); //opens serial port for read and write and locks it
 
-    if (g_arduinoDevice != INVALID_HANDLE_VALUE && g_arduinoDevice != NULL) //if successfully opened
+    if (g_controlDevice != INVALID_HANDLE_VALUE && g_controlDevice != NULL) //if successfully opened
     {
         printf("\nSerial Port Opened! \n\n");
 
-        DCB arduinoControlSettings; //DCB structure(Windows)
-        arduinoControlSettings.DCBlength = sizeof(DCB);   //set length
-        GetCommState(g_arduinoDevice,&arduinoControlSettings); //retrieve current control settings for comm device
-        arduinoControlSettings.BaudRate = CBR_9600;    //right now hard code this to 9600 otherwise use baud rate   TODO!!!
-        arduinoControlSettings.ByteSize = 8;
-        arduinoControlSettings.Parity = NOPARITY;   //set parity
-        arduinoControlSettings.StopBits = ONESTOPBIT;   //set how many stop bits
+        DCB controDeviceConnectionSettings; //DCB structure(Windows)
+        controDeviceConnectionSettings.DCBlength = sizeof(DCB);   //set length
+        GetCommState(g_controlDevice,&controDeviceConnectionSettings); //retrieve current control settings for comm device
+        controDeviceConnectionSettings.BaudRate = CBR_9600;    //right now hard code this to 9600 otherwise use baud rate   TODO!!!
+        controDeviceConnectionSettings.ByteSize = 8;
+        controDeviceConnectionSettings.Parity = NOPARITY;   //set parity
+        controDeviceConnectionSettings.StopBits = ONESTOPBIT;   //set how many stop bits
 
         /*Alternate section once Arduino exhibits failure to communicate, these turn off various port settings
-        arduinoControlSettings.fBinary = FALSE;            // Binary mode; no EOF check
-        arduinoControlSettings.fOutxCtsFlow = TRUE;         // No CTS output flow control
-        arduinoControlSettings.fOutxDsrFlow = FALSE;         // No DSR output flow control
-        arduinoControlSettings.fDtrControl = DTR_CONTROL_ENABLE;  // DTR flow control type
-        arduinoControlSettings.fDsrSensitivity = FALSE;      // DSR sensitivity
-        arduinoControlSettings.fTXContinueOnXoff = TRUE;     // XOFF continues Tx
-        arduinoControlSettings.fOutX = FALSE;                // No XON/XOFF out flow control
-        arduinoControlSettings.fInX = FALSE;                 // No XON/XOFF in flow control
-        arduinoControlSettings.fErrorChar = FALSE;           // Disable error replacement
-        arduinoControlSettings.fNull = FALSE;                // Disable null stripping
+        controDeviceConnectionSettings.fBinary = FALSE;            // Binary mode; no EOF check
+        controDeviceConnectionSettings.fOutxCtsFlow = TRUE;         // No CTS output flow control
+        controDeviceConnectionSettings.fOutxDsrFlow = FALSE;         // No DSR output flow control
+        controDeviceConnectionSettings.fDtrControl = DTR_CONTROL_ENABLE;  // DTR flow control type
+        controDeviceConnectionSettings.fDsrSensitivity = FALSE;      // DSR sensitivity
+        controDeviceConnectionSettings.fTXContinueOnXoff = TRUE;     // XOFF continues Tx
+        controDeviceConnectionSettings.fOutX = FALSE;                // No XON/XOFF out flow control
+        controDeviceConnectionSettings.fInX = FALSE;                 // No XON/XOFF in flow control
+        controDeviceConnectionSettings.fErrorChar = FALSE;           // Disable error replacement
+        controDeviceConnectionSettings.fNull = FALSE;                // Disable null stripping
         //lpTest.fRtsControl = RTS_CONTROL_ENABLE; //// RTS flow control
-        arduinoControlSettings.fAbortOnError = TRUE;        // Do not abort reads/writes on error
+        controDeviceConnectionSettings.fAbortOnError = TRUE;        // Do not abort reads/writes on error
         */
 
         //Add enumeration for all baud rates? TODO
 
-        SetCommState(g_arduinoDevice,&arduinoControlSettings); //set the current control settings for the device
+        SetCommState(g_controlDevice,&controDeviceConnectionSettings); //set the current control settings for the device
 
         printf("\nSerial Port Settings Established! \n");
         
@@ -89,7 +97,7 @@ int setupCommunication(const char inPortName[], const int inPortBaudRate)
  */
 int closeCommunication(void)
 {
-    return CloseHandle(g_arduinoDevice); //close the connection and return result (0 = failed)
+    return CloseHandle(g_controlDevice); //close the connection and return result (0 = failed)
     
 } //end closeCommunication function
 
@@ -102,8 +110,8 @@ int closeCommunication(void)
  */
 int testCommunication(void)
 {
-    Sleep(1000);   
-    WriteFile(g_arduinoDevice,arduinoTest,strlen(arduinoTest),&g_btsIO,NULL);
+    delayProgram(1000);
+    WriteFile(g_controlDevice,extG_controllerTestCmd,strlen(extG_controllerTestCmd),&g_btsIO,NULL);
 
     //TODO: Readfile here if we wish to do an 'ACK' from the Arduno
 
@@ -119,9 +127,9 @@ int testCommunication(void)
  */
 void testOperation(void)
 {
-      sendToArduino(arduinoLeft); //Test Actual Movement (Wheelchair turns left then right for example, test functions etc.) //TODO
-      Sleep(500);
-      sendToArduino(arduinoRight);
+      sendToWheelChairController(extG_controllerLeftCmd); //Test Actual Movement (Wheelchair turns left then right for example, test functions etc.) //TODO
+      delayProgram(500);
+      sendToWheelChairController(extG_controllerRightCmd);
 } //end testOperaiton 
 
 
@@ -129,9 +137,9 @@ void testOperation(void)
  * Sends a char to the currently open serial port.
  * @param toSend char to send to Arduino
  */
-void sendToArduino(char toSend[])
+void sendToWheelChairController(char toSend[])
 {
-   WriteFile(g_arduinoDevice,toSend,strlen(toSend),&g_btsIO,NULL); //writes char to arduino
+   WriteFile(g_controlDevice,toSend,strlen(toSend),&g_btsIO,NULL); //writes char to arduino
 } //end sendIntToArduino function
 
 

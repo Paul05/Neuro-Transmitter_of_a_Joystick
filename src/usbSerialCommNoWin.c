@@ -18,6 +18,15 @@
 #include <stdio.h>
 #include "usbSerialComm.h"
 
+
+char extG_controllerTestCmd = 't';
+char extG_controllerForwardCmd = 'w';
+char extG_controllerBackCmd = 's';
+char extG_controllerRightCmd = 'd';
+char extG_controllerLeftCmd = 'a';
+char extG_controllerExitCmd = 'x';
+
+
 /**
  * Purpose: Sets up communication on port specified at baud rate specified if
  * possible and handles the details. It returns an integer where non-zero is

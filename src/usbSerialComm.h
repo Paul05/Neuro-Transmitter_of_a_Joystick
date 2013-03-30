@@ -34,8 +34,14 @@
     #define UPPRBAUDRATE 256000  //upper possible baud rate
  #endif
 
-//Maybe add setup and let user define these? TODO
-#define arduinoTest "t"
+
+//Global Commands for the controller
+extern char extG_controllerTestCmd;
+extern char extG_controllerForwardCmd;
+extern char extG_controllerBackCmd;
+extern char extG_controllerRightCmd;
+extern char extG_controllerLeftCmd;
+extern char extG_controllerExitCmd;
 
 
 #define	USBSERIALCOMM_H
@@ -44,7 +50,7 @@ int setupCommunication(const char portName[], const int portBaudRate);
 int closeCommunication(void);
 int testCommunication(void);
 void testOperation(void);
-void sendToArduino(char toSend[]);
+void sendToWheelChairController(char toSend[]);
 void delayProgram(int time);
 
 #endif	/* USBSERIALCOMM_H */

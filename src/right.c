@@ -14,7 +14,7 @@
 
 void goRight()
 {
-    sendToArduino(arduinoRight);
+    sendToWheelChairController(extG_controllerRightCmd);
     printf("You are going right.\n");
     delayProgram(1000);
 

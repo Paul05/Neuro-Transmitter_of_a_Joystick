@@ -11,13 +11,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <usbSerialComm.h>
 
 /**
  * 
  */
 void goForward()
 {
-    sendToArduino(arduinoForward);
+    sendToWheelChairController(extG_controllerForwardCmd);
     printf("You are going forward.\n");
     delayProgram(1000);
 
