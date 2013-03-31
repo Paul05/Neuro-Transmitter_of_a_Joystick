@@ -78,7 +78,7 @@ int testCommunication(void)
  * Sends an integer to the currently open device.
  * @param toSend integer to send to Arduino
  */
-void sendToArduino(char toSend[])
+void sendToWheelChairController(char toSend)
 {
 
 } //end sendIntToArduino function
