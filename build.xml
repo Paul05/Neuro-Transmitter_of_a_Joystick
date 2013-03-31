@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <project name="Neuro-Transmitter of a Joystick Control Normalization Algorithm and Program"
-         default="targets" basedir="."
-         xmlns:dn="antlib:org.apache.ant.dotnet"
+         default="targets" basedir="."      
          xmlns="antlib:org.apache.tools.ant"
 		 xmlns:cpptasks="antlib:net.sf.antcontrib.cpptasks">       
    <property file="build.properties"/>
