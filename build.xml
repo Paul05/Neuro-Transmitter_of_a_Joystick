@@ -60,6 +60,7 @@
       <echo message="Please also run 'ant restoreWin' or 'ant restoreUnix', depending on OS, before committing any changes!"/>
       <delete dir="${dist.dir}" failonerror="false"/>
 	  <delete dir="${build.dir}" />
+	  <delete file="${test.dir}/errorsStaticCheck.xml" failonerror="false"/>
    </target>
    
    <!-- Creates directories needed in preparation for build and subsequentl compilation -->
@@ -105,14 +106,15 @@
 		description="Uses cppcheck, cppcheck must be installed and path set correctly! &#xa;
 	                 Cppcheck tests the source code and puts results into an xml file in the tests dir.">		
 		<delete file="${test.dir}/errorsStaticCheck.xml" failonerror="false"/>
-		<exec executable="cmd" dir="${test.dir}" osfamily="windows" failonerror="true">			
+		<exec executable="cmd" dir="${src.dir}" osfamily="windows" failonerror="true">			
 			<arg value="/C" />
 			<arg line="cppcheck --xml-version=2 --enable=all --inconclusive . 2&gt; errorsStaticCheck.xml" />
 		</exec>
-		<exec executable="/bin/sh" dir="${test.dir}" osfamily="unix" failonerror="true">			
+		<exec executable="/bin/sh" dir="${src.dir}" osfamily="unix" failonerror="true">			
 			<arg value="-c" />
-			<arg line="cppcheck --xml-version=2 --enable=all --inconclusive . 2&gt; errorsStaticCheck.xml" />
+			<arg line="cppcheck --xml-version=2 --enable=all --inconclusive . 2&gt; errorsStaticCheck.xml" />			
 		</exec>
+		<move file="src/errorsStaticCheck.xml" todir="${test.dir}"/>
 	</target>
 	
 	<target name="dynamic_test">

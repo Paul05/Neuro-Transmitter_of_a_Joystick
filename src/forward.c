@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <usbSerialComm.h>
+#include "usbSerialComm.h"
 
 /**
  * 
