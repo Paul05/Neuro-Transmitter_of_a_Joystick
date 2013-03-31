@@ -9,7 +9,7 @@
    <property name="user" value="${env.USERNAME}"/>
    
     <target name="targets">
-      <echo message="Targets are clean, build, static_test, restoreUnix, restoreWin and targets. "/>
+      <echo message="Targets are clean, build, static_test, dynamic_test, restoreUnix, restoreWin and targets. "/>
 	  <echo message="  Note: Ant will need cpptasks jar in your system's ant/lib folder "/>
 	  <echo message="		           (jar is included in the lib directory of this repository)."/> 
 	  <echo message="	&#xa;Also, you will need a C compiler setup in your system or shell path "/>
@@ -103,8 +103,8 @@
 	<!--		See documentation at: http://cppcheck.sourceforge.net/  -->
     <target name="static_test" 
 		description="Uses cppcheck, cppcheck must be installed and path set correctly! &#xa;
-	                 Cppcheck tests the source code and puts results into an xml file in the tests dir.">
-		<mkdir dir="${test.dir}" failonerror="true" />
+	                 Cppcheck tests the source code and puts results into an xml file in the tests dir.">		
+		<delete file="${test.dir}/errorsStaticCheck.xml" failonerror="false"/>
 		<exec executable="cmd" dir="${test.dir}" osfamily="windows" failonerror="true">			
 			<arg value="/C" />
 			<arg line="cppcheck --xml-version=2 --enable=all --inconclusive . 2&gt; errorsStaticCheck.xml" />
@@ -113,5 +113,9 @@
 			<arg value="-c" />
 			<arg line="cppcheck --xml-version=2 --enable=all --inconclusive . 2&gt; errorsStaticCheck.xml" />
 		</exec>
+	</target>
+	
+	<target name="dynamic_test">
+		<echo message="Dynamic Test Ran"/>
 	</target>
 </project>

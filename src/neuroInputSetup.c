@@ -10,12 +10,14 @@
  */
 
 #include <stdio.h>
+#include <ctype.h>
 #include "neuroInputSetup.h"
 #include "userInput.h"
+#include "usbSerialComm.h"
 
 void changeMovementCommands()
 {
-    char defaultChange = '';
+    char defaultChange = 'z';
     printf("The default inputs are W for forward, A for backward, S for left, D for right, and X for exiting the program while moving the wheelchair. Do you wish to change the defaults? Type [Y] for yes or [N] for no.\n");
 
     defaultChange = getCharConsole();

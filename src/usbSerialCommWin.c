@@ -110,8 +110,9 @@ int closeCommunication(void)
  */
 int testCommunication(void)
 {
+    char tempToSend[] = {extG_controllerTestCmd};
     delayProgram(1000);
-    WriteFile(g_controlDevice,extG_controllerTestCmd,strlen(extG_controllerTestCmd),&g_btsIO,NULL);
+    WriteFile(g_controlDevice,tempToSend,strlen(tempToSend),&g_btsIO,NULL);
 
     //TODO: Readfile here if we wish to do an 'ACK' from the Arduno
 
@@ -137,9 +138,10 @@ void testOperation(void)
  * Sends a char to the currently open serial port.
  * @param toSend char to send to Arduino
  */
-void sendToWheelChairController(char toSend[])
+void sendToWheelChairController(char toSend)
 {
-   WriteFile(g_controlDevice,toSend,strlen(toSend),&g_btsIO,NULL); //writes char to arduino
+   char tempToSend[] = {toSend};
+   WriteFile(g_controlDevice,tempToSend,strlen(tempToSend),&g_btsIO,NULL); //writes char to arduino
 } //end sendIntToArduino function
 
 

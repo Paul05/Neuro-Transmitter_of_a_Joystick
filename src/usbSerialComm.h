@@ -50,7 +50,7 @@ int setupCommunication(const char portName[], const int portBaudRate);
 int closeCommunication(void);
 int testCommunication(void);
 void testOperation(void);
-void sendToWheelChairController(char toSend[]);
+void sendToWheelChairController(char toSend);
 void delayProgram(int time);
 
 #endif	/* USBSERIALCOMM_H */
