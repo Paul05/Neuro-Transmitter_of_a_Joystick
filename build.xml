@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <project name="Neuro-Transmitter of a Joystick Control Normalization Algorithm and Program"
-         default="targets" basedir="."      
-         xmlns="antlib:org.apache.tools.ant"
-		 xmlns:cpptasks="antlib:net.sf.antcontrib.cpptasks">       
+  default="targets" basedir="."      
+        xmlns="antlib:org.apache.tools.ant"
+	 xmlns:cpptasks="antlib:net.sf.antcontrib.cpptasks">       
    <property file="build.properties"/>
    <property environment="env"/>
    <property name="user" value="${env.USERNAME}"/>
@@ -110,13 +110,19 @@
 			<arg line="cppcheck --xml-version=2 --enable=all --inconclusive . 2&gt; errorsStaticCheck.xml" />
 		</exec>
 		<exec executable="/bin/sh" dir="${src.dir}" osfamily="unix" failonerror="true">			
-			<arg value="-c" />
-			<arg line="cppcheck --xml-version=2 --enable=all --inconclusive . 2&gt; errorsStaticCheck.xml" />			
+			<arg value="-c"/>			
+			<arg value="cppcheck --xml-version=2 --enable=all --inconclusive . 2&gt; errorsStaticCheck.xml" />			
 		</exec>
 		<move file="src/errorsStaticCheck.xml" todir="${test.dir}"/>
 	</target>
 	
-	<target name="dynamic_test">
-		<echo message="Dynamic Test Ran"/>
+	<!-- Warning: Some issues to still work out with dynamic test don't use. -->
+	<target name="dynamic_test" depends="build" 
+	        description="Uses Valgrind to dynamic test the code. Valgrind must be on the path and set correctly!&#xa;
+			    Runs the code and puts the results into ">
+		<exec executable="/bin/sh" dir="dist/" osfamily="unix" failonerror="true" inputstring="x">			
+		    <arg value="-c" />
+		    <arg value="valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --track-fds=yes ./NeuroControlProgram ttyS2 9600" />
+		</exec>
 	</target>
 </project>
