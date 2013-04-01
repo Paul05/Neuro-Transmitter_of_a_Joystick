@@ -54,7 +54,7 @@
 */
 void welcomeMessage(void)
 {
-    printf("Welcome to the 'Neuro-Trasmitter Of A Joystick' Group's "
+    printf("\nWelcome to the 'Neuro-Trasmitter Of A Joystick' Group's "
             "Emotiv Normalization Program 1.0!\n\n");
 
 } //end welcomeMessage
@@ -81,17 +81,18 @@ void exitMessage(void)
  */
 void userInstructionMessage(void)
 {
-    printf("\nMake sure the neuro(EEG) headset is connected and that the software"
-    "points to this program. \n Actions for forward, back, left, and right,"
-    "must be translated to keyboard inputs to this program via your headset "
-    "software.\nCurrently w is forward, s is back, a is left, and d is right.\n"
-    "\nAlso, make sure the Arduino or other slave controller that is hooked up"
-    "to the wheelchair is connected and acting as a Serial port.\n You need to "
-    "know the name of the port (starts with COM and then a number). \n The Arduino"
-    "or other slave controller must accept char inputs on the serial connection "
-    "the same as what was described above. \n If that is all done, this program"
-    "will normalize inputs from your EEG and communicate with the wheelchair. \n\n"
-    "Enjoy!  \n\n");
+    printf("\n\tMake sure the neuro(EEG) headset is connected and that the software"
+    " inputs to this program.\n\tActions for forward, back, left, and right,"
+    " must be translated to keyboard inputs into this \n\tprogram via your headset "
+    "software.\n\tDefaults are: w is forward, s is back, a is left, and d is right.\n"
+    "\n\tAlso, make sure the Arduino or other wheelchair/joystick controller is "
+    "connected and \n\tcommunicating through a Serial port.\n\tYou will need to "
+    "know the name of the port that it is connected on, as well as the baud rate "
+    "\n\tof the connection. "
+    "This controller must accept string inputs from that serial connection.\n\n\t"
+    "If that is all done, this program will normalize inputs from your EEG,\n\t"
+    "and communicate with the wheelchair.\n\n\t"
+    "Enjoy!\n\n");
     
 }//end userInstructionMessage
 
