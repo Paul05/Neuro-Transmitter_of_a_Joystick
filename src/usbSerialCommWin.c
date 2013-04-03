@@ -156,7 +156,7 @@ void sendToWheelChairController(char toSend)
         ++g_count;
     }else{
         if(g_last_userInpt[0] == g_last_userInpt[1]){
-            g_last_userInpt[0] == g_last_userInpt[2];
+            g_last_userInpt[0] = g_last_userInpt[2];
             g_count = 1;
         }else if(g_last_userInpt[1] == g_last_userInpt[2]){
             g_last_userInpt[0] = g_last_userInpt[2];
