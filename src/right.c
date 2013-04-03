@@ -14,9 +14,10 @@
 
 void goRight()
 {
-    sendToWheelChairController(extG_controllerRightCmd);
+//    sendToWheelChairController(extG_controllerRightCmd);
+    sendToWheelChairController('d'); //Have to hard code this currently, Arduino only accepts a and d at the moment.
     printf("You are going right.\n");
-    delayProgram(1000);
+    delayProgram(400);
 
 } //end goRight function
 

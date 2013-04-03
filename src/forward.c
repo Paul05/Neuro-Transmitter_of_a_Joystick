@@ -20,7 +20,7 @@ void goForward()
 {
     sendToWheelChairController(extG_controllerForwardCmd);
     printf("You are going forward.\n");
-    delayProgram(1000);
+    delayProgram(400);
 
 } //end goForward function
 

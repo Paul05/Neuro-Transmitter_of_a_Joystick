@@ -20,7 +20,7 @@ void goBackward()
 {
     sendToWheelChairController(extG_controllerBackCmd);
     printf("You are going backwards.\n");
-    delayProgram(1000);
+    delayProgram(400);
 
 } //end goBackward function
 
