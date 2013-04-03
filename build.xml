@@ -104,16 +104,16 @@
     <target name="static_test" 
 		description="Uses cppcheck, cppcheck must be installed and path set correctly! &#xa;
 	                 Cppcheck tests the source code and puts results into an xml file in the tests dir.">		
-		<delete file="${test.dir}/errorsStaticCheck.xml" failonerror="false"/>
+		<delete file="${test.dir}/errorsStaticAnalysis.xml" failonerror="false"/>
 		<exec executable="cmd" dir="${src.dir}" osfamily="windows" failonerror="true">			
 			<arg value="/C" />
-			<arg line="cppcheck --xml-version=2 --enable=all --inconclusive . 2&gt; errorsStaticCheck.xml" />
+			<arg line="cppcheck --xml-version=2 --enable=all --inconclusive . 2&gt; errorsStaticAnalysis.xml" />
 		</exec>
 		<exec executable="/bin/sh" dir="${src.dir}" osfamily="unix" failonerror="true">			
 			<arg value="-c"/>			
-			<arg value="cppcheck --xml-version=2 --enable=all --inconclusive . 2&gt; errorsStaticCheck.xml" />			
+			<arg value="cppcheck --xml-version=2 --enable=all --inconclusive . 2&gt; errorsStaticAnalysis.xml" />			
 		</exec>
-		<move file="src/errorsStaticCheck.xml" todir="${test.dir}"/>
+		<!-- <move file="src/errorsStaticAnalysis.xml" todir="${test.dir}"/> -->
 	</target>
 	
 	<!-- Warning: Some issues to still work out with dynamic test don't use. -->
