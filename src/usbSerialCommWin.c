@@ -154,7 +154,7 @@ void sendToWheelChairController(char toSend)
         char tempToSend[] = {toSend};
         WriteFile(g_controlDevice,tempToSend,strlen(tempToSend),&g_btsIO,NULL); //writes char to arduino
         ++g_count;
-    }else{
+    }else if(!isNaN(g_last_userInpt[2])){
         if(g_last_userInpt[0] == g_last_userInpt[1]){
             g_last_userInpt[0] = g_last_userInpt[2];
             g_count = 1;
@@ -163,8 +163,10 @@ void sendToWheelChairController(char toSend)
             g_count = 2;
         }else{
             g_count = 0;
-            printf("Let's start over.");
+            printf("Let's start over, the middle number is different.");
         }
+    }else{
+        g_count++;
     }
     
 } //end sendIntToArduino function
