@@ -137,6 +137,18 @@ void callNormalizeDirectionFuncs(char key)
 } //end callNormalizeDirectionFuncs function
 
 
+void showMenu(){
+    printf("Below is a menu where you will choose what your current request would "
+           "be.\n\n"
+           "Menu:\n"
+           "0 - TOP SECRET DEVELOPER MODE\n"
+           "1 - Change Baud Rate\n"
+           "2 - Change Port Name\n"
+           "3 - Change Input Keys (from Emotiv)\n"
+           "4 - Begin Testing\n");
+}
+
+
 /**
 * This is the Main function that calls other functions and 'runs' the program.
 * It needs two arguments on the command line.
