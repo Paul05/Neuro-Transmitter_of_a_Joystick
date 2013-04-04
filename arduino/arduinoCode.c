@@ -26,17 +26,18 @@ volatile int STATE = LOW;			//Gives the variable STATE which will change between
 volatile int SWITCH = HIGH;			//Initializes the state of SWITCH to HIGH
 int number;
 
+
 /*
- * The four inputs that need to be changed if the user decides to change the inputs
- * in the source code.
+ * *******USER-ADJUSTED INFORMATION*******
  */
 char inputLeft = 'a';
 char inputRight = 'd';
 char inputForward = 'w';
 char inputBackward = 's';
 /*
- * End user-adjusted information.
+ * *******USER-ADJUSTED INFORMATION*******
  */
+
 
 const int PULSE = 1500;                         //Pulse value for servo motors
 //Number used for communication between the Arduino and Keyboard via Serial Monitor
@@ -114,8 +115,7 @@ void loop(){			        //Main loop which is constantly being run on the arduino
       goRight();
   }
     /*
-     * END 
-     * old code that is to be changed/is outdated in regards to our servos.
+     * END IF/ELSE INFORMATION.
      */
     
 }
