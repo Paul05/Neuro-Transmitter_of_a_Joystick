@@ -25,8 +25,19 @@ const int INTERRUPT_TWO = 1;                    //Uses '1' as the interrupt numb
 volatile int STATE = LOW;			//Gives the variable STATE which will change between HIGH and LOW allowing for movement.
 volatile int SWITCH = HIGH;			//Initializes the state of SWITCH to HIGH
 int number;
+
+/*
+ * The four inputs that need to be changed if the user decides to change the inputs
+ * in the source code.
+ */
 char inputLeft = 'a';
 char inputRight = 'd';
+char inputForward = 'w';
+char inputBackward = 's';
+/*
+ * End user-adjusted information.
+ */
+
 const int PULSE = 1500;                         //Pulse value for servo motors
 //Number used for communication between the Arduino and Keyboard via Serial Monitor
 
@@ -52,6 +63,13 @@ void loop(){			        //Main loop which is constantly being run on the arduino
 
 
   delay(3000); //Keeps the previous motor spinning for 3 seconds
+    
+    /*
+     * BEGIN:
+     * Below code would be used for the serial reception and it would turn on the
+     * servos depending on this. The code itself checks against the preset chars to 
+     * evaluate if the servos will go forward, backward, left, or right.
+     */
   while (Serial.available() == 0)
   {
     digitalWrite(LEFT_MOTOR, LOW);
@@ -95,6 +113,11 @@ void loop(){			        //Main loop which is constantly being run on the arduino
     else
       goRight();
   }
+    /*
+     * END 
+     * old code that is to be changed/is outdated in regards to our servos.
+     */
+    
 }
 
 void toggleSwitch(){
@@ -110,20 +133,21 @@ void buttonPressed(){				// function buttonPressed which gets called when an int
 
 }
 
-void goRight(){					//Function gets called as part of the predestined movement
-  digitalWrite(LEFT_MOTOR, STATE);	//Writes the current state to the LEFT_MOTOR
-  digitalWrite(RIGHT_MOTOR, !STATE);	//Writes the opposite state to the RIGHT_MOTOR (disabling the motor)
+void goRight(){
+    //Push the vertical servo to the right to have the wheelchair go right.
 
 }
 
-void goLeft(){					//Function gets called as part of the predestined movement
-  digitalWrite(RIGHT_MOTOR, STATE);	//Writes the current state to the RIGHT_MOTOR
-  digitalWrite(LEFT_MOTOR, !STATE);	//Writes the opposite state to the LEFT_MOTOR (disabling the motor)
+void goLeft(){
+    //Move the vertical (sideways) servo to the left to make the controller go left.
 }
 
-void goForward(){				//Function gets called as part of the predestined movement
-  digitalWrite(RIGHT_MOTOR, STATE);	//Writes the current state to the RIGHT_MOTOR
-  digitalWrite(LEFT_MOTOR, STATE);	//Writes the current state to the LEFT_MOTOR
+void goForward(){
+    //Turn one of the servos on to go forward (the horizontal servo goes forward so the controller goes forward)
+}
+
+void goBackward(){
+    //Push the horizontal servo backward to have the wheelchair/controller go backwards.
 }
 
 //END file arduinoCode.c
