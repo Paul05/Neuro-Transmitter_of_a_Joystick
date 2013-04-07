@@ -13,6 +13,9 @@
  * Created Spring, 2013
  */
 
+#include <string.h>
+#include <stdlib.h>
+#include <fcntl.h>
 #include <termios.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -25,6 +28,7 @@ char extG_controllerBackCmd = 's';
 char extG_controllerRightCmd = 'd';
 char extG_controllerLeftCmd = 'a';
 char extG_controllerExitCmd = 'x';
+char g_last_userInput[3];
 
 
 /**
