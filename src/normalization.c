@@ -24,6 +24,8 @@
 #include "forward.h"
 #include "backward.h"
 
+int g_count = 0;
+char g_last_userInpt[3];
 
 /*
  * This function hands off functionality to the appropriate normalization/direction
@@ -77,7 +79,7 @@ void normalizationAlgorithm(){
         char tempToSend[] = {toSend};
         WriteFile(g_controlDevice,tempToSend,strlen(tempToSend),&g_btsIO,NULL); //writes char to arduino
         ++g_count;
-    }else{
+    }else if(!isnan(g_last_userInpt[2])){
         if(g_last_userInpt[0] == g_last_userInpt[1]){
             g_last_userInpt[0] == g_last_userInpt[2];
             g_count = 1;
@@ -88,6 +90,8 @@ void normalizationAlgorithm(){
             g_count = 0;
             printf("Let's start over.");
         }
+    }else{
+        g_count++;
     }
 }
 
