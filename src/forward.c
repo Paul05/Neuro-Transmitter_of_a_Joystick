@@ -18,8 +18,7 @@
  */
 void goForward()
 {
-    sendToWheelChairController(extG_controllerForwardCmd);
-    printf("You are going forward.\n");
+    sendToWheelChairController(extG_controllerForwardCmd);    
     delayProgram(400);
 
 } //end goForward function

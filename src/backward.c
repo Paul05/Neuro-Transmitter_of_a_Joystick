@@ -18,8 +18,7 @@
  */
 void goBackward()
 {
-    sendToWheelChairController(extG_controllerBackCmd);
-    printf("You are going backwards.\n");
+    sendToWheelChairController(extG_controllerBackCmd);    
     delayProgram(400);
 
 } //end goBackward function

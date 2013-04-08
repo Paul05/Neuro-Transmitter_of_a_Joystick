@@ -149,7 +149,33 @@ void sendToWheelChairController(char toSend)
 {
     char tempToSend[] = {toSend};
     WriteFile(g_controlDevice,tempToSend,strlen(tempToSend),&g_btsIO,NULL); //writes char to arduino
-    
+
+/*
+        if(g_count == 0){
+            g_last_userInpt[0] = toSend;
+  	}else if(g_count == 1){
+            g_last_userInpt[1] = toSend;
+  	}else if(g_count == 2){
+            g_last_userInpt[2] = toSend;
+  	}
+  	if(g_last_userInpt[0] == g_last_userInpt[1] && g_last_userInpt[0] == g_last_userInpt[2]){
+            g_count = 0;
+            char tempToSend[] = {toSend};
+            WriteFile(g_controlDevice,tempToSend,strlen(tempToSend),&g_btsIO,NULL); //writes char to arduino
+            ++g_count;
+  	}else{
+            if(g_last_userInpt[0] == g_last_userInpt[1]){
+               g_last_userInpt[0] == g_last_userInpt[2];
+              g_count = 1;
+            }else if(g_last_userInpt[1] == g_last_userInpt[2]){
+            g_last_userInpt[0] = g_last_userInpt[2];
+               g_count = 2;
+            }else{
+                g_count = 0;
+                printf("Let's start over.");
+            }
+  	}
+*/
 } //end sendIntToArduino function
 
 
