@@ -28,9 +28,6 @@ char extG_controllerBackCmd = 's';
 char extG_controllerRightCmd = 'd';
 char extG_controllerLeftCmd = 'a';
 char extG_controllerExitCmd = 'x';
-char g_last_userInpt[3];
-
-int g_count = 0;
 
 /**
  * Purpose: Sets up communication on port specified at baud rate specified if

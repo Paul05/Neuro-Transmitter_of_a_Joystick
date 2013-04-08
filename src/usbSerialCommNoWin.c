@@ -28,7 +28,6 @@ char extG_controllerBackCmd = 's';
 char extG_controllerRightCmd = 'd';
 char extG_controllerLeftCmd = 'a';
 char extG_controllerExitCmd = 'x';
-char g_last_userInput[3];
 
 
 /**
