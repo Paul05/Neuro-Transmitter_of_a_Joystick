@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <conio.h>
+#include <malloc.h>
 #include "userInput.h"
 #include "usbSerialComm.h"
 
@@ -35,7 +36,8 @@ int getPortName(char outPortName[])
 {    
     char inputLine[BUFFERLENGTH];  //this is used as buffer for raw user input
     int errorFlag;     //status of input 1 = error keep going, 0 = stop success
-    int length;    //var for length of buffer returned    
+    int returnFlag = 0;
+    int length;    //var for length of buffer returned
 
     do
     {
@@ -53,20 +55,20 @@ int getPortName(char outPortName[])
 
             if (strcasecmp(inputLine,USEREXITCOMMAND) == 0)  //compare ignore case
             {
-                return -1; //user wishes to exit
+                returnFlag = -1; //user wishes to exit
             }
             else if ( strncmp(inputLine,"COM",3) == 0 ) //check if portname conforms to beginning "COM"
             {
                 if ( strlen(inputLine) == STDPORTLENGTH-1 ) //if ports 1-9
                 {
                     strncpy(outPortName,inputLine,STDPORTLENGTH); //put the inputLine into outPortName but not more than STDPORTLENGTH
-                    return 1;
+                    returnFlag = 1;
                 }
                 else if (strlen(inputLine) == LRGERPORTLENGTH-1) //if ports 10+
                 {
                     strncpy(outPortName,DEVICENAMEAPPEND,strlen(DEVICENAMEAPPEND));  //put device(close to DOS) name into string first
                     strncat(outPortName,inputLine,LRGERPORTLENGTH);  //concate device name header with port name since windows needs this for ports 10+
-                    return 1;
+                    returnFlag = 1;
                 }
                 //fall through to generic warning
             }
@@ -87,7 +89,7 @@ int getPortName(char outPortName[])
 
     }while(errorFlag == 1); //end loop get port name
 
-    return 0; //return failure if fall through
+    return returnFlag; //return failure if fall through
     
 } //end getPortName function
 
@@ -102,7 +104,8 @@ int getPortName(char outPortName[])
  */
 int getBaudRate(void)
 {
-    char inputLine[BUFFERLENGTH];  //this is used as buffer for raw user input    
+    char inputLine[BUFFERLENGTH];  //this is used as buffer for raw user input
+    int returnFlag = 0;
     int length;    //var for length of buffer returned
     int outBaudRate; //int for baud rate and status of input 1 = error or keep going,
     
@@ -123,7 +126,7 @@ int getBaudRate(void)
 
             if (strcasecmp(inputLine,USEREXITCOMMAND) == 0)  //compare ignore case
             {
-                return -1; //user wishes to exit
+                returnFlag = -1; //user wishes to exit
             }
             else if (1 == sscanf(inputLine, "%d", &outBaudRate))  //int is found
             {
@@ -135,7 +138,7 @@ int getBaudRate(void)
                 }
                 else
                 {
-                    return outBaudRate; //baud rate is valid success return it
+                    returnFlag = outBaudRate; //baud rate is valid success return it
                 }
             }
             else
@@ -154,7 +157,7 @@ int getBaudRate(void)
 
     }while(outBaudRate == 1); //end loop get baud rate
 
-    return 0; //fall through return 0 for neutral failure
+    return returnFlag; //fall through return 0 for neutral failure
 
 } //end getBaudRate function
 
@@ -174,9 +177,7 @@ int getBaudRate(void)
 char getCharConsole(void)
 {    
     return getch(); //call to getchar to get char without enter being pressed
-    //This is done for speed and not to use a custom keyboard library.
-    //This is not compatible with all systems and will usually only work on Windows.
-  
+    //This is done for speed and not to use a custom keyboard library.  
 }//end function getCharConsole
 
 //END file userInputWin.c

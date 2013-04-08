@@ -18,9 +18,7 @@
  */
  void goLeft()
  {
-     sendToWheelChairController(extG_controllerLeftCmd);
-//     sendToWheelChairController('a'); //Have to hard code this as the Arduino only accepts a and d at the moment.
-     printf("You are going left.\n");
+     sendToWheelChairController(extG_controllerLeftCmd);    
      delayProgram(400);
 
  }//end goLeft function

@@ -62,7 +62,7 @@ int closeCommunication(void)
  * connected on the currently open connection.
  * @return  int 0 for failure and non-zero for success
  */
-int testCommunication(void)
+int testControllerCommunication(void)
 {
       return 1;
 } //end testCommunication function 
@@ -72,7 +72,7 @@ int testCommunication(void)
  * Tests the operation of the device by sending brief 
  * movement commands.
  */
- void testOperation(void)
+ void testWheelChairOperation(void)
  {
  
  } //end testOperation function

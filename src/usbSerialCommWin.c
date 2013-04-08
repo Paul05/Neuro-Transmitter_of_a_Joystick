@@ -110,13 +110,13 @@ int closeCommunication(void)
  * that the Arduino may have just started, and as such has a delay built in.
  * @return  int 0 for failure and non-zero for success
  */
-int testCommunication(void)
+int testControllerCommunication(void)
 {
     char tempToSend[] = {extG_controllerTestCmd};
-    delayProgram(1000);
+    delayProgram(2000);
     WriteFile(g_controlDevice,tempToSend,strlen(tempToSend),&g_btsIO,NULL);
 
-    //TODO: Readfile here if we wish to do an 'ACK' from the Arduno
+    //TODO: Readfile here if we wish to do an 'ACK' from the Arduino
 
     return 1;
 
@@ -124,15 +124,20 @@ int testCommunication(void)
 
 
 /**
- * Test the connection and motor/wheelchair movment capability of the
+ * Test the connection and motor/wheelchair movement capability of the
  * connected device with a defined test. 
  * This can be used in a startup test or for troubleshooting issues.
  */
-void testOperation(void)
+void testWheelChairOperation(void)
 {
-      sendToWheelChairController(extG_controllerLeftCmd); //Test Actual Movement (Wheelchair turns left then right for example, test functions etc.) //TODO
-      delayProgram(500);
+      sendToWheelChairController(extG_controllerLeftCmd); 
+      delayProgram(1500);
       sendToWheelChairController(extG_controllerRightCmd);
+      delayProgram(1500);
+      sendToWheelChairController(extG_controllerForwardCmd);
+      delayProgram(1500);
+      sendToWheelChairController(extG_controllerBackCmd);
+      delayProgram(1500);
 } //end testOperaiton 
 
 
@@ -142,32 +147,8 @@ void testOperation(void)
  */
 void sendToWheelChairController(char toSend)
 {
-    if(g_count == 0){
-        g_last_userInpt[0] = toSend;
-    }else if(g_count == 1){
-        g_last_userInpt[1] = toSend;
-    }else if(g_count == 2){
-        g_last_userInpt[2] = toSend;
-    }
-    if(g_last_userInpt[0] == g_last_userInpt[1] && g_last_userInpt[0] == g_last_userInpt[2]){
-        g_count = 0;
-        char tempToSend[] = {toSend};
-        WriteFile(g_controlDevice,tempToSend,strlen(tempToSend),&g_btsIO,NULL); //writes char to arduino
-        ++g_count;
-    }else if(!isNaN(g_last_userInpt[2])){
-        if(g_last_userInpt[0] == g_last_userInpt[1]){
-            g_last_userInpt[0] = g_last_userInpt[2];
-            g_count = 1;
-        }else if(g_last_userInpt[1] == g_last_userInpt[2]){
-            g_last_userInpt[0] = g_last_userInpt[2];
-            g_count = 2;
-        }else{
-            g_count = 0;
-            printf("Let's start over, the middle number is different.");
-        }
-    }else{
-        g_count++;
-    }
+    char tempToSend[] = {toSend};
+    WriteFile(g_controlDevice,tempToSend,strlen(tempToSend),&g_btsIO,NULL); //writes char to arduino
     
 } //end sendIntToArduino function
 

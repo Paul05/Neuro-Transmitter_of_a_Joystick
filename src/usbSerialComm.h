@@ -48,8 +48,8 @@ extern char extG_controllerExitCmd;
 
 int setupCommunication(const char portName[], const int portBaudRate);
 int closeCommunication(void);
-int testCommunication(void);
-void testOperation(void);
+int testControllerCommunication(void);
+void testWheelChairOperation(void);
 void sendToWheelChairController(char toSend);
 void delayProgram(int time);
 
