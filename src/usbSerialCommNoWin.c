@@ -29,6 +29,13 @@ char extG_controllerRightCmd = 'd';
 char extG_controllerLeftCmd = 'a';
 char extG_controllerExitCmd = 'x';
 
+/** Use following to help implement log files?
+void usage(void);
+int serialport_writebyte(int fd, uint8_t b);
+int serialport_write(int fd, const char* str);
+int serialport_read_until(int fd, char* buf, char until);
+*/
+
 
 /**
  * Purpose: Sets up communication on port specified at baud rate specified if
@@ -38,9 +45,16 @@ char extG_controllerExitCmd = 'x';
  * @param portBaudRate Int for the baud rate of connection (serial) to the Arduino 9600 is standard.
  * @return int for success 0 is failed and 1 is success
  */
-int setupCommunication(const char inPortName[], const int inPortBaudRate)
-{ 
-         return 1; //success
+int setupCommunication{ 
+    int fd =0; //file descriptor of port
+    
+    inPortBaudRate = 9600
+    
+    fd = open(port, O_RDWR); //port is port filename, /dev/ttyS0, /dev/tty01, etc.
+       if (fd == -1) {
+              printf("\n*Error opening serial port %s at rate %i! Communication not established. \n\n");
+    
+         //return 1; //success
 
 } //end function to setup communication with Arduino
 
@@ -51,7 +65,7 @@ int setupCommunication(const char inPortName[], const int inPortBaudRate)
  */
 int closeCommunication(void)
 {
-    return 1;
+    close(fd); //Close the connection
     
 } //end closeCommunication function
 
