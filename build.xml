@@ -104,7 +104,7 @@
     <target name="static_test" 
 		description="Uses cppcheck, cppcheck must be installed and path set correctly! &#xa;
 	                 Cppcheck tests the source code and puts results into an xml file in the tests dir.">		
-		<delete file="${test.dir}/errorsStaticAnalysis.xml" failonerror="false"/>
+		<delete file="test/errorsStaticAnalysis.xml" failonerror="false"/>
 		<exec executable="cmd" dir="${src.dir}" osfamily="windows" failonerror="true">			
 			<arg value="/C" />
 			<arg line="cppcheck --xml-version=2 --enable=all --inconclusive . 2&gt; errorsStaticAnalysis.xml" />
@@ -113,16 +113,16 @@
 			<arg value="-c"/>			
 			<arg value="cppcheck --xml-version=2 --enable=all --inconclusive . 2&gt; errorsStaticAnalysis.xml" />			
 		</exec>
-		<!-- <move file="src/errorsStaticAnalysis.xml" todir="${test.dir}"/> -->
+		<move file="src/errorsStaticAnalysis.xml" todir="${test.dir}"/> 
 	</target>
 	
 	<!-- Warning: Some issues to still work out with dynamic test don't use. -->
 	<target name="dynamic_test" depends="build" 
 	        description="Uses Valgrind to dynamic test the code. Valgrind must be on the path and set correctly!&#xa;
-			    Runs the code and puts the results into ">
+			    Runs the dynamic test tool and prints out to the screen. ">
 		<exec executable="/bin/sh" dir="dist/" osfamily="unix" failonerror="true" inputstring="x">			
 		    <arg value="-c" />
-		    <arg value="valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --track-fds=yes ./NeuroControlProgram ttyS2 9600" />
+		    <arg value="valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --track-fds=yes ./NeuroControlProgram dynamicTest" />
 		</exec>
 	</target>
 </project>
