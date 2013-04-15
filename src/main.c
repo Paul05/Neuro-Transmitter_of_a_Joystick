@@ -46,7 +46,7 @@
 */
 void welcomeMessage(void)
 {
-    printf("\nWelcome to the 'Neuro-Trasmitter Of A Joystick' Group's "
+    printf("\nWelcome to the 'Neuro-Transmitter Of A Joystick' Group's "
             "Emotiv Normalization Program 1.0!\n\n");
 
 } //end welcomeMessage

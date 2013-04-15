@@ -8,7 +8,7 @@
    <property name="user" value="${env.USERNAME}"/>
    
     <target name="targets">
-      <echo message="Targets are clean, build, static_test, dynamic_test, restoreUnix, restoreWin and targets. "/>
+      <echo message="Targets are clean, build, unit_test, static_test, dynamic_test, restoreUnix, restoreWin and targets. "/>
 	  <echo message="  Note: Ant will need cpptasks jar in your system's ant/lib folder "/>
 	  <echo message="		           (jar is included in the lib directory of this repository)."/> 
 	  <echo message="	&#xa;Also, you will need a C compiler setup in your system or shell path "/>
@@ -60,6 +60,8 @@
       <delete dir="${dist.dir}" failonerror="false"/>
 	  <delete dir="${build.dir}" />
 	  <delete file="${test.dir}/errorsStaticCheck.xml" failonerror="false"/>
+	  <delete file="${test.dir}/RunUnitTests.exe" failonerror="false"/>
+	  <delete dir="${test.dir}/build" failonerror="false"/>
    </target>
    
    <!-- Creates directories needed in preparation for build and subsequentl compilation -->
@@ -98,6 +100,24 @@
 		<move file="src/userInputNoWin.c.txt" tofile="src/userInputNoWin.c"/>
 		<move file="src/userInput.c" tofile="src/userInputWin.c"/>	
    </target>   
+   
+   <!--This runs the unit tests automatically. Will print out results to the screen. -->
+   <taskdef resource="cpptasks.tasks"/>
+    <target name="unit_test" depends="build" 
+		  description="Builds and runs the unit tests automatically and prints out to the screen the results.">	  
+		<mkdir dir="${test.dir}/build/"/>
+		<cpptasks:cc outtype="executable" subsystem="console" outfile="${test.dir}/RunUnitTests" objdir="${test.dir}/build/">
+			<fileset dir="test/" includes="*.c"/>
+		</cpptasks:cc>	 
+		<exec executable="cmd" dir="${test.dir}" osfamily="windows" failonerror="true">			
+			   <arg value="/C" />
+			   <arg line="RunUnitTests.exe" />
+		</exec>
+		<exec executable="/bin/sh" dir="${test.dir}" osfamily="unix" failonerror="true">			
+				<arg value="-c"/>			
+				<arg value="./RunUnitTests" />			
+		</exec>	  
+   </target>
    
     <!--Note: In order to static test, you will need cppcheck installed and available on the system or shell path. -->
 	<!--		See documentation at: http://cppcheck.sourceforge.net/  -->

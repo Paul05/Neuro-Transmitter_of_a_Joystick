@@ -72,7 +72,7 @@ void normalizationAlgorithm(char toSend){
             g_last_userInpt[0] = g_last_userInpt[2];
             g_count = 2;
         }else{
-            g_last_userInpt[0] == g_last_userInpt[2];
+            g_last_userInpt[0] = g_last_userInpt[2];
             g_count = 1;
         }
     }else{
