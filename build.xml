@@ -113,7 +113,7 @@
 			<arg value="-c"/>			
 			<arg value="cppcheck --xml-version=2 --enable=all --inconclusive . 2&gt; errorsStaticAnalysis.xml" />			
 		</exec>
-		<move file="src/errorsStaticAnalysis.xml" todir="${test.dir}"/> 
+		<!-- <move file="src/errorsStaticAnalysis.xml" todir="${test.dir}"/> -->
 	</target>
 	
 	<!-- Warning: Some issues to still work out with dynamic test don't use. -->
