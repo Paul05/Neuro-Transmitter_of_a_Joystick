@@ -37,6 +37,9 @@ int serialport_read_until(int fd, char* buf, char until);
 */
 
 
+ int g_fd = 0; //file descriptor of port
+
+
 /**
  * Purpose: Sets up communication on port specified at baud rate specified if
  * possible and handles the details. It returns an integer where non-zero is
@@ -45,16 +48,18 @@ int serialport_read_until(int fd, char* buf, char until);
  * @param portBaudRate Int for the baud rate of connection (serial) to the Arduino 9600 is standard.
  * @return int for success 0 is failed and 1 is success
  */
-int setupCommunication{ 
-    int fd =0; //file descriptor of port
+int setupCommunication(const char portName[], const int portBaudRate)
+{ 
+   int inPortBaudRate = 9600;
     
-    inPortBaudRate = 9600
+   g_fd = open(portName, O_RDWR); //port is port filename, /dev/ttyS0, /dev/tty01, etc.
+   
+   if (g_fd == -1) 
+   {
+     printf("\n*Error opening serial port %s at rate %i! Communication not established. \n\n");
     
-    fd = open(port, O_RDWR); //port is port filename, /dev/ttyS0, /dev/tty01, etc.
-       if (fd == -1) {
-              printf("\n*Error opening serial port %s at rate %i! Communication not established. \n\n");
-    
-         //return 1; //success
+     //return 1; //success
+    }
 
 } //end function to setup communication with Arduino
 
@@ -65,7 +70,7 @@ int setupCommunication{
  */
 int closeCommunication(void)
 {
-    close(fd); //Close the connection
+     close(g_fd); //Close the connection
     
 } //end closeCommunication function
 
