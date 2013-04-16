@@ -173,7 +173,7 @@ int main(int argc, char** argv)
     int baudRate = 0;
     int successFlag = 0;
     char neuroHeadSetInput = '\0';
-    char menuInput;
+    int menuInput;
 
     welcomeMessage();
 
@@ -196,9 +196,9 @@ int main(int argc, char** argv)
             menuInput = '9';
 
             showMenu();
-
+            getMenuInput(menuInput);
             fflush(stdout); 
-            menuInput = getchar();
+//            menuInput = getchar();
             (void)getchar(); //remove enter TODO Bad Way fix with userInput function
 
             successFlag = performMenuAction(menuInput, portName);
