@@ -180,13 +180,13 @@ char getCharConsole(void)
     //This is done for speed and not to use a custom keyboard library.  
 }//end function getCharConsole
 
-int getMenuInput(int inputReturned){
-    char inputLine[BUFFERLENGTH];
-    int length;
-    
-    if(fgets(inputLine, sizeof(inputLine), stdin)){
-            
-    }
+/*
+ * At this time it just gets the user's input for the menu.
+ * Will be improved upon further to implement more useability (fgets(inputLine), 
+ *  for instance).
+ */
+int getInput(int inputReturned){
+    scanf("%d", &inputReturned);
     return inputReturned;
 }
 

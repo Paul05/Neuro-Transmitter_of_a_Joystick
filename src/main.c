@@ -116,37 +116,37 @@ void showMenu()
  * @param actionNumberFromUser integer that corresponds to menu function in showMenu
  * @return integer for success (>=1 = success, <=0 = failure).
  */
-int performMenuAction(char actionNumberFromUser, char portName[])
+int performMenuAction(int actionNumberFromUser, char portName[])
 {
     int flagToReturn = 1;
 
     switch ( actionNumberFromUser )
     {
-        case '0':
+        case 0:
             showUserInstructionMessage();
             break;
-        case '1':
+        case 1:
             //TODO Show setup configuration
             break;
-        case '2':
+        case 2:
             //TODO Load previous setup file
             break;
-        case '3':
+        case 3:
             //TODO Save setup file
             break;
-        case '4':
+        case 4:
             flagToReturn = getPortName(portName);
             break;
-        case '5':
+        case 5:
             flagToReturn = getBaudRate();
             break;
-        case '6':
+        case 6:
             //TODO Change Input Cmds here
             break;
-        case '7':
+        case 7:
             flagToReturn = 2; //go to neuro-input loop
             break;
-        case '8':
+        case 8:
             flagToReturn = -2; //exit
             break;
         default:
@@ -196,7 +196,7 @@ int main(int argc, char** argv)
             menuInput = '9';
 
             showMenu();
-            getMenuInput(menuInput);
+            getInput(menuInput);
             fflush(stdout); 
 //            menuInput = getchar();
             (void)getchar(); //remove enter TODO Bad Way fix with userInput function
