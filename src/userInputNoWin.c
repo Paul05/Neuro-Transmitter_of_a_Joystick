@@ -187,4 +187,15 @@ char getCharConsole(void)
    
 }//end function getCharConsole
 
+/*
+ * At this time it just gets the user's input for the menu.
+ * Will be improved upon further to implement more useability (fgets(inputLine),
+ *  for instance).
+ */
+int getInput(int inputReturned){
+    scanf("%d", &inputReturned);
+    return inputReturned;
+}
+
+
 //END file userInputNoWin.c

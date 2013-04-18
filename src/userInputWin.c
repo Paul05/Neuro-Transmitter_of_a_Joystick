@@ -138,7 +138,11 @@ int getBaudRate(void)
                 }
                 else
                 {
-                    returnFlag = outBaudRate; //baud rate is valid success return it
+                    if(setBaudRate(outBaudRate))
+                        returnFlag = outBaudRate; //baud rate is valid success return it
+                    else{
+                        outBaudRate = 1;
+                    }
                 }
             }
             else
@@ -181,13 +185,47 @@ char getCharConsole(void)
 }//end function getCharConsole
 
 /*
- * At this time it just gets the user's input for the menu.
- * Will be improved upon further to implement more useability (fgets(inputLine), 
- *  for instance).
+ * Takes the int and outputs it back for the menu.
  */
 int getInput(int inputReturned){
-    scanf("%d", &inputReturned);
-    return inputReturned;
+    char inputLine[BUFFERLENGTH];  //this is used as buffer for raw user input
+    int returnFlag = 0;
+    int length;    //var for length of buffer returned
+    
+    do
+    {
+        inputReturned = 1;
+        
+        if (fgets(inputLine, sizeof(inputLine), stdin))
+        {
+            length = strlen(inputLine); //get length of input
+            
+            if (inputLine[length-1] == '\n')
+            {
+                inputLine[length-1] = 0; //replace newline fgets puts in
+            }
+            
+            if (strcasecmp(inputLine,USEREXITCOMMAND) == 0)  //compare ignore case
+            {
+                returnFlag = -1; //user wishes to exit
+            }
+            else if (1 == sscanf(inputLine, "%d", &inputReturned))  //int is found
+            {
+                    returnFlag = inputReturned; //baud rate is valid success return it
+            }
+            else
+            {
+                inputReturned = 1; //too many ints entered etc.
+            }
+        }
+        else
+        {
+            inputReturned = 1; //improper input (probably blank)
+        }
+        
+    }while(inputReturned == 1); //end loop get baud rate
+    
+    return returnFlag; //fall through return 0 for neutral failure
 }
 
 //END file userInputWin.c

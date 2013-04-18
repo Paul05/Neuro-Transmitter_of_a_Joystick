@@ -28,6 +28,8 @@ char extG_controllerBackCmd = 's';
 char extG_controllerRightCmd = 'd';
 char extG_controllerLeftCmd = 'a';
 char extG_controllerExitCmd = 'x';
+DCB controDeviceConnectionSettings; //DCB structure(Windows)
+
 
 /**
  * Purpose: Sets up communication on port specified at baud rate specified if
@@ -50,10 +52,9 @@ int setupCommunication(const char inPortName[], const int inPortBaudRate)
     {
         printf("\nSerial Port Opened! \n\n");
 
-        DCB controDeviceConnectionSettings; //DCB structure(Windows)
         controDeviceConnectionSettings.DCBlength = sizeof(DCB);   //set length
         GetCommState(g_controlDevice,&controDeviceConnectionSettings); //retrieve current control settings for comm device
-        controDeviceConnectionSettings.BaudRate = CBR_9600;    //right now hard code this to 9600 otherwise use baud rate   TODO!!!
+//        controDeviceConnectionSettings.BaudRate = CBR_9600;    //right now hard code this to 9600 otherwise use baud rate   TODO!!!
         controDeviceConnectionSettings.ByteSize = 8;
         controDeviceConnectionSettings.Parity = NOPARITY;   //set parity
         controDeviceConnectionSettings.StopBits = ONESTOPBIT;   //set how many stop bits
@@ -156,5 +157,74 @@ void sendToWheelChairController(char toSend)
 void delayProgram(int time)
 {
     Sleep(time);
+}
+
+/**
+ * Sets the user's Baud Rate.
+ */
+int setBaudRate(int baudNumber){
+    int returnedNumber = 0;
+    switch(baudNumber){
+        case 110:
+            controDeviceConnectionSettings.BaudRate = CBR_110;
+            returnedNumber = 1;
+            break;
+        case 300:
+            controDeviceConnectionSettings.BaudRate = CBR_300;
+            returnedNumber = 1;
+            break;
+        case 600:
+            controDeviceConnectionSettings.BaudRate = CBR_600;
+            returnedNumber = 1;
+            break;
+        case 1200:
+            controDeviceConnectionSettings.BaudRate = CBR_1200;
+            returnedNumber = 1;
+            break;
+        case 2400:
+            controDeviceConnectionSettings.BaudRate = CBR_2400;
+            returnedNumber = 1;
+            break;
+        case 4800:
+            controDeviceConnectionSettings.BaudRate = CBR_4800;
+            returnedNumber = 1;
+            break;
+        case 9600:
+            controDeviceConnectionSettings.BaudRate = CBR_9600;
+            returnedNumber = 1;
+            break;
+        case 14400:
+            controDeviceConnectionSettings.BaudRate = CBR_14400;
+            returnedNumber = 1;
+            break;
+        case 19200:
+            controDeviceConnectionSettings.BaudRate = CBR_19200;
+            returnedNumber = 1;
+            break;
+        case 38400:
+            controDeviceConnectionSettings.BaudRate = CBR_38400;
+            returnedNumber = 1;
+            break;
+        case 57600:
+            controDeviceConnectionSettings.BaudRate = CBR_57600;
+            returnedNumber = 1;
+            break;
+        case 115200:
+            controDeviceConnectionSettings.BaudRate = CBR_115200;
+            returnedNumber = 1;
+            break;
+        case 128000:
+            controDeviceConnectionSettings.BaudRate = CBR_128000;
+            returnedNumber = 1;
+            break;
+        case 256000:
+            controDeviceConnectionSettings.BaudRate = CBR_256000;
+            returnedNumber = 1;
+            break;
+        case default:
+            returnedNumber = 0;
+            break;
+    }
+    return returnedNumber;
 }
 //END file usbSerialComm.c
