@@ -211,7 +211,7 @@ int getInput(int inputReturned){
             }
             else if (1 == sscanf(inputLine, "%d", &inputReturned))  //int is found
             {
-                    returnFlag = inputReturned; //baud rate is valid success return it
+                    returnFlag = inputReturned; //User's numerical input is set up and used as the returnFlag
             }
             else
             {
@@ -223,7 +223,7 @@ int getInput(int inputReturned){
             inputReturned = 1; //improper input (probably blank)
         }
         
-    }while(inputReturned == 1); //end loop get baud rate
+    }while(inputReturned == 1); //end loop get user's numerical input for the menu
     
     return returnFlag; //fall through return 0 for neutral failure
 }
