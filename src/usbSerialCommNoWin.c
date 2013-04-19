@@ -118,68 +118,9 @@ void delayProgram(int time)
 /**
  * Sets the user's Baud Rate.
  */
-void setBaudRate(int baudNumber, int returnedNumber){
-    switch(baudNumber){
-        case 110:
-            controDeviceConnectionSettings.BaudRate = CBR_110;
-            returnedNumber = 1;
-            break;
-        case 300:
-            controDeviceConnectionSettings.BaudRate = CBR_300;
-            returnedNumber = 1;
-            break;
-        case 600:
-            controDeviceConnectionSettings.BaudRate = CBR_600;
-            returnedNumber = 1;
-            break;
-        case 1200:
-            controDeviceConnectionSettings.BaudRate = CBR_1200;
-            returnedNumber = 1;
-            break;
-        case 2400:
-            controDeviceConnectionSettings.BaudRate = CBR_2400;
-            returnedNumber = 1;
-            break;
-        case 4800:
-            controDeviceConnectionSettings.BaudRate = CBR_4800;
-            returnedNumber = 1;
-            break;
-        case 9600:
-            controDeviceConnectionSettings.BaudRate = CBR_9600;
-            returnedNumber = 1;
-            break;
-        case 14400:
-            controDeviceConnectionSettings.BaudRate = CBR_14400;
-            returnedNumber = 1;
-            break;
-        case 19200:
-            controDeviceConnectionSettings.BaudRate = CBR_19200;
-            returnedNumber = 1;
-            break;
-        case 38400:
-            controDeviceConnectionSettings.BaudRate = CBR_38400;
-            returnedNumber = 1;
-            break;
-        case 57600:
-            controDeviceConnectionSettings.BaudRate = CBR_57600;
-            returnedNumber = 1;
-            break;
-        case 115200:
-            controDeviceConnectionSettings.BaudRate = CBR_115200;
-            returnedNumber = 1;
-            break;
-        case 128000:
-            controDeviceConnectionSettings.BaudRate = CBR_128000;
-            returnedNumber = 1;
-            break;
-        case 256000:
-            controDeviceConnectionSettings.BaudRate = CBR_256000;
-            returnedNumber = 1;
-            break;
-        case default:
-            returnedNumber = 0;
-            break;
-    }
+void setBaudRate(int baudNumber){
+ 
+	int returnedNumber = 9600;
     return returnedNumber;
 }
 
