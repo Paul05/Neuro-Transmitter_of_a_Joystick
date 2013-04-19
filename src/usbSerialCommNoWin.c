@@ -118,7 +118,7 @@ void delayProgram(int time)
 /**
  * Sets the user's Baud Rate.
  */
-void setBaudRate(int baudNumber){
+int setBaudRate(int baudNumber){
  
 	int returnedNumber = 9600;
     return returnedNumber;
