@@ -52,7 +52,7 @@ int testControllerCommunication(void);
 void testWheelChairOperation(void);
 void sendToWheelChairController(char toSend);
 void delayProgram(int time);
-int setBaudRate(int baudNumber, int returnedNumber);
+int setBaudRate(int baudNumber);
 
 #endif	/* USBSERIALCOMM_H */
 

@@ -221,7 +221,7 @@ int setBaudRate(int baudNumber){
             controDeviceConnectionSettings.BaudRate = CBR_256000;
             returnedNumber = 1;
             break;
-        case default:
+        default:
             returnedNumber = 0;
             break;
     }
