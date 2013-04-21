@@ -16,6 +16,9 @@
 #include <stdio.h>
 #include "usbSerialComm.h"
 
+/*
+ * This function saves the information that the user has written!
+ */
 void outputFile(int baudRate){
 	char buffer[BUFSIZ];
 	char configFile[] = "Configuration.txt";
@@ -43,12 +46,18 @@ void outputFile(int baudRate){
     fclose(fp); /* close file */
 	return 0;
 }
-
-void inputFile(void){
+/*
+ * This reads the file (Configuration.txt) from the user's local folder.
+ * It will then read through it and save the information as it is written in the file.
+ *
+ * IMPORTANT: The user must NOT change the format in the file, or else it will not work!
+ *
+ * TODO: Make it not break if it is changed in the file.
+ */
+void inputFile(int baudRate){
     char buffer[BUFSIZ];
 	char configFile[] = "Configuration.txt";
 	FILE *fp = NULL;
-    char *toFree;
     char *string;
     char *token;
     
@@ -60,33 +69,37 @@ void inputFile(void){
     }
     
     while(fgets(buffer, BUFSIZ, fp) != NULL){
-        //        sscanf("%s", );
-        toFree = buffer;
+        
         string = buffer;
         token = strsep(&string, " ");
         strsep(&string, " "); //Used to throw away the second token ("=")
         if(strncmp(token, "Forward", 100) == 0){
             token = strsep(&string, " ");
-//            printf("%s", token);
+            sscanf(token, "%c", &extG_controllerForwardCmd);
+//            printf("%c\n", extG_controllerForwardCmd);
         }else if(strncmp(token, "Backward", 100) == 0){
             token = strsep(&string, " ");
-//            printf("%s", token);
+            sscanf(token, "%c", &extG_controllerBackCmd);
+//            printf("%c\n", extG_controllerBackCmd);
         }else if(strncmp(token, "Right", 100) == 0){
             token = strsep(&string, " ");
-//            printf("%s", token);
+            sscanf(token, "%c", &extG_controllerRightCmd);
+//            printf("%c\n", extG_controllerRightCmd);
         }else if(strncmp(token, "Left", 100) == 0){
             token = strsep(&string, " ");
-//            printf("%s", token);
+            sscanf(token, "%c", &extG_controllerLeftCmd);
+//            printf("%c\n", extG_controllerExitCmd);
         }else if(strncmp(token, "Exit", 100) == 0){
             token = strsep(&string, " ");
-//            printf("%s", token);
+            sscanf(token, "%c", &extG_controllerExitCmd);
+//            printf("%c\n", extG_controllerExitCmd);
         }if(strncmp(token, "Baud", 100) == 0){
             token = strsep(&string, " ");
-//            printf("%s", token);
+            sscanf(token, "%d", &baudRate);
+//            printf("%d\n", baudRate);
         }
         
     }
-    free(toFree);
     fclose(fp);
     
     return 0;
