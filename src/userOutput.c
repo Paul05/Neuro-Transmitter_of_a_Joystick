@@ -86,12 +86,15 @@ void showMenu(void)
 void showSetupConfiguration(int baudRate)
 {
     printf("\nYour current setup is as follows:\n\n"
-           "Forward Command: ", extG_controllerForwardCmd);
-    printf("\nBackward Commad: ", extG_controllerBackCmd);
-    printf("\nLeft Commad: ", extG_controllerLeftCmd);
-    printf("\nRight Commad: ", extG_controllerRightCmd);
-    printf("\nExit Commad: ", extG_controllerExitCmd);
-    printf("\nBaud Rate: ", baudRate);
+           "Forward Command: %c"
+           "\nBackward Command: %c"
+           "\nLeft Command: %c"
+           "\nRight Command: %c"
+           "\nExit Command: %c"
+           "\nBaud Rate: %d\n",
+                extG_controllerForwardCmd, extG_controllerBackCmd,
+                extG_controllerLeftCmd, extG_controllerRightCmd,
+                extG_controllerExitCmd, baudRate);
 
 }//end showConfiguration function
 
