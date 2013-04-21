@@ -40,8 +40,11 @@
 #include "usbSerialComm.h"
 #include "neuroInputSetup.h"
 #include "normalization.h"
+#include "configFileIO.h"
 
 #define DYNAMICTESTCMD "dynamicTest"  //command for valgrind to dynamic test the code
+
+int baudRate = 0; //Making baudRate a global variable so that it can be passed to then 
 
 
 /**
@@ -78,10 +81,10 @@ int performMenuAction(char actionNumberFromUser, char portName[])
             showSetupConfiguration();
             break;
         case '2':
-            //TODO Load previous setup file
+            inputFile();
             break;
         case '3':
-            //TODO Save setup file
+            outputFile(baudRate);
             break;
         case '4':
             flagToReturn = getPortName(portName);
@@ -119,7 +122,6 @@ int performMenuAction(char actionNumberFromUser, char portName[])
 int main(int argc, char** argv)
 {
     char portName[LRGERPORTLENGTH+3]; //+3 for margin of error
-    int baudRate = 0;
     int successFlag = 0;
     char neuroHeadSetInput = '\0';
     int menuInput;

@@ -19,10 +19,6 @@
 #include <math.h>
 #include "normalization.h"
 #include "usbSerialComm.h"
-#include "left.h"
-#include "right.h"
-#include "forward.h"
-#include "backward.h"
 
 int g_count = 0;
 char g_last_userInpt[3];
