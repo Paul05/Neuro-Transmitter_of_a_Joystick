@@ -20,7 +20,7 @@
 
 HANDLE g_controlDevice = NULL; //global variable that is a file handle to be used for Arduino Connection
 DWORD g_btsIO;   //global variable that is used by the writeFile cmd to record number of bytes written
-
+DCB g_controDeviceConnectionSettings; //DCB structure(Windows)
 
 char extG_controllerTestCmd = 't';
 char extG_controllerForwardCmd = 'w';
@@ -28,7 +28,6 @@ char extG_controllerBackCmd = 's';
 char extG_controllerRightCmd = 'd';
 char extG_controllerLeftCmd = 'a';
 char extG_controllerExitCmd = 'x';
-DCB controDeviceConnectionSettings; //DCB structure(Windows)
 
 
 /**
@@ -52,12 +51,12 @@ int setupCommunication(const char inPortName[], const int inPortBaudRate)
     {
         printf("\nSerial Port Opened! \n\n");
 
-        controDeviceConnectionSettings.DCBlength = sizeof(DCB);   //set length
-        GetCommState(g_controlDevice,&controDeviceConnectionSettings); //retrieve current control settings for comm device
+        g_controDeviceConnectionSettings.DCBlength = sizeof(DCB);   //set length
+        GetCommState(g_controlDevice,&g_controDeviceConnectionSettings); //retrieve current control settings for comm device
 //        controDeviceConnectionSettings.BaudRate = CBR_9600;    //right now hard code this to 9600 otherwise use baud rate   TODO!!!
-        controDeviceConnectionSettings.ByteSize = 8;
-        controDeviceConnectionSettings.Parity = NOPARITY;   //set parity
-        controDeviceConnectionSettings.StopBits = ONESTOPBIT;   //set how many stop bits
+        g_controDeviceConnectionSettings.ByteSize = 8;
+        g_controDeviceConnectionSettings.Parity = NOPARITY;   //set parity
+        g_controDeviceConnectionSettings.StopBits = ONESTOPBIT;   //set how many stop bits
 
         /*Alternate section once Arduino exhibits failure to communicate, these turn off various port settings
         controDeviceConnectionSettings.fBinary = FALSE;            // Binary mode; no EOF check
@@ -76,7 +75,7 @@ int setupCommunication(const char inPortName[], const int inPortBaudRate)
 
         //Add enumeration for all baud rates? TODO
 
-        SetCommState(g_controlDevice,&controDeviceConnectionSettings); //set the current control settings for the device
+        SetCommState(g_controlDevice,&g_controDeviceConnectionSettings); //set the current control settings for the device
 
         printf("\nSerial Port Settings Established! \n");
         
@@ -166,59 +165,59 @@ int setBaudRate(int baudNumber){
     int returnedNumber = 0;
     switch(baudNumber){
         case 110:
-            controDeviceConnectionSettings.BaudRate = CBR_110;
+            g_controDeviceConnectionSettings.BaudRate = CBR_110;
             returnedNumber = 1;
             break;
         case 300:
-            controDeviceConnectionSettings.BaudRate = CBR_300;
+            g_controDeviceConnectionSettings.BaudRate = CBR_300;
             returnedNumber = 1;
             break;
         case 600:
-            controDeviceConnectionSettings.BaudRate = CBR_600;
+            g_controDeviceConnectionSettings.BaudRate = CBR_600;
             returnedNumber = 1;
             break;
         case 1200:
-            controDeviceConnectionSettings.BaudRate = CBR_1200;
+            g_controDeviceConnectionSettings.BaudRate = CBR_1200;
             returnedNumber = 1;
             break;
         case 2400:
-            controDeviceConnectionSettings.BaudRate = CBR_2400;
+            g_controDeviceConnectionSettings.BaudRate = CBR_2400;
             returnedNumber = 1;
             break;
         case 4800:
-            controDeviceConnectionSettings.BaudRate = CBR_4800;
+            g_controDeviceConnectionSettings.BaudRate = CBR_4800;
             returnedNumber = 1;
             break;
         case 9600:
-            controDeviceConnectionSettings.BaudRate = CBR_9600;
+            g_controDeviceConnectionSettings.BaudRate = CBR_9600;
             returnedNumber = 1;
             break;
         case 14400:
-            controDeviceConnectionSettings.BaudRate = CBR_14400;
+            g_controDeviceConnectionSettings.BaudRate = CBR_14400;
             returnedNumber = 1;
             break;
         case 19200:
-            controDeviceConnectionSettings.BaudRate = CBR_19200;
+            g_controDeviceConnectionSettings.BaudRate = CBR_19200;
             returnedNumber = 1;
             break;
         case 38400:
-            controDeviceConnectionSettings.BaudRate = CBR_38400;
+            g_controDeviceConnectionSettings.BaudRate = CBR_38400;
             returnedNumber = 1;
             break;
         case 57600:
-            controDeviceConnectionSettings.BaudRate = CBR_57600;
+            g_controDeviceConnectionSettings.BaudRate = CBR_57600;
             returnedNumber = 1;
             break;
         case 115200:
-            controDeviceConnectionSettings.BaudRate = CBR_115200;
+            g_controDeviceConnectionSettings.BaudRate = CBR_115200;
             returnedNumber = 1;
             break;
         case 128000:
-            controDeviceConnectionSettings.BaudRate = CBR_128000;
+            g_controDeviceConnectionSettings.BaudRate = CBR_128000;
             returnedNumber = 1;
             break;
         case 256000:
-            controDeviceConnectionSettings.BaudRate = CBR_256000;
+            g_controDeviceConnectionSettings.BaudRate = CBR_256000;
             returnedNumber = 1;
             break;
         default:

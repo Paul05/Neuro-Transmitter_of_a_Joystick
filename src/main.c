@@ -11,15 +11,16 @@
 *         options. The user will be able to set most input and output commands
 *         as well as most serial port options.
 *
-* Function: This program sets up communication with the Arduino. The
-*           connection may be USB, but this program uses serial as typical
-*           Arduino behavior is to mimic a serial port and communication.
+* Function: This program sets up communication with a joystick controller. The
+*           connection may be USB or serial but the USB must mimic a serial port
+ *          and communication.
 *           If the test completes and communication works, then this program
 *           takes inputs from the keyboard. Defaults are: t is reserved for testing
 *           and x is reserved for exiting. w is forward, s is back, d is right,
 *           and a is left. This is designed to be inputed from various neuro
-*           EEG headsets. They do this via their proprietary and other open software write
-*           a char to the keyboard based on a brain activity or muscular face action.
+*           EEG headsets. They may do this via their proprietary and other open software.
+ *          The goal is to write a char to the keyboard based on a
+ *          brain activity or muscular face action.
 *
 *           This program then sends that input to the wheelchair controller
 *           after it normalizes the input to provide a consistent and usable
@@ -34,86 +35,34 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-#include "usbSerialComm.h"
 #include "userInput.h"
+#include "userOutput.h"
+#include "usbSerialComm.h"
 #include "neuroInputSetup.h"
 #include "normalization.h"
 
 #define DYNAMICTESTCMD "dynamicTest"  //command for valgrind to dynamic test the code
 
-/**
-* Welcome message function that displays a welcome message on the console.
-*/
-void welcomeMessage(void)
-{
-    printf("\nWelcome to the 'Neuro-Transmitter Of A Joystick' Group's "
-            "Emotiv Normalization Program 1.0!\n\n");
-
-} //end welcomeMessage
-
 
 /**
-* Exit message function that displays an exit message and keeps console open
-* until any key is pressed on the keyboard.
-*
-*/
-void exitMessage(void)
-{
-    printf("\n\nGoodbye\n\n");
-    printf("\n\nPlease press 'ENTER' to exit.\n\n\n");
-    fflush(stdout); //need to flush stdout before using getchar
-    (void)getchar(); //keeps console open until user presses key on keyboard
-
-}//end exitMessage
-
-
-/**
- * Prints user instructions to the screen.
+ * This function is for dynamic testing of the program. This is designed so an 
+ * outside testing tool can adequetely test most of the various functions.
+ * As testing the normal paths of this program would need a simulated serial port, 
+ * and simulated input device, which is not available in our limited test server or scenarios.
  */
-void showUserInstructionMessage(void)
+void dynamicTestFunction(void)
 {
-    printf("\n\tMake sure the neuro(EEG) headset is connected and that the software"
-    " inputs to this program.\n\tActions for forward, back, left, and right,"
-    " must be translated to keyboard inputs into this \n\tprogram via your headset "
-    "software.\n\tDefaults are: w is forward, s is back, a is left, and d is right.\n"
-    "\n\tAlso, make sure the Arduino or other wheelchair/joystick controller is "
-    "connected and \n\tcommunicating through a Serial port.\n\tYou will need to "
-    "know the name of the port that it is connected on, as well as the baud rate "
-    "\n\tof the connection. "
-    "This controller must accept string inputs from that serial connection.\n\n\t"
-    "If that is all done, this program will normalize inputs from your EEG,\n\t"
-    "and communicate with the wheelchair.\n\n\t"
-    "Enjoy!\n\n");
     
-}//end showUserInstructionMessage
 
-
-/**
- * Shows the user a menu to select various program options
- */
-void showMenu()
-{
-    printf("\nOptions Menu:\n\n"
-           " 0 - Help\n"
-        //   " 1 - View Current Setup Configuration\n"
-        //   " 2 - Load Previously Saved Setup File\n"
-        //   " 3 - Save Setup Changes to a File\n"
-           " 4 - Change Serial Port Name\n"
-           " 5 - Change Serial Port Baud Rate\n"
-       //    " 6 - Change Neuro/Controller Input Commands\n"
-           " 7 - Start Neuro-Control of the Wheelchair\n\n"
-           " 8 - Exit the program\n\n"
-           "Selection: \n\n"
-           );
-    
-}//end showMenu function
-
+} //end dynamicTestFunction
 
 /**
  * This function contains the switch statement that calls the responsible
- * functions for performing the actions listed in the showMenu function above.
- * Those actions are selectable by the user.
+ * functions for performing the actions listed in the showMenu function.
+ * Those actions are selectable by the user. This provides a main menu
+ * that is the main user interface with this program.
  * @param actionNumberFromUser integer that corresponds to menu function in showMenu
+ * @param portName string for the name of the serial port joystick conroller is connected on
  * @return integer for success (>=1 = success, <=0 = failure).
  */
 int performMenuAction(int actionNumberFromUser, char portName[])
@@ -126,7 +75,7 @@ int performMenuAction(int actionNumberFromUser, char portName[])
             showUserInstructionMessage();
             break;
         case 1:
-            //TODO Show setup configuration
+            showSetupConfiguration();
             break;
         case 2:
             //TODO Load previous setup file
@@ -138,13 +87,13 @@ int performMenuAction(int actionNumberFromUser, char portName[])
             flagToReturn = getPortName(portName);
             break;
         case 5:
-            flagToReturn = getBaudRate();
+            flagToReturn = getBaudRate(); 
             break;
         case 6:
-            //TODO Change Input Cmds here
+            changeMovementCommands(); //change neuro-input cmds
             break;
         case 7:
-            flagToReturn = 2; //go to neuro-input loop
+            flagToReturn = 2; //go to neuro-input loop (control wheelchair)
             break;
         case 8:
             flagToReturn = -2; //exit
@@ -180,7 +129,7 @@ int main(int argc, char** argv)
     if ( argc == 2 && (strcasecmp(argv[1],DYNAMICTESTCMD) == 0) ) //check test mode from cmd line
     {
         printf("\n**Dynamic Analysis Testing Mode Enabled.** \n\n");
-        //DO Dynamic test mode here (call functions)
+        dynamicTestFunction();
         successFlag = 2;
     }
     else if (argc > 1)

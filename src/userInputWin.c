@@ -18,7 +18,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <conio.h>
-#include <malloc.h>
 #include "userInput.h"
 #include "usbSerialComm.h"
 
@@ -184,10 +183,14 @@ char getCharConsole(void)
     //This is done for speed and not to use a custom keyboard library.  
 }//end function getCharConsole
 
-/*
- * Takes the int and outputs it back for the menu.
+
+/**
+ *
+ * @param inputReturned
+ * @return int
  */
-int getInput(int inputReturned){
+int getInput(int inputReturned)
+{
     char inputLine[BUFFERLENGTH];  //this is used as buffer for raw user input
     int returnFlag = 0;
     int length;    //var for length of buffer returned
