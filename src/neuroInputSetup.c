@@ -10,33 +10,42 @@
  */
 
 #include <stdio.h>
-#include <ctype.h>
 #include "neuroInputSetup.h"
 #include "userInput.h"
 #include "usbSerialComm.h"
 
 void changeMovementCommands()
 {
-    char defaultChange = 'z';
-    printf("The default inputs are W for forward, A for backward, S for left, D for right, and X for exiting the program while moving the wheelchair. Do you wish to change the defaults? Type [Y] for yes or [N] for no.\n");
+    char userAnswer = 'z';
+    printf("\n\nThe default inputs for the the Neuro-Headset and WheelChair Controller are: "
+            "\n\n\tw for forward, s for backward, a for left, d for right, and x for "
+            "exiting the program. \n\nDo you wish to change the defaults? "
+            "\n\n\tType [Y] for yes or [N] for no: ");
 
-    defaultChange = getCharConsole();
-    defaultChange = tolower(defaultChange);
-
-    if(defaultChange == 'y'){
-        printf("Do the motion to go forward and that will be the new forward key\n");
-        extG_controllerForwardCmd = tolower(getCharConsole());
-        printf("Now the command to go backwards in the wheelchair. \n");
-        extG_controllerBackCmd = tolower(getCharConsole());
-        printf("Fantastic, halfway done. What would be the key command for left?\n");
-        extG_controllerLeftCmd = tolower(getCharConsole());
-        printf("And last but not least the command to go right. \n");
-        extG_controllerRightCmd = tolower(getCharConsole());
-        printf("Also, what is the new key to exit the program?\n");
-        extG_controllerExitCmd = tolower(getCharConsole());
-        printf("Fantastic! All of the keys have now been changed succesfully.\n");
-    }else{
-        printf("All right, the defaults for forward, back, left, right, and exit have stayed the same.\n\n");
+    userAnswer = (char)getCharWithEnter();
+   
+    if( userAnswer == 'y' || userAnswer == 'Y' )
+    {
+        printf("\n\nUse the headset and perform the motion to go forward."
+                "\n\tForward Cmd: ");
+        extG_controllerForwardCmd = getCharWithEnter();
+        printf("\n\nNow perform the command to go backwards. "
+                "\n\tBackwards Cmd: ");
+        extG_controllerBackCmd = getCharWithEnter();
+        printf("\n\nNext, perform the command for left?"
+                "\n\tLeft Cmd: ");
+        extG_controllerLeftCmd = getCharWithEnter();
+        printf("\n\nFinally, perform the command for right. "
+                "\n\tRight Cmd: ");
+        extG_controllerRightCmd = getCharWithEnter();
+        printf("\n\nAdditionaly, press the key or perform the action to exit the program."
+                "\n\tExit Cmd: ");
+        extG_controllerExitCmd = getCharWithEnter();
+        printf("\n\nFantastic! All of the keys have now been changed succesfully.\n");
+    }
+    else
+    {
+        printf("\nThe default input commands have stayed the same.\n\n");
     }    
     
 } //end function changeMovementCommands

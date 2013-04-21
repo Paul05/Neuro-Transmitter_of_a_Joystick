@@ -172,7 +172,7 @@ int getBaudRate(void)
  *          environments.
  *
  */
-char getCharConsole(void)
+char getCharNoEnter(void)
 {  
 	struct termios oldt, newt;
 	int ch;
@@ -185,17 +185,47 @@ char getCharConsole(void)
 	
 	return ch;  
    
-}//end function getCharConsole
+}//end function getCharNoEnter
 
-/*
- * At this time it just gets the user's input for the menu.
- * Will be improved upon further to implement more useability (fgets(inputLine),
- *  for instance).
+
+/**
+ * This function gets user input in the form of one int or char.
+ * @return int this can be an integer or char depending on function use
  */
-int getInput(int inputReturned){
-    scanf("%d", &inputReturned);
-    return inputReturned;
-}
+char getCharWithEnter(void)
+{
+       char inputLine[BUFFERLENGTH];  //this is used as buffer for raw user input
+    char returnFlag;
+    int length;   //var for length of buffer returned
+    
+    do
+    {
+        returnFlag = -1;
+        
+        if (fgets(inputLine, sizeof(inputLine), stdin))
+        {
+            length = strlen(inputLine); //get length of input
+            
+            if (inputLine[length-1] == '\n')
+            {
+                inputLine[length-1] = 0; //replace newline fgets puts in
+            }
+            
+            if (strcasecmp(inputLine,USEREXITCOMMAND) == 0)  //compare ignore case
+            {
+                returnFlag = -2; //user wishes to exit
+            }
+            else if ( 1 != sscanf(inputLine, "%c", &returnFlag) )  //char is found
+            {                
+               returnFlag = -1; //too many ints entered etc.
+            }  
+        }       
+        
+    }while(returnFlag == -1); //end loop get user's numerical input for the menu
+    
+    return returnFlag; 
+   
+} //end getCharWithEnter function
 
 
-//END file userInputNoWin.c
+//END file getCharWithEnter

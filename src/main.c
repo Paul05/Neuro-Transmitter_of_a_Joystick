@@ -61,41 +61,41 @@ void dynamicTestFunction(void)
  * functions for performing the actions listed in the showMenu function.
  * Those actions are selectable by the user. This provides a main menu
  * that is the main user interface with this program.
- * @param actionNumberFromUser integer that corresponds to menu function in showMenu
+ * @param actionNumberFromUser char that corresponds to menu function in showMenu
  * @param portName string for the name of the serial port joystick conroller is connected on
  * @return integer for success (>=1 = success, <=0 = failure).
  */
-int performMenuAction(int actionNumberFromUser, char portName[])
+int performMenuAction(char actionNumberFromUser, char portName[])
 {
     int flagToReturn = 1;
 
     switch ( actionNumberFromUser )
     {
-        case 0:
+        case '0':
             showUserInstructionMessage();
             break;
-        case 1:
+        case '1':
             showSetupConfiguration();
             break;
-        case 2:
+        case '2':
             //TODO Load previous setup file
             break;
-        case 3:
+        case '3':
             //TODO Save setup file
             break;
-        case 4:
+        case '4':
             flagToReturn = getPortName(portName);
             break;
-        case 5:
+        case '5':
             flagToReturn = getBaudRate(); 
             break;
-        case 6:
+        case '6':
             changeMovementCommands(); //change neuro-input cmds
             break;
-        case 7:
+        case '7':
             flagToReturn = 2; //go to neuro-input loop (control wheelchair)
             break;
-        case 8:
+        case '8':
             flagToReturn = -2; //exit
             break;
         default:
@@ -142,14 +142,10 @@ int main(int argc, char** argv)
         do
         {
             successFlag = 0;
-            menuInput = '9';
-
+       
             showMenu();
-            getInput(menuInput);
-            fflush(stdout); 
-//            menuInput = getchar();
-            (void)getchar(); //remove enter TODO Bad Way fix with userInput function
-
+            menuInput = getCharWithEnter();
+ 
             successFlag = performMenuAction(menuInput, portName);
 
             if (successFlag >= LWRBAUDRATE)
@@ -184,7 +180,7 @@ int main(int argc, char** argv)
 
                     do
                     {
-                        neuroHeadSetInput = getCharConsole();
+                        neuroHeadSetInput = getCharNoEnter();
 
                         printf("\n(DEBUG PURPOSES ONLY) Char recieved: %c. \n\n",neuroHeadSetInput); //TODO: Remove this, for debug purposes only!
 

@@ -156,14 +156,21 @@ void sendToWheelChairController(char toSend)
 void delayProgram(int time)
 {
     Sleep(time);
-}
+} //end delayProgram function
+
 
 /**
- * Sets the user's Baud Rate.
+ * This function sets the baud rate if it's valid versus the valid baud rates
+ * for Windows operating system's serial ports.
+ * @param int baudNumber  to set if it's valid
+ * @return int for success 1 is success, 0 is false
  */
-int setBaudRate(int baudNumber){
+int setBaudRate( int baudNumber )
+{
     int returnedNumber = 0;
-    switch(baudNumber){
+    
+    switch(baudNumber)
+    {
         case 110:
             g_controDeviceConnectionSettings.BaudRate = CBR_110;
             returnedNumber = 1;
@@ -224,6 +231,9 @@ int setBaudRate(int baudNumber){
             returnedNumber = 0;
             break;
     }
+    
     return returnedNumber;
-}
+    
+} //end setBaudRate function
+
 //END file usbSerialComm.c

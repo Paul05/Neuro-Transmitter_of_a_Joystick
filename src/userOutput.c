@@ -63,14 +63,14 @@ void showUserInstructionMessage(void)
  */
 void showMenu(void)
 {
-    printf("\nOptions Menu:\n\n"
+    printf("\n\nOptions Menu:\n\n"
            " 0 - Help\n"
            " 1 - View Current Setup Configuration\n"
         //   " 2 - Load Previously Saved Setup File\n"
         //   " 3 - Save Setup Changes to a File\n"
            " 4 - Change Serial Port Name\n"
            " 5 - Change Serial Port Baud Rate\n"
-       //    " 6 - Change Neuro/Controller Input Commands\n"
+           " 6 - Change Neuro/Controller Input Commands\n"
            " 7 - Start Neuro-Control of the Wheelchair\n\n"
            " 8 - Exit the program\n\n"
            "Selection: "
@@ -80,7 +80,7 @@ void showMenu(void)
 
 
 /**
- *
+ * Shows the setup configuration... TODO
  */
 void showSetupConfiguration(void)
 {

@@ -26,8 +26,8 @@
 
 int getPortName(char outPortName[]);
 int getBaudRate(void);
-char getCharConsole(void);
-int getInput(int inputReturned);
+char getCharNoEnter(void);
+char getCharWithEnter(void);
 
 #endif	/* USERINPUT_H */
 

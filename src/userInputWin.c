@@ -24,7 +24,7 @@
 
 /**
  * This function is designed to get a port name from the user on the console.
- * Return: It returns a -1 if the user wishes to exit, 0 for failure and
+ * Return: It returns a -1 if the user wishes to exit, and
  *          1 for success.
  * Furthermore, the inputed string (as a parameter to this function)
  * will be returned to the calling function.
@@ -34,13 +34,12 @@
 int getPortName(char outPortName[])
 {    
     char inputLine[BUFFERLENGTH];  //this is used as buffer for raw user input
-    int errorFlag;     //status of input 1 = error keep going, 0 = stop success
-    int returnFlag = 0;
+    int returnFlag;
     int length;    //var for length of buffer returned
 
     do
     {
-        errorFlag = 0;
+        returnFlag = 0;
         printf("\nPlease enter the port name the Arduino is connected on: ");
 
         if (fgets(inputLine, sizeof(inputLine), stdin))
@@ -53,7 +52,7 @@ int getPortName(char outPortName[])
             }
 
             if (strcasecmp(inputLine,USEREXITCOMMAND) == 0)  //compare ignore case
-            {
+            {  
                 returnFlag = -1; //user wishes to exit
             }
             else if ( strncmp(inputLine,"COM",3) == 0 ) //check if portname conforms to beginning "COM"
@@ -76,17 +75,17 @@ int getPortName(char outPortName[])
                 printf("\n*Error in port name being entered. "
                         "Make sure it's the proper length and format. \n\t"
                         "Example: 'COM1' or type 'exit' to end the program. \n\n");
-                errorFlag = 1; //too many strings entered or too long or improper format.
+                returnFlag = 0; //too many strings entered or too long or improper format.
             }
         }
         else
         {
             printf("\n*Error in port name being entered. \n\t*Please try again or "
                     "type 'exit' to end the program.\n\n");
-            errorFlag = 1; //usually no input found (blank)
+            returnFlag = 0; //usually no input found (blank)
         }
 
-    }while(errorFlag == 1); //end loop get port name
+    }while(returnFlag == 0); //end loop get port name
 
     return returnFlag; //return failure if fall through
     
@@ -96,26 +95,24 @@ int getPortName(char outPortName[])
 /**
  * This function is designed to get the baud rate from the user
  * and reduces erroneous and extraneous input within reason.
- * Return: It returns a -1 if the user wishes to exit, 0
- *          for failure and above 1 for success.
+ * Return: It returns a -1 if the user wishes to exit and above 1 for success.
  * Note: It should be reasonably free of improper
  *          input unless the input line is longer than the buffer.
  */
 int getBaudRate(void)
 {
     char inputLine[BUFFERLENGTH];  //this is used as buffer for raw user input
-    int returnFlag = 0;
+    int returnFlag;
     int length;    //var for length of buffer returned
-    int outBaudRate; //int for baud rate and status of input 1 = error or keep going,
     
     do
     {
-        outBaudRate = 1;
+        returnFlag = 0;
         printf("\nPlease enter the baud rate of the connection to "
                 "the Arduino: ");
 
         if (fgets(inputLine, sizeof(inputLine), stdin))
-        {
+        {          
             length = strlen(inputLine); //get length of input
 
             if (inputLine[length-1] == '\n')
@@ -127,20 +124,23 @@ int getBaudRate(void)
             {
                 returnFlag = -1; //user wishes to exit
             }
-            else if (1 == sscanf(inputLine, "%d", &outBaudRate))  //int is found
+            else if (1 == sscanf(inputLine, "%d", &returnFlag))  //int is found
             {
-                if (outBaudRate < LWRBAUDRATE || outBaudRate > UPPRBAUDRATE ) //check upper and lower possible baud rate bounds
+                if (returnFlag < LWRBAUDRATE || returnFlag > UPPRBAUDRATE ) //check upper and lower possible baud rate bounds
                 {
                     printf("*Please enter a valid baud rate. "
                             "(9600 is default) \n\n");
-                    outBaudRate = 1; //baud rate is invalid
+                    returnFlag = 0; //baud rate is invalid
                 }
                 else
                 {
-                    if(setBaudRate(outBaudRate))
-                        returnFlag = outBaudRate; //baud rate is valid success return it
-                    else{
-                        outBaudRate = 1;
+                    if( setBaudRate(returnFlag) )
+                    {
+                        returnFlag = returnFlag; //baud rate is valid success return it
+                    }
+                    else
+                    {
+                        returnFlag = 0;
                     }
                 }
             }
@@ -148,17 +148,17 @@ int getBaudRate(void)
             {
                 printf("\n*Please enter one number for the baud rate of "
                         "the connection. \n\t*Example: '9600'. \n\n");
-                outBaudRate = 1; //too many ints entered etc.
+                returnFlag = 0; //too many ints entered etc.
             }
         }
         else
         {
             printf("\n*Error in baud rate entered. Please try again or "
                     "type 'exit' to end the program.\n\n");
-            outBaudRate = 1; //improper input (probably blank)
+            returnFlag = 0; //improper input (probably blank)
         }
 
-    }while(outBaudRate == 1); //end loop get baud rate
+    }while(returnFlag == 0); //end loop get baud rate
 
     return returnFlag; //fall through return 0 for neutral failure
 
@@ -175,29 +175,28 @@ int getBaudRate(void)
  * Warning: This function is platform dependent to certain compilers and
  *          environments due to the getch function which needs to be in conio.h.
  *          and is usually only found on Windows systems.
- *
+ * @return char
  */
-char getCharConsole(void)
+char getCharNoEnter(void)
 {    
     return getch(); //call to getchar to get char without enter being pressed
     //This is done for speed and not to use a custom keyboard library.  
-}//end function getCharConsole
+}//end function getCharNoEnter
 
 
 /**
- *
- * @param inputReturned
- * @return int
+ * This function gets user input in the form of one int or char.
+ * @return char 
  */
-int getInput(int inputReturned)
+char getCharWithEnter(void)
 {
     char inputLine[BUFFERLENGTH];  //this is used as buffer for raw user input
-    int returnFlag = 0;
-    int length;    //var for length of buffer returned
+    char returnFlag;
+    int length;   //var for length of buffer returned
     
     do
     {
-        inputReturned = 1;
+        returnFlag = -1;
         
         if (fgets(inputLine, sizeof(inputLine), stdin))
         {
@@ -210,25 +209,18 @@ int getInput(int inputReturned)
             
             if (strcasecmp(inputLine,USEREXITCOMMAND) == 0)  //compare ignore case
             {
-                returnFlag = -1; //user wishes to exit
+                returnFlag = -2; //user wishes to exit
             }
-            else if (1 == sscanf(inputLine, "%d", &inputReturned))  //int is found
-            {
-                    returnFlag = inputReturned; //User's numerical input is set up and used as the returnFlag
-            }
-            else
-            {
-                inputReturned = 1; //too many ints entered etc.
-            }
-        }
-        else
-        {
-            inputReturned = 1; //improper input (probably blank)
-        }
+            else if ( 1 != sscanf(inputLine, "%c", &returnFlag) )  //char is found
+            {                
+               returnFlag = -1; //too many ints entered etc.
+            }  
+        }       
         
-    }while(inputReturned == 1); //end loop get user's numerical input for the menu
+    }while(returnFlag == -1); //end loop get user's numerical input for the menu
     
-    return returnFlag; //fall through return 0 for neutral failure
-}
+    return returnFlag; 
+
+} //end getCharWithEnter function
 
 //END file userInputWin.c
