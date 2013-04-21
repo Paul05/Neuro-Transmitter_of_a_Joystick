@@ -78,10 +78,11 @@ int performMenuAction(char actionNumberFromUser, char portName[])
             showUserInstructionMessage();
             break;
         case '1':
-            showSetupConfiguration();
+            showSetupConfiguration(baudRate);
             break;
         case '2':
             inputFile(baudRate);
+            showSetupConfiguration(baudRate);
             break;
         case '3':
             outputFile(baudRate);

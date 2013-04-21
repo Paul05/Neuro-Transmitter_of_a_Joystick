@@ -10,6 +10,7 @@
  */
 
 #include <stdio.h>
+#include "usbSerialComm.h"
 
 /**
 * Welcome message function that displays a welcome message on the console.
@@ -80,10 +81,17 @@ void showMenu(void)
 
 
 /**
- * Shows the setup configuration... TODO
+ * Shows the setup configuration.
  */
-void showSetupConfiguration(void)
+void showSetupConfiguration(int baudRate)
 {
+    printf("\nYour current setup is as follows:\n\n"
+           "Forward Command: ", extG_controllerForwardCmd);
+    printf("\nBackward Commad: ", extG_controllerBackCmd);
+    printf("\nLeft Commad: ", extG_controllerLeftCmd);
+    printf("\nRight Commad: ", extG_controllerRightCmd);
+    printf("\nExit Commad: ", extG_controllerExitCmd);
+    printf("\nBaud Rate: ", baudRate);
 
 }//end showConfiguration function
 
