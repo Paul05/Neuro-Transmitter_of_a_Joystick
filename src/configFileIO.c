@@ -11,6 +11,7 @@
 
 
 #include <stdio.h>
+#include <string.h>
 #include "usbSerialComm.h"
 
 /*
@@ -67,7 +68,7 @@ int inputFile(int baudRate){
     
     while(fgets(buffer, BUFSIZ, fp) != NULL){
         
-/*        string = buffer;
+        string = buffer;
         token = strsep(&string, " ");
         strsep(&string, " "); //Used to throw away the second token ("=")
         if(strncmp(token, "Forward", 100) == 0){
@@ -89,7 +90,7 @@ int inputFile(int baudRate){
             token = strsep(&string, " ");
             sscanf(token, "%d", &baudRate);
         }
-*/
+
     }
     fclose(fp);
     
