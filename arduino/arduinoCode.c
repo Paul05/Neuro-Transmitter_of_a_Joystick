@@ -94,6 +94,8 @@ void loop(){			        //Main loop which is constantly being run on the arduino
 }
 
 void buttonPressed(){				// Function will disable the servo motors for manual override
+  FORWARDSERVO.write(25);
+  SIDESERVO.write(40);
   SIDESERVO.detach();
   FORWARDSERVO.detach();
 }
@@ -111,7 +113,7 @@ void goRight(){
       SIDESERVO.write(i);
       delay(125);
     }
-    delay(1500);
+    delay(500);
   
     for(int i = 0; i <= 45; i+= 2)
     {
@@ -141,7 +143,7 @@ void goLeft(){
       SIDESERVO.write(i);
       delay(125);
     }
-    delay(1500);
+    delay(500);
   
     for(int i = 90; i >= 45; i-= 2)
     {
@@ -171,7 +173,7 @@ void goForward(){
       FORWARDSERVO.write(i);
       delay(125);
     }
-    delay(1500);
+    delay(300);
   
     for(int i = 70; i >= 25; i-= 2)
     {
