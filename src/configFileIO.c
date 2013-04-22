@@ -147,6 +147,7 @@ int checkFile(){
     {
         return 0;
     }
+    fclose(fp);
     
     printf("Configuration file found in folder!"
            "\nLoading information...");
