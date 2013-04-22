@@ -84,7 +84,7 @@ void normalizationAlgorithm(const char toSendToController)
     if(g_last_userInpt[0] == g_last_userInpt[1] && g_last_userInpt[0] == g_last_userInpt[2])
     {
         sendToWheelChairController(toSendToController);
-        delayProgram(400);
+        delayProgram(500);
         g_count = 2;
     }
     else if(!isnan(g_last_userInpt[2]))
