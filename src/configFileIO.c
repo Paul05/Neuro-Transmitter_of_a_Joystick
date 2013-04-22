@@ -73,27 +73,21 @@ int inputFile(int baudRate){
         if(strncmp(token, "Forward", 100) == 0){
             token = strsep(&string, " ");
             sscanf(token, "%c", &extG_controllerForwardCmd);
-//            printf("%c\n", extG_controllerForwardCmd);
         }else if(strncmp(token, "Backward", 100) == 0){
             token = strsep(&string, " ");
             sscanf(token, "%c", &extG_controllerBackCmd);
-//            printf("%c\n", extG_controllerBackCmd);
         }else if(strncmp(token, "Right", 100) == 0){
             token = strsep(&string, " ");
             sscanf(token, "%c", &extG_controllerRightCmd);
-//            printf("%c\n", extG_controllerRightCmd);
         }else if(strncmp(token, "Left", 100) == 0){
             token = strsep(&string, " ");
             sscanf(token, "%c", &extG_controllerLeftCmd);
-//            printf("%c\n", extG_controllerExitCmd);
         }else if(strncmp(token, "Exit", 100) == 0){
             token = strsep(&string, " ");
             sscanf(token, "%c", &extG_controllerExitCmd);
-//            printf("%c\n", extG_controllerExitCmd);
         }if(strncmp(token, "Baud", 100) == 0){
             token = strsep(&string, " ");
             sscanf(token, "%d", &baudRate);
-//            printf("%d\n", baudRate);
         }
 */
     }

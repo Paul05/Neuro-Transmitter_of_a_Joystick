@@ -23,6 +23,13 @@ const int INTERRUPT = 0;			//Uses '0' as the interrupt number, which is set up w
 volatile int BUTTONSTATE;
 int number;
 
+const int forwardservopin = 9;
+const int sideservopin = 8;
+
+boolean firstRun = true;
+boolean secondRun = false;
+boolean turnTo90 = true;
+boolean turnTo45 = true;
 /*
  * *******USER-ADJUSTED INFORMATION*******
  */
@@ -39,14 +46,16 @@ const int PULSE = 1500;                         //Pulse value for servo motors
 
 void setup(){							//Initial setup process for pins on input and output.
   Serial.begin(9600);					//Allows for use of the Serial Monitor
-  FORWARDSERVO.attach(8);
-  SIDESERVO.attach(9);
+  FORWARDSERVO.attach(forwardservopin);
+  SIDESERVO.attach(sideservopin);
   attachInterrupt(INTERRUPT, buttonPressed, RISING);	//Sets up the interrupt pin, specifices the called function and what mode to use
+  FORWARDSERVO.write(25);
+  SIDESERVO.write(40);
 }
 
 void loop(){			        //Main loop which is constantly being run on the arduino
-  FORWARDSERVO.attach(8);
-  SIDESERVO.attach(9);
+  FORWARDSERVO.attach(forwardservopin);
+  SIDESERVO.attach(sideservopin);
   number = 0;                         // zero the incoming number ready for a new read
 
   /*
@@ -77,9 +86,7 @@ void loop(){			        //Main loop which is constantly being run on the arduino
   else if (number == inputBackward){
     goBackward();
   }
-  else {
-    Serial.println("Sorry, I didn't recognize your input. Please re-enter your input.");
-  }
+
   Serial.flush();
   /*
      * END IF/ELSE INFORMATION.
@@ -93,37 +100,120 @@ void buttonPressed(){				// Function will disable the servo motors for manual ov
 
 void goRight(){
   //Push the vertical servo to the right to have the wheelchair go right.
-  SIDESERVO.write(120);
-  delay(15);
-  SIDESERVO.write(-150);
-  delay(15);
+ for(int i = 45; i >= 0; i -= 2)
+    {
+      //If the servo has reached 90 degrees, start to move the other direction to 45 degrees
+      if(SIDESERVO.read() < 5)
+      {        
+        SIDESERVO.write(0);//Set the servo to 90 degrees exactly
+        break;
+      }
+      SIDESERVO.write(i);
+      delay(125);
+    }
+    delay(1500);
+  
+    for(int i = 0; i <= 45; i+= 2)
+    {
+      //If the servo has reached 0 degrees, start to move the other direction to 90 degrees
+      if(SIDESERVO.read() >= 40)
+      {
+        SIDESERVO.write(45);//Set the servo to 45 degrees exactly
+        break;
+      }      
+      
+      SIDESERVO.write(i);
+      delay(125);
+    }
   SIDESERVO.detach();
 }
 
 void goLeft(){
   //Move the vertical (sideways) servo to the left to make the controller go left.
-  SIDESERVO.write(-170);
-  delay(15);
-  SIDESERVO.write(100);
-  delay(15);
+       for(int i = 45; i <= 90; i += 2)
+    {
+      //If the servo has reached 90 degrees, start to move the other direction to 45 degrees
+      if(SIDESERVO.read() > 85)
+      {        
+        SIDESERVO.write(90);//Set the servo to 90 degrees exactly
+        break;
+      }
+      SIDESERVO.write(i);
+      delay(125);
+    }
+    delay(1500);
+  
+    for(int i = 90; i >= 45; i-= 2)
+    {
+      //If the servo has reached 0 degrees, start to move the other direction to 90 degrees
+      if(SIDESERVO.read() <= 50)
+      {
+        SIDESERVO.write(45);//Set the servo to 45 degrees exactly
+        break;
+      }      
+      
+      SIDESERVO.write(i);
+      delay(125);
+    }
   SIDESERVO.detach();
 }
 
 void goForward(){
-  //Turn one of the servos on to go forward (the horizontal servo goes forward so the controller goes forward)
-  FORWARDSERVO.write(-170);
-  delay(15);
-  FORWARDSERVO.write(100);
-  delay(15);
+
+     for(int i = 25; i <= 70; i += 2)
+    {
+      //If the servo has reached 90 degrees, start to move the other direction to 45 degrees
+      if(FORWARDSERVO.read() > 65)
+      {        
+        FORWARDSERVO.write(70);//Set the servo to 90 degrees exactly
+        break;
+      }
+      FORWARDSERVO.write(i);
+      delay(125);
+    }
+    delay(1500);
+  
+    for(int i = 70; i >= 25; i-= 2)
+    {
+      //If the servo has reached 0 degrees, start to move the other direction to 90 degrees
+      if(FORWARDSERVO.read() <= 30)
+      {
+        FORWARDSERVO.write(25);//Set the servo to 45 degrees exactly
+        break;
+      }      
+      
+      FORWARDSERVO.write(i);
+      delay(125);
+    }
   FORWARDSERVO.detach();
 }
 
 void goBackward(){
-  //Push the horizontal servo backward to have the wheelchair/controller go backwards.
-  FORWARDSERVO.write(120);
-  delay(15);
-  FORWARDSERVO.write(-150);
-  delay(15);
+       for(int i = 25; i >= 0; i -= 2)
+    {
+      //If the servo has reached 90 degrees, start to move the other direction to 45 degrees
+      if(FORWARDSERVO.read() < 5)
+      {        
+        FORWARDSERVO.write(0);//Set the servo to 90 degrees exactly
+        break;
+      }
+      FORWARDSERVO.write(i);
+      delay(125);
+    }
+    delay(1500);
+  
+    for(int i = 0; i <= 25; i+= 2)
+    {
+      //If the servo has reached 0 degrees, start to move the other direction to 90 degrees
+      if(FORWARDSERVO.read() >= 20)
+      {
+        FORWARDSERVO.write(25);//Set the servo to 45 degrees exactly
+        break;
+      }      
+      
+      FORWARDSERVO.write(i);
+      delay(125);
+    }
   FORWARDSERVO.detach();
 }
 
