@@ -14,6 +14,32 @@
 #include <string.h>
 #include "usbSerialComm.h"
 
+/*
+ * This function is used to separate the information that is read in from the file 
+ *  (Configuration.txt)
+ * @param stringp, delim
+ * @return
+ */
+
+char* mystrsep(char** stringp, const char* delim)
+{
+    char* start = *stringp;
+    char* p;
+    
+    p = (start != NULL) ? strpbrk(start, delim) : NULL;
+    
+    if (p == NULL)
+    {
+        *stringp = NULL;
+    }
+    else
+    {
+        *p = '\0';
+        *stringp = p + 1;
+    }
+    
+    return start;
+}
 
 /**
  * This function saves the information that the user has written!
@@ -64,11 +90,11 @@ int outputFile(int baudRate)
  */
 int inputFile(int baudRate)
 {
- //   char buffer[BUFSIZ];
+    char buffer[BUFSIZ];
 	char configFile[] = "Configuration.txt";
 	FILE *fp = NULL;
- //   char *string;
- //   char *token;
+    char *string;
+    char *token;
     
     fp = fopen(configFile, "r"); /* open file for reading */
     if(fp == NULL)
@@ -77,35 +103,38 @@ int inputFile(int baudRate)
         return -3;
     }
     
-//    while(fgets(buffer, BUFSIZ, fp) != NULL){
-/*
- * Commenting this out for now, don't know if it works for sure, don't want jenkins to break.
- *
+    while(fgets(buffer, BUFSIZ, fp) != NULL){
+        
         string = buffer;
-        token = strsep(&string, " ");
-        strsep(&string, " "); //Used to throw away the second token ("=")
+        token = mystrsep(&string, " ");
+        mystrsep(&string, " "); //Used to throw away the second token ("=")
         if(strncmp(token, "Forward", 100) == 0){
-            token = strsep(&string, " ");
+            token = mystrsep(&string, " ");
             sscanf(token, "%c", &extG_controllerForwardCmd);
+            printf("%c\n", extG_controllerForwardCmd);
         }else if(strncmp(token, "Backward", 100) == 0){
-            token = strsep(&string, " ");
+            token = mystrsep(&string, " ");
             sscanf(token, "%c", &extG_controllerBackCmd);
+            printf("%c\n", extG_controllerBackCmd);
         }else if(strncmp(token, "Right", 100) == 0){
-            token = strsep(&string, " ");
+            token = mystrsep(&string, " ");
             sscanf(token, "%c", &extG_controllerRightCmd);
+            printf("%c\n", extG_controllerRightCmd);
         }else if(strncmp(token, "Left", 100) == 0){
-            token = strsep(&string, " ");
+            token = mystrsep(&string, " ");
             sscanf(token, "%c", &extG_controllerLeftCmd);
+            printf("%c\n", extG_controllerExitCmd);
         }else if(strncmp(token, "Exit", 100) == 0){
-            token = strsep(&string, " ");
+            token = mystrsep(&string, " ");
             sscanf(token, "%c", &extG_controllerExitCmd);
+            printf("%c\n", extG_controllerExitCmd);
         }if(strncmp(token, "Baud", 100) == 0){
-            token = strsep(&string, " ");
+            token = mystrsep(&string, " ");
             sscanf(token, "%d", &baudRate);
+            printf("%d\n", baudRate);
         }
-
+        
     }
- */
     fclose(fp);
     
     return 0;
