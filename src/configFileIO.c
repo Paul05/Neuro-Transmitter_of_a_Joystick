@@ -12,6 +12,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "usbSerialComm.h"
 
 /*
@@ -67,7 +68,9 @@ int inputFile(int baudRate){
     }
     
     while(fgets(buffer, BUFSIZ, fp) != NULL){
-        
+/*
+ * Commenting this out for now, don't know if it works for sure, don't want jenkins to break.
+ *
         string = buffer;
         token = strsep(&string, " ");
         strsep(&string, " "); //Used to throw away the second token ("=")
@@ -90,7 +93,7 @@ int inputFile(int baudRate){
             token = strsep(&string, " ");
             sscanf(token, "%d", &baudRate);
         }
-
+*/
     }
     fclose(fp);
     
