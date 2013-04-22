@@ -4,22 +4,26 @@
  *         Frank Liu, Darryl Monroe, Michael Berg, Paul Spaude
  * Class: CST315 & CST316 ASU Polytechnic
  *
- * Purpose: This class is set up to read/write a file for the user's configuration information.
+ * Purpose: This file contains functions to read/write from or to a file
+ *          containing the user's last saved or current configuration information.
  *  
  * Created Spring, 2013
  */
 
-
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
 #include "usbSerialComm.h"
 
-/*
+
+/**
  * This function saves the information that the user has written!
+ * 
+ * @param baudRate
+ * @return
  */
-int outputFile(int baudRate){
-	char buffer[BUFSIZ];
+int outputFile(int baudRate)
+{
+//	char buffer[BUFSIZ];
 	char configFile[] = "Configuration.txt";
 	FILE *fp = NULL;
     
@@ -44,21 +48,27 @@ int outputFile(int baudRate){
     fprintf(fp, "%d\n", baudRate);
     fclose(fp); /* close file */
 	return 0;
-}
-/*
+} //end outputFile function
+
+
+/**
  * This reads the file (Configuration.txt) from the user's local folder.
  * It will then read through it and save the information as it is written in the file.
  *
  * IMPORTANT: The user must NOT change the format in the file, or else it will not work!
  *
  * TODO: Make it not break if it is changed in the file.
+ * 
+ * @param baudRate
+ * @return
  */
-int inputFile(int baudRate){
-    char buffer[BUFSIZ];
+int inputFile(int baudRate)
+{
+ //   char buffer[BUFSIZ];
 	char configFile[] = "Configuration.txt";
 	FILE *fp = NULL;
-    char *string;
-    char *token;
+ //   char *string;
+ //   char *token;
     
     fp = fopen(configFile, "r"); /* open file for reading */
     if(fp == NULL)
@@ -67,7 +77,7 @@ int inputFile(int baudRate){
         return -3;
     }
     
-    while(fgets(buffer, BUFSIZ, fp) != NULL){
+//    while(fgets(buffer, BUFSIZ, fp) != NULL){
 /*
  * Commenting this out for now, don't know if it works for sure, don't want jenkins to break.
  *
@@ -93,11 +103,13 @@ int inputFile(int baudRate){
             token = strsep(&string, " ");
             sscanf(token, "%d", &baudRate);
         }
-*/
+
     }
+ */
     fclose(fp);
     
     return 0;
-
     
-}
+}//end inputFile function
+
+//END File configFileIO.c

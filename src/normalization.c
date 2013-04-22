@@ -20,74 +20,110 @@
 #include "normalization.h"
 #include "usbSerialComm.h"
 
+#define LASTINPUTMEMSIZE 3
+
 int g_count = 0;
-char g_last_userInpt[3];
-/*
- * The below method checks to see if the input key is a default key you have.
- * If it is, it returns true else it returns false.
+char g_last_userInpt[LASTINPUTMEMSIZE];
+
+
+/**
+ * This function checks to see if the inputted key is in the key mapping for
+ * the wheel chair controller and neuro-input device. If it is a mapped key,
+ * it returns 1 otherwise it returns 0.
+ * @param key to validate is in the mapping for movement
+ * @return 1 for true and 0 for false
  */
-int aKey(char key){
-    int theVal = 0;
+int aKey(const char key)
+{
+    int returnVal = 0;
+
     if(key == extG_controllerForwardCmd){
-        theVal = 1;
+        returnVal = 1;
     }else if(key == extG_controllerBackCmd){
-        theVal = 1;
+        returnVal = 1;
     }else if(key == extG_controllerLeftCmd){
-        theVal = 1;
+        returnVal = 1;
     }else if(key == extG_controllerRightCmd){
-        theVal = 1;
+        returnVal = 1;
     }else if (key == extG_controllerTestCmd){
-        theVal = 1;
+        returnVal = 1;
     }else if(key == extG_controllerExitCmd){
-        theVal = 1;
+        returnVal = 1;
     }else{
-        theVal = 0;
+        returnVal = 0;
     }
-    return theVal;
-}
-/*
- * The below method goes through a rigorous if/else loop that checks the inputs.
- * If the last three inputs are the same it will send it to the arduino and reset.
- * If they were not the same, it sets the values in appropriate places and tries again.
+
+    return returnVal;
+    
+} //end aKey function
+
+
+/**
+ * This function normalizes input and uses a global array and global count value.
+ * The array holds the last several inputs which this function compares the
+ * current inputted character to. This function then decides to send
+ * the inputted character to the wheelchair controller or not, based on the
+ * conditional statements below.
+ *
+ * @param toSendToController the current char that has been inputted to be
+ *                          sent to the wheelchair controller
  */
-void normalizationAlgorithm(char toSend){
-    if(g_count == 0){
-        g_last_userInpt[0] = toSend;
-    }else if(g_count == 1){
-        g_last_userInpt[1] = toSend;
-    }else if(g_count == 2){
-        g_last_userInpt[2] = toSend;
+void normalizationAlgorithm(const char toSendToController)
+{
+    if(g_count == 0)
+    {
+        g_last_userInpt[0] = toSendToController;
+    }else if(g_count == 1)
+    {
+        g_last_userInpt[1] = toSendToController;
+    }else if(g_count == 2)
+    {
+        g_last_userInpt[2] = toSendToController;
     }
     
-    if(g_last_userInpt[0] == g_last_userInpt[1] && g_last_userInpt[0] == g_last_userInpt[2]){
-        sendToWheelChairController(toSend);
+    if(g_last_userInpt[0] == g_last_userInpt[1] && g_last_userInpt[0] == g_last_userInpt[2])
+    {
+        sendToWheelChairController(toSendToController);
         delayProgram(400);
         g_count = 2;
-    }else if(!isnan(g_last_userInpt[2])){
-        if(g_last_userInpt[1] == g_last_userInpt[2]){
+    }
+    else if(!isnan(g_last_userInpt[2]))
+    {
+        if(g_last_userInpt[1] == g_last_userInpt[2])
+        {
             g_last_userInpt[0] = g_last_userInpt[2];
             g_count = 2;
-        }else{
+        }else
+        {
             g_last_userInpt[0] = g_last_userInpt[2];
             g_count = 1;
         }
-    }else{
+    }
+    else
+    {
         g_count++;
     }
-}
+    
+} //end normalizationAlgorithm function
 
-/*
- * This function hands off functionality to the appropriate normalization/direction
- * functions based on an inputted char.
- * @param char key
+
+/**
+ * This function decides tp hands off functionality to the appropriate
+ * normalization/direction function based on if an inputted char is in the
+ * current mapping. If not, the value is extraneous.
+ * 
+ * @param key a char that needs to be checked and if mapped needs to be normalized. 
  */
-void callNormalizeDirectionFuncs(char key)
+void callNormalizeDirectionFuncs(const char key)
 {
-    if(aKey(key)){ //confirms if the key is one of your default keys
+    if(aKey(key))
+    { //confirms if the key is one of your default keys
         normalizationAlgorithm(key); //normalizes the input
-    }else{
+    }else
+    {
         printf("\n*Error char not recognized! Char input: %c. \n\n", key); //char not recognized print error, will keep going though
     }//end switch on key
     
 } //end callNormalizeDirectionFuncs function
 
+//END file normalization.c

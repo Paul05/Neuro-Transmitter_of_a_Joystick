@@ -5,23 +5,24 @@
 *         Frank Liu, Darryl Monroe, Michael Berg, Paul Spaude
 *
 * Class: CST315 & CST316 ASU Polytechnic
-*         Copyright ASU Polytechnic 2013 All Rights Reserved.
+*        Copyright ASU Polytechnic 2013 All Rights Reserved.
 *
-* Inputs: The program will show a menu so that the user can select different
-*         options. The user will be able to set most input and output commands
-*         as well as most serial port options.
+* Input: The program will show a menu so that users can select different
+*        options. All user information is inputted and communicated through
+*        the console.
 *
-* Function: This program sets up communication with a joystick controller. The
+* Function: This program sets up communication with a wheelchair controller. The
 *           connection may be USB or serial but the USB must mimic a serial port
- *          and communication.
-*           If the test completes and communication works, then this program
-*           takes inputs from the keyboard. Defaults are: t is reserved for testing
-*           and x is reserved for exiting. w is forward, s is back, d is right,
-*           and a is left. This is designed to be inputed from various neuro
-*           EEG headsets. They may do this via their proprietary and other open software.
- *          The goal is to write a char to the keyboard based on a
- *          brain activity or muscular face action.
-*
+*           and communication.
+*           If the connection is setup successfully, this program will then
+*           take inputs from the keyboard. 
+*           Default inputs are: t is reserved for testing and x is reserved
+*           for exiting.
+*           w is forward, s is back, d is right, and a is left.
+*           Those last movement inputs are designed to be inputted from a "Neuro"
+*           EEG/EMG headset. They may do this via their proprietary and/or
+*           other open software. The goal is to map an action on the headset to
+*           a designated keyboard character.
 *           This program then sends that input to the wheelchair controller
 *           after it normalizes the input to provide a consistent and usable
 *           user experience. This version is in its infancy and is based on the
@@ -159,13 +160,14 @@ int main(int argc, char** argv)
 
             if (successFlag == 2)
             {
-                printf("\n\nSetting up communication with Arduino on port: %s at rate %i... \n\n", portName, baudRate);
+                printf("\n\nSetting up communication with the WheelChair Controller "
+                        "on port: %s at rate %i... \n\n", portName, baudRate);
                
                 successFlag = setupCommunication(portName, baudRate);
 
                 if (successFlag > 0)
                 {
-                    successFlag = testControllerCommunication(); //test communication with arduino
+                    successFlag = testControllerCommunication(); //test communication with controller
                 }
 
                 if (successFlag > 0)

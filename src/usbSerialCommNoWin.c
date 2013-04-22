@@ -39,6 +39,15 @@ int serialport_read_until(int fd, char* buf, char until);
 
  int g_fd = 0; //file descriptor of port
 
+/**
+ * Sets the user's Baud Rate.
+ */
+int setBaudRate(int baudNumber){
+ 
+	int returnedNumber = 9600;
+    return returnedNumber;
+}
+
 
 /**
  * Purpose: Sets up communication on port specified at baud rate specified if
@@ -100,7 +109,7 @@ int testControllerCommunication(void)
  * Sends an integer to the currently open device.
  * @param toSend integer to send to Arduino
  */
-void sendToWheelChairController(char toSend)
+void sendToWheelChairController(const char toSend)
 {
 
 } //end sendIntToArduino function
@@ -109,19 +118,11 @@ void sendToWheelChairController(char toSend)
  * Delay function for program between serial communication.
  * @param integer time where time is in milliseconds
  */
-void delayProgram(int time)
+void delayProgram(const int time)
 {
 	int timeToMilliSecs = (time * 1000); 
 	//this converts the input (milliseconds to be same interface as windows) to the required microseconds by the unix cmd
 	usleep(timeToMilliSecs);
-}
-/**
- * Sets the user's Baud Rate.
- */
-int setBaudRate(int baudNumber){
- 
-	int returnedNumber = 9600;
-    return returnedNumber;
 }
 
 //END file usbSerialCommNoWin.c 

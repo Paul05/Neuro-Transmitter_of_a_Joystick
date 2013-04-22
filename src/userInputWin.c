@@ -24,12 +24,15 @@
 
 /**
  * This function is designed to get a port name from the user on the console.
+ *  The input array will hold the portname if this function completes successfully.
  * Return: It returns a -1 if the user wishes to exit, and
  *          1 for success.
  * Furthermore, the inputed string (as a parameter to this function)
  * will be returned to the calling function.
  * Note: It should be reasonably free of improper and extraneous
  *          input unless the input line is longer than the buffer.
+ *
+ * @param outPortName string port to be inputted from user
  */
 int getPortName(char outPortName[])
 {    
@@ -131,18 +134,7 @@ int getBaudRate(void)
                     printf("*Please enter a valid baud rate. "
                             "(9600 is default) \n\n");
                     returnFlag = 0; //baud rate is invalid
-                }
-                else
-                {
-                    if( setBaudRate(returnFlag) )
-                    {
-                        returnFlag = returnFlag; //baud rate is valid success return it
-                    }
-                    else
-                    {
-                        returnFlag = 0;
-                    }
-                }
+                }                
             }
             else
             {
@@ -170,12 +162,11 @@ int getBaudRate(void)
  *   from the console and returns it.
  * Returns: Single char from console input.
  * Note: This is not reasonably free of improper input. It is excepted to be so,
- *          since a machine would be entering data at the point this function
- *          is used.
+ *          for speed and more data will come later to correct invalid input.
  * Warning: This function is platform dependent to certain compilers and
  *          environments due to the getch function which needs to be in conio.h.
  *          and is usually only found on Windows systems.
- * @return char
+ * @return char from console
  */
 char getCharNoEnter(void)
 {    
@@ -185,8 +176,10 @@ char getCharNoEnter(void)
 
 
 /**
- * This function gets user input in the form of one int or char.
- * @return char 
+ * This function gets a single character (user presses enter after)
+ *    from the console and returns it.
+ * Returns: Single char input from the user.
+ * @return char from console
  */
 char getCharWithEnter(void)
 {

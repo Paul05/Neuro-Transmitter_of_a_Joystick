@@ -4,7 +4,11 @@
  *         Frank Liu, Darryl Monroe, Michael Berg, Paul Spaude
  * Class: CST315 & CST316 ASU Polytechnic
  *
- * Purpose: Allows the user to change the left/right/back/forward/exit keys.
+ * Purpose: Allows the user to change the movement keys. There is a contract
+ *          between the WheelChair Controller and the Neuro-Headset
+ *          that the inputs will be the same between the two devices. So, any
+ *          changes here by a user would need to be altered in the controller
+ *          setup as well.
  *
  * Created Spring, 2013
  */
@@ -14,12 +18,14 @@
 #include "userInput.h"
 #include "usbSerialComm.h"
 
-void changeMovementCommands()
+void changeMovementCommands(void)
 {
     char userAnswer = 'z';
-    printf("\n\nThe default inputs for the the Neuro-Headset and WheelChair Controller are: "
+
+    printf("\n\n\n\nThe default inputs for the the Neuro-Headset and WheelChair Controller are: "
             "\n\n\tw for forward, s for backward, a for left, d for right, and x for "
             "exiting the program. \n\nDo you wish to change the defaults? "
+            "\n\n\tWarning: Any changes here will have to be applied to the wheelchair controller as well!"
             "\n\n\tType [Y] for yes or [N] for no: ");
 
     userAnswer = (char)getCharWithEnter();

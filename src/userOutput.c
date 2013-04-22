@@ -4,9 +4,10 @@
  *         Frank Liu, Darryl Monroe, Michael Berg, Paul Spaude
  * Class: CST315 & CST316 ASU Polytechnic
  *
- * Purpose: This file contains functions that output data or prompts to the user.
+ * Purpose: This file contains functions that output informative text
+ *          or input prompts to the user.
  *
- *  * Created Spring, 2013
+ * Created Spring, 2013
  */
 
 #include <stdio.h>
@@ -24,7 +25,7 @@ void welcomeMessage(void)
 
 
 /**
-* Exit message function that displays an exit message and keeps console open
+* Exit message function that displays an exit message and keeps the console open
 * until any key is pressed on the keyboard.
 *
 */
@@ -39,22 +40,37 @@ void exitMessage(void)
 
 
 /**
- * Prints user instructions to the screen.
+ * Prints program specific instructions to the screen.
  */
 void showUserInstructionMessage(void)
 {
-    printf("\n\tMake sure the neuro(EEG) headset is connected and that the software"
+    printf(
+    "\n\n\n\n\tMake sure the neuro(EEG) headset is connected and that it's software"
     " inputs to this program.\n\tActions for forward, back, left, and right,"
     " must be translated to keyboard inputs into this \n\tprogram via your headset "
-    "software.\n\tDefaults are: w is forward, s is back, a is left, and d is right.\n"
+    "software.\n\n\tDefaults are: w forward, s back, a left, and d right.\n"
+
     "\n\tAlso, make sure the Arduino or other wheelchair/joystick controller is "
-    "connected and \n\tcommunicating through a Serial port.\n\tYou will need to "
-    "know the name of the port that it is connected on, as well as the baud rate "
-    "\n\tof the connection. "
+    "connected and \n\tcommunicating through a Serial Port connection."
+    "\n\tYou will need to know the name of the port that it is connected on, "
+    "as well as the baud rate \n\tof the connection. "
+
     "This controller must accept string inputs from that serial connection.\n\n\t"
-    "If that is all done, this program will normalize inputs from your EEG,\n\t"
-    "and communicate with the wheelchair.\n\n\t"
-    "Enjoy!\n\n");
+    "If that is all done, this program will normalize inputs from your EEG headset"
+    ",\n\tand communicate them to the wheelchair/joystick controller.\n\t"
+    "At that point, you will be able to control the wheelchair with actions"
+    "\n\tmapped from your neuro-headset software."
+            
+    "\n\n\t*If you have any issues inside of the program you can type "
+    "'exit' or 'x' \n\tand the program will stop."
+    "\n\n\t*Furthermore, a disconnect button on the wheelchair controller "
+    "\n\tor other reset button should halt all wheelchair movement."
+    "\n\n\t*Finally, while this program does accept input from your headset device, "
+    "\n\tyou can always manually override with the keyboard on the computer "
+    "running this program."
+            
+    "\n\n\tThanks for using our software and enjoy!\n\n"
+    );
 
 }//end showUserInstructionMessage
 
@@ -71,7 +87,7 @@ void showMenu(void)
            " 3 - Save Setup Changes to a File\n"
            " 4 - Change Serial Port Name\n"
            " 5 - Change Serial Port Baud Rate\n"
-           " 6 - Change Neuro/Controller Input Commands\n"
+           " 6 - Change Neuro-Headset and WheelChair Controller Commands\n"
            " 7 - Start Neuro-Control of the Wheelchair\n\n"
            " 8 - Exit the program\n\n"
            "Selection: "
@@ -81,22 +97,26 @@ void showMenu(void)
 
 
 /**
- * Shows the setup configuration.
+ * Shows the user the current setup configuration.
  */
-void showSetupConfiguration(int baudRate, const char portName[])
+void showSetupConfiguration(const int baudRate, const char portName[])
 {
-    printf("\nYour current setup is as follows:\n\n"
-           "\nWheelchair Controller Connection Port: %s\n"
-           "\nWheelchair Controller Connection Baud Rate: %d\n"
-           "Forward Command: %c"
+    printf(
+           "\n\n\n\n\n\n\n\n\n\n\n"
+           "*Your current setup is as follows: *\n\n"
+           "\nWheelchair Controller Connection Port: %s"
+           "\nWheelchair Controller Connection Baud Rate: %d"
+           "\nForward Command: %c"
            "\nBackward Command: %c"
            "\nLeft Command: %c"
            "\nRight Command: %c"
-           "\nExit Command: %c",
+           "\nExit Command: %c"
+           "\n\n\n*End Setup Display*\n\n\n\n",
                 portName, baudRate,
                 extG_controllerForwardCmd, extG_controllerBackCmd,
                 extG_controllerLeftCmd, extG_controllerRightCmd,
-                extG_controllerExitCmd);
+                extG_controllerExitCmd
+            );
 
 }//end showConfiguration function
 

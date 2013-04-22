@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="Neuro-Transmitter of a Joystick Control Normalization Algorithm and Program"
+<project name="Neuro-Transmitter of a Joystick Control Normalization Program"
   default="targets" basedir="."      
         xmlns="antlib:org.apache.tools.ant"
 	 xmlns:cpptasks="antlib:net.sf.antcontrib.cpptasks">       
@@ -27,7 +27,10 @@
 		 Checks which OS is installed on build system and calls targets depending on OS. -->
     <target name="checkOS" depends="checkUsbSerialFile" if="usbSerialUnmodified">
 		<condition property="isUnix">
-			<os family="unix" />
+			<os family="unix" />			
+		</condition>
+		<condition property="isUnix">
+			<os family="mac" />			
 		</condition>
 		<condition property="isWindows">
 			<os family="windows" />			
@@ -136,7 +139,7 @@
 		<!-- <move file="src/errorsStaticAnalysis.xml" todir="${test.dir}"/> -->
 	</target>
 	
-	<!-- Warning: Some issues to still work out with dynamic test don't use. -->
+	<!-- Warning: Some issues to still work out with dynamic test don't use. Jenkins doesn't need this either. -->
 	<target name="dynamic_test" depends="build" 
 	        description="Uses Valgrind to dynamic test the code. Valgrind must be on the path and set correctly!&#xa;
 			    Runs the dynamic test tool and prints out to the screen. ">
