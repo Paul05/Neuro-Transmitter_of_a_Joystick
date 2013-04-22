@@ -14,7 +14,7 @@
 #define CONFIGFILEIO_H
 
 int outputFile(const int baudRate);
-int inputFile(int baudRate);
+int inputFile();
 
 #endif /* CONFIGFILEIO_H */
 
