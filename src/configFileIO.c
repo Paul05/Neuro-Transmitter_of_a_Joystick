@@ -1,25 +1,22 @@
 /*
- * File:   fileIO.c   (Windows Version)
+ * File:   fileIO.c   
  * Author: Neuro-Transmitter Group
  *         Frank Liu, Darryl Monroe, Michael Berg, Paul Spaude
  * Class: CST315 & CST316 ASU Polytechnic
  *
  * Purpose: This class is set up to read/write a file for the user's configuration information.
  *  
- * Note: This is platform specific (Windows) and somewhat compiler specific.
- *       It uses Windows.h and conio.h header files.
- *
  * Created Spring, 2013
  */
 
-#include <Windows.h>
+
 #include <stdio.h>
 #include "usbSerialComm.h"
 
 /*
  * This function saves the information that the user has written!
  */
-void outputFile(int baudRate){
+int outputFile(int baudRate){
 	char buffer[BUFSIZ];
 	char configFile[] = "Configuration.txt";
 	FILE *fp = NULL;
@@ -54,7 +51,7 @@ void outputFile(int baudRate){
  *
  * TODO: Make it not break if it is changed in the file.
  */
-void inputFile(int baudRate){
+int inputFile(int baudRate){
     char buffer[BUFSIZ];
 	char configFile[] = "Configuration.txt";
 	FILE *fp = NULL;
@@ -70,7 +67,7 @@ void inputFile(int baudRate){
     
     while(fgets(buffer, BUFSIZ, fp) != NULL){
         
-        string = buffer;
+/*        string = buffer;
         token = strsep(&string, " ");
         strsep(&string, " "); //Used to throw away the second token ("=")
         if(strncmp(token, "Forward", 100) == 0){
@@ -98,7 +95,7 @@ void inputFile(int baudRate){
             sscanf(token, "%d", &baudRate);
 //            printf("%d\n", baudRate);
         }
-        
+*/
     }
     fclose(fp);
     
