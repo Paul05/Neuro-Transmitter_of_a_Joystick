@@ -102,8 +102,8 @@ void showMenu(void)
 void showSetupConfiguration(const int baudRate, const char portName[])
 {
     printf(
-           "\n\n\n\n\n\n\n\n\n\n\n"
-           "*Your current setup is as follows: *\n\n"
+           "\n\n\n"
+           "*****Your current setup is as follows: *****\n\n"
            "\nWheelchair Controller Connection Port: %s"
            "\nWheelchair Controller Connection Baud Rate: %d"
            "\nForward Command: %c"
@@ -111,7 +111,7 @@ void showSetupConfiguration(const int baudRate, const char portName[])
            "\nLeft Command: %c"
            "\nRight Command: %c"
            "\nExit Command: %c"
-           "\n\n\n*End Setup Display*\n\n\n\n",
+           "\n\n\n*****        End Setup Display        *****\n\n\n",
                 portName, baudRate,
                 extG_controllerForwardCmd, extG_controllerBackCmd,
                 extG_controllerLeftCmd, extG_controllerRightCmd,

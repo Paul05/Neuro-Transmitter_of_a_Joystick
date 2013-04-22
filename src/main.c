@@ -82,7 +82,7 @@ int performMenuAction(char actionNumberFromUser, char portName[])
             showSetupConfiguration(baudRate, portName);
             break;
         case '2':
-            inputFile(baudRate);
+            baudRate = inputFile();
             showSetupConfiguration(baudRate, portName);
             break;
         case '3':
@@ -129,6 +129,7 @@ int main(int argc, char** argv)
     int menuInput;
 
     welcomeMessage();
+    
 
     if ( argc == 2 && (strcasecmp(argv[1],DYNAMICTESTCMD) == 0) ) //check test mode from cmd line
     {
@@ -142,11 +143,15 @@ int main(int argc, char** argv)
                 "detected.\n\tThis program does not use command line arguments as input.\n\n");
     }
     else
-    {        
+    {
+        if(checkFile()){
+            baudRate = inputFile();
+            showSetupConfiguration(baudRate, portName);
+        }
+        
         do
         {
             successFlag = 0;
-       
             showMenu();
             menuInput = getCharWithEnter();
  
@@ -177,7 +182,6 @@ int main(int argc, char** argv)
 
                 if (successFlag > 0)
                 {
-                    changeMovementCommands();
                     printf("\nProgram ready for Neuro-Headset Input and Control of a Wheelchair! \n\n");
                     printf("\tCommands are:   Forward= %c.  Back= %c.  Left= %c.  Right= %c  and Exit= %c. \n\n",
                             extG_controllerForwardCmd, extG_controllerBackCmd,
