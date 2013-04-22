@@ -182,7 +182,6 @@ int main(int argc, char** argv)
 
                 if (successFlag > 0)
                 {
-                    changeMovementCommands();
                     printf("\nProgram ready for Neuro-Headset Input and Control of a Wheelchair! \n\n");
                     printf("\tCommands are:   Forward= %c.  Back= %c.  Left= %c.  Right= %c  and Exit= %c. \n\n",
                             extG_controllerForwardCmd, extG_controllerBackCmd,
