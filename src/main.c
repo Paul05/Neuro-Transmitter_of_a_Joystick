@@ -45,9 +45,6 @@
 
 #define DYNAMICTESTCMD "dynamicTest"  //command for valgrind to dynamic test the code
 
-int baudRate = 0; //Making baudRate a global variable so that it can be passed to then 
-
-
 /**
  * This function is for dynamic testing of the program. This is designed so an 
  * outside testing tool can adequetely test most of the various functions.
@@ -60,6 +57,72 @@ void dynamicTestFunction(void)
 
 } //end dynamicTestFunction
 
+
+/**
+ * Checks that the port input and the baud inputs are
+ * filled with non-default values. Otherwise it will
+ * prompt the user to do so using the appropriate
+ * menu options.
+ * @param port
+ * @param baud
+ */
+void portAndBaudCheck(const char port[], const int baud)
+{    
+    if ( port[0] == '\0' || port == NULL)
+    {
+        printf("\n\nPort Name has not been set. Please enter the port name "
+                "under menu option 4. \n\n");
+    }
+
+
+    if ( baud < 1 )
+    {
+        printf("\n\nBaud rate has not been set. Please enter the baud rate "
+                "under menu option 5. \n\n");
+    }
+} //end portAndBaudCheck
+
+
+/**
+ * This is the main control loop for controlling the wheelchair. It will call
+ * the functions needed in order to get input from the keyboard and normalize
+ * them, and then output them to the wheelchair controller. It keeps looping,
+ * until the exit command is entered.
+ */
+void wheelChairControlLoop(void)
+{
+    char neuroHeadSetInput = '\0';
+    
+    printf("\n\nProgram ready for Neuro-Headset Input and Control of a Wheelchair! \n\n");
+    printf("\tCommands are:   Forward= %c.  Back= %c.  Left= %c.  Right= %c  and Exit= %c. \n\n",
+            extG_controllerForwardCmd, extG_controllerBackCmd,
+            extG_controllerLeftCmd, extG_controllerRightCmd, extG_controllerExitCmd );
+                        printf("Neuro or keyboard input: ");
+
+    do
+    {
+        neuroHeadSetInput = getCharNoEnter();
+
+        printf("\n(DEBUG PURPOSES ONLY) Char recieved: %c. \n\n",neuroHeadSetInput); //TODO: Remove this, for debug purposes only!
+
+        callNormalizeDirectionFuncs(neuroHeadSetInput);  //Call respective direction/normalization functions based on input
+
+    } while( neuroHeadSetInput != extG_controllerExitCmd); //end loop get input from console from emotiv device
+
+
+    if ( tolower(neuroHeadSetInput) == extG_controllerExitCmd )
+    {
+        printf("\n\nExit character found! Now exiting the wheelchair control loop.\n\n");
+                                closeCommunication();
+    }
+    else
+    {
+        printf("\n\nUnexpected character or action found! Char found: %c. \n\n", neuroHeadSetInput);
+    }
+                        
+} //end wheelChairControlLoop function
+
+
 /**
  * This function contains the switch statement that calls the responsible
  * functions for performing the actions listed in the showMenu function.
@@ -69,7 +132,7 @@ void dynamicTestFunction(void)
  * @param portName string for the name of the serial port joystick conroller is connected on
  * @return integer for success (>=1 = success, <=0 = failure).
  */
-int performMenuAction(char actionNumberFromUser, char portName[])
+int performMenuAction(char actionNumberFromUser, int* p_baudRate, char portName[])
 {
     int flagToReturn = 1;
 
@@ -79,14 +142,14 @@ int performMenuAction(char actionNumberFromUser, char portName[])
             showUserInstructionMessage();
             break;
         case '1':
-            showSetupConfiguration(baudRate, portName);
+            showSetupConfiguration(*p_baudRate, portName);
             break;
         case '2':
-            baudRate = inputFile();
-            showSetupConfiguration(baudRate, portName);
+            *p_baudRate = inputConfigFile(portName);
+            showSetupConfiguration(*p_baudRate, portName);
             break;
         case '3':
-            outputFile(baudRate);
+            outputConfigFile(*p_baudRate, portName);
             break;
         case '4':
             flagToReturn = getPortName(portName);
@@ -124,13 +187,12 @@ int performMenuAction(char actionNumberFromUser, char portName[])
 int main(int argc, char** argv)
 {
     char portName[LRGERPORTLENGTH+3]; //+3 for margin of error
-    int successFlag = 0;
-    char neuroHeadSetInput = '\0';
+    int baudRate = 0;
+    int successFlag = 0;    
     int menuInput;
 
     welcomeMessage();
     
-
     if ( argc == 2 && (strcasecmp(argv[1],DYNAMICTESTCMD) == 0) ) //check test mode from cmd line
     {
         printf("\n**Dynamic Analysis Testing Mode Enabled.** \n\n");
@@ -144,18 +206,22 @@ int main(int argc, char** argv)
     }
     else
     {
-        if(checkFile()){
-            baudRate = inputFile();
+        if( checkForExistingConfigFile() == 1 )
+        {
+            printf("\nConfiguration file found!  Loading information...");
+            baudRate = inputConfigFile(portName);
+            printf("\n\nConfiguration file loaded and settings applied.\n\n");
             showSetupConfiguration(baudRate, portName);
         }
         
         do
         {
             successFlag = 0;
-            showMenu();
-            menuInput = getCharWithEnter();
- 
-            successFlag = performMenuAction(menuInput, portName);
+
+            portAndBaudCheck(portName, baudRate); //check that portName and baudRate initialized
+            showMenu(); 
+            menuInput = getCharWithEnter(); 
+            successFlag = performMenuAction(menuInput, &baudRate, portName); //perform action based on menu input
 
             if (successFlag >= LWRBAUDRATE)
             {
@@ -182,33 +248,8 @@ int main(int argc, char** argv)
 
                 if (successFlag > 0)
                 {
-                    printf("\n\nProgram ready for Neuro-Headset Input and Control of a Wheelchair! \n\n");
-                    printf("\tCommands are:   Forward= %c.  Back= %c.  Left= %c.  Right= %c  and Exit= %c. \n\n",
-                            extG_controllerForwardCmd, extG_controllerBackCmd,
-                            extG_controllerLeftCmd, extG_controllerRightCmd, extG_controllerExitCmd );
-					printf("Neuro or keyboard input: ");
-                    
-					do
-                    {
-                        neuroHeadSetInput = getCharNoEnter();
-
-                        printf("\n(DEBUG PURPOSES ONLY) Char recieved: %c. \n\n",neuroHeadSetInput); //TODO: Remove this, for debug purposes only!
-
-                        callNormalizeDirectionFuncs(neuroHeadSetInput);  //Call respective direction/normalization functions based on input
-
-                    } while( neuroHeadSetInput != extG_controllerExitCmd); //end loop get input from console from emotiv device
-
-
-                    if ( tolower(neuroHeadSetInput) == extG_controllerExitCmd )
-                    {
-                        printf("\n\nExit character found! Now exiting the wheelchair control loop.\n\n");
-						closeCommunication();
-                    }
-                    else
-                    {
-                        printf("\n\nUnexpected character or action found! Char found: %c. \n\n", neuroHeadSetInput);
-                    }
-                } //end if check setup complete and if so run loop to get input from neuro-headset and output to controller
+                   wheelChairControlLoop(); //actual wheelchair control loop
+                } //end if check setup complete 
 
           } //end if else check if inputs completed and setup communications/test communications
 

@@ -13,8 +13,9 @@
 #ifndef CONFIGFILEIO_H
 #define CONFIGFILEIO_H
 
-int outputFile(const int baudRate);
-int inputFile();
+int outputConfigFile(const int baudRate, const char portName[]);
+int inputConfigFile(char portName[]);
+int checkForExistingConfigFile(void);
 
 #endif /* CONFIGFILEIO_H */
 

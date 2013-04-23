@@ -14,147 +14,155 @@
 #include <string.h>
 #include "usbSerialComm.h"
 
-char configFile[] = "Configuration.neuro";
-FILE *fp = NULL;
-int baudRate;
+const char g_configFile[] = "Configuration.neuro";
+FILE *gp_filePointer = NULL;
 
 /*
  * This function is used to separate the information that is read in from the file 
- *  (Configuration.txt)
- * @param stringp, delim
+ * of user's last saved configuration settings. It takes the string to seperate
+ * and the delimeter to seperate on. It returns the seperated element of the string.
+ * @param p_string, p_delimeter
  * @return
  */
-
-char* mystrsep(char** stringp, const char* delim)
+char* mystrsep(char** p_string, const char* p_delimeter)
 {
-    char* start = *stringp;
-    char* p;
+    char* p_start = *p_string;
+    char* p_temp;
     
-    p = (start != NULL) ? strpbrk(start, delim) : NULL;
+    p_temp = (p_start != NULL) ? strpbrk(p_start, p_delimeter) : NULL;
     
-    if (p == NULL)
+    if (p_temp == NULL)
     {
-        *stringp = NULL;
+        *p_string = NULL;
     }
     else
     {
-        *p = '\0';
-        *stringp = p + 1;
+        *p_temp = '\0';
+        *p_string = p_temp + 1;
     }
     
-    return start;
-}
+    return p_start;
+    
+} //end mystrsep
 
 /**
- * This function saves the information that the user has written!
- * 
+ * This function saves the configuration settings that the user can change
+ * to a configuration file in the program's folder. This file than can be reloaded
+ * for quick setup with the inputConfigFile function.
  * @param baudRate
- * @return
+ * @return -1 for failure and 0 for success
  */
-int outputFile(int baudRate)
+int outputConfigFile(const int baudRate, const char portName[])
 {
+    gp_filePointer = fopen(g_configFile, "w"); /* open file for writing */
     
-    fp = fopen(configFile, "w"); /* open file for writing */
-    
-    if(fp == NULL) /* checks if the file doesn't exist/returns null */
+    if(gp_filePointer == NULL) /* checks if the file doesn't exist/returns null */
     {
-        printf("Failed to open writeable file!\n");
+        printf("\n*Failed to create configuration file! Check folder permissions. \n\n");
         return -1;
     }
-    fputs("Forward = ", fp);
-    fputc(extG_controllerForwardCmd, fp);
-    fputs("\nBackward = ", fp);
-    fputc(extG_controllerBackCmd, fp);
-    fputs("\nRight = ", fp);
-    fputc(extG_controllerRightCmd, fp);
-    fputs("\nLeft = ", fp);
-    fputc(extG_controllerLeftCmd, fp);
-    fputs("\nExit = ", fp);
-    fputc(extG_controllerExitCmd, fp);
-    fputs("\nBaud = ", fp);
-    fprintf(fp, "%d\n", baudRate);
-    fclose(fp); /* close file */
-    printf("\n\n*****Configuration has been saved!*****\n\n");
-	return 0;
+    else
+    {
+        fputs("Forward = ", gp_filePointer);
+        fputc(extG_controllerForwardCmd, gp_filePointer);
+        fputs("\nBackward = ", gp_filePointer);
+        fputc(extG_controllerBackCmd, gp_filePointer);
+        fputs("\nRight = ", gp_filePointer);
+        fputc(extG_controllerRightCmd, gp_filePointer);
+        fputs("\nLeft = ", gp_filePointer);
+        fputc(extG_controllerLeftCmd, gp_filePointer);
+        fputs("\nExit = ", gp_filePointer);
+        fputc(extG_controllerExitCmd, gp_filePointer);
+        fputs("\nBaud = ", gp_filePointer);
+        fprintf(gp_filePointer, "%d", baudRate);
+        fputs("\nPort = ", gp_filePointer);
+        fprintf(gp_filePointer, "%s\n", portName);
+        fclose(gp_filePointer); /* close file */
+        printf("\n\n*****Configurations have been saved!*****\n\n");
+        return 0;
+    }
 } //end outputFile function
 
 
 /**
- * This reads the file (Configuration.txt) from the user's local folder.
- * It will then read through it and save the information as it is written in the file.
- *
- * IMPORTANT: The user must NOT change the format in the file, or else it will not work!
- *
- * TODO: Make it not break if it is changed in the file.
- * 
- * @param baudRate
- * @return
+ * This reads in a previously saved configuration file for user changeable
+ * settings in this program. It takes an input parameter of the portName and returns
+ * the new portName in that variable. It returns -3 for failure and the baudRate
+ * otherwise for success in addition to setting the global variables for the other values.
+ * @return -3 for failure or saved baudRate for success
  */
-int inputFile()
+int inputConfigFile(char portName[])
 {
     char buffer[BUFSIZ];
     char *string;
     char *token;
+    int baudRate;
     
-    fp = fopen(configFile, "r"); /* open file for reading */
-    if(fp == NULL)
+    gp_filePointer = fopen(g_configFile, "r"); /* open file for reading */
+    if(gp_filePointer == NULL)
     {
-        printf("Failed to open file for reading\n");
+        printf("\n\n*Failed to open file for reading! "
+                "\n\tMake sure you saved a configuration file previously \n\tand "
+                "security permissions are correct.\n\n");
         return -3;
     }
-    
-    while(fgets(buffer, BUFSIZ, fp) != NULL){
-        
-        string = buffer;
-        token = mystrsep(&string, " ");
-        mystrsep(&string, " "); //Used to throw away the second token ("=")
-        if(strncmp(token, "Forward", 100) == 0){
+    else
+    {
+        while(fgets(buffer, BUFSIZ, gp_filePointer) != NULL)
+        {
+            string = buffer;
             token = mystrsep(&string, " ");
-            sscanf(token, "%c", &extG_controllerForwardCmd);
-        }else if(strncmp(token, "Backward", 100) == 0){
-            token = mystrsep(&string, " ");
-            sscanf(token, "%c", &extG_controllerBackCmd);
-        }else if(strncmp(token, "Right", 100) == 0){
-            token = mystrsep(&string, " ");
-            sscanf(token, "%c", &extG_controllerRightCmd);
-        }else if(strncmp(token, "Left", 100) == 0){
-            token = mystrsep(&string, " ");
-            sscanf(token, "%c", &extG_controllerLeftCmd);
-        }else if(strncmp(token, "Exit", 100) == 0){
-            token = mystrsep(&string, " ");
-            sscanf(token, "%c", &extG_controllerExitCmd);
-        }if(strncmp(token, "Baud", 100) == 0){
-            token = mystrsep(&string, " ");
-            sscanf(token, "%d", &baudRate);
-        }
-        
-    }
-    fclose(fp);
-    
-    return baudRate;
-    
+            mystrsep(&string, " "); //Used to throw away the second token ("=")
+
+            if(strncmp(token, "Forward", 100) == 0){
+                token = mystrsep(&string, " ");
+                sscanf(token, "%c", &extG_controllerForwardCmd);
+            }else if(strncmp(token, "Backward", 100) == 0){
+                token = mystrsep(&string, " ");
+                sscanf(token, "%c", &extG_controllerBackCmd);
+            }else if(strncmp(token, "Right", 100) == 0){
+                token = mystrsep(&string, " ");
+                sscanf(token, "%c", &extG_controllerRightCmd);
+            }else if(strncmp(token, "Left", 100) == 0){
+                token = mystrsep(&string, " ");
+                sscanf(token, "%c", &extG_controllerLeftCmd);
+            }else if(strncmp(token, "Exit", 100) == 0){
+                token = mystrsep(&string, " ");
+                sscanf(token, "%c", &extG_controllerExitCmd);
+            }else if(strncmp(token, "Baud", 100) == 0){
+                token = mystrsep(&string, " ");
+                sscanf(token, "%d", &baudRate);
+            }else if(strncmp(token, "Port", 100) == 0){
+                token = mystrsep(&string, " ");
+                sscanf(token, "%s", portName);
+            }
+
+        } //end while go through config file
+
+        fclose(gp_filePointer);
+        return baudRate;
+
+    } //end if/else don't load on null   
 }//end inputFile function
 
-/*
- * Checks if the file exists, and then shows the user the configuration
- * @param baudRate
- * @return
- */
 
-int checkFile(){
-    fp = fopen(configFile, "r"); /* open file for reading */
-    if(fp == NULL)
+/*
+ * Checks if the configuration file exists. Returns an int 1 for success.
+ * @return 0 for failure and 1 for success
+ */
+int checkForExistingConfigFile(void)
+{
+    gp_filePointer = fopen(g_configFile, "r"); /* open file for reading */
+
+    if(gp_filePointer == NULL)
     {
         return 0;
     }
-    fclose(fp);
-    
-    printf("Configuration file found in folder!"
-           "\nLoading information...");
-    inputFile(baudRate);
-    printf("Complete!");
-    return 1;
-    
+    else
+    {
+        fclose(gp_filePointer); 
+        return 1;
+    }
     
 }//end checkFile function
 
