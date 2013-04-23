@@ -113,7 +113,8 @@ void wheelChairControlLoop(void)
     if ( tolower(neuroHeadSetInput) == extG_controllerExitCmd )
     {
         printf("\n\nExit character found! Now exiting the wheelchair control loop.\n\n");
-                                closeCommunication();
+        sendToWheelChairController(extG_controllerExitCmd); //send exit command to controller
+        closeCommunication(); //close the serial port as will reopen next loop entrance
     }
     else
     {
