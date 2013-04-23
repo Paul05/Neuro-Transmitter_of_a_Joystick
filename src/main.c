@@ -172,7 +172,7 @@ int main(int argc, char** argv)
 
                 if (successFlag > 0)
                 {
-                    successFlag = testControllerCommunication(); //test communication with controller
+                    //successFlag = testControllerCommunication(); //test communication with controller TODO IMPLEMENT ACK!!!S
                 }
 
                 if (successFlag > 0)
@@ -182,12 +182,13 @@ int main(int argc, char** argv)
 
                 if (successFlag > 0)
                 {
-                    printf("\nProgram ready for Neuro-Headset Input and Control of a Wheelchair! \n\n");
+                    printf("\n\nProgram ready for Neuro-Headset Input and Control of a Wheelchair! \n\n");
                     printf("\tCommands are:   Forward= %c.  Back= %c.  Left= %c.  Right= %c  and Exit= %c. \n\n",
                             extG_controllerForwardCmd, extG_controllerBackCmd,
                             extG_controllerLeftCmd, extG_controllerRightCmd, extG_controllerExitCmd );
-
-                    do
+					printf("Neuro or keyboard input: ");
+                    
+					do
                     {
                         neuroHeadSetInput = getCharNoEnter();
 
@@ -198,14 +199,14 @@ int main(int argc, char** argv)
                     } while( neuroHeadSetInput != extG_controllerExitCmd); //end loop get input from console from emotiv device
 
 
-                    if ( tolower(neuroHeadSetInput) == extG_controllerExitCmd)
+                    if ( tolower(neuroHeadSetInput) == extG_controllerExitCmd )
                     {
-                        printf("\nExit character found! Now exiting the program. \n\n");
+                        printf("\n\nExit character found! Now exiting the wheelchair control loop.\n\n");
+						closeCommunication();
                     }
                     else
                     {
-                        printf("\nUnexpected character or action found! Char found: %c. "
-                                "Now Exiting!\n\n", neuroHeadSetInput);
+                        printf("\n\nUnexpected character or action found! Char found: %c. \n\n", neuroHeadSetInput);
                     }
                 } //end if check setup complete and if so run loop to get input from neuro-headset and output to controller
 
