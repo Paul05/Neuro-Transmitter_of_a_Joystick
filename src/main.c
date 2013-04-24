@@ -46,6 +46,8 @@
 
 #define DYNAMICTESTCMD "dynamicTest"  //command for valgrind to dynamic test the code
 
+FILE *fp;
+
 /**
  * This function is for dynamic testing of the program. This is designed so an 
  * outside testing tool can adequetely test most of the various functions.
