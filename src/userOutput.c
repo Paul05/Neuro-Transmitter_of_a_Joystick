@@ -89,7 +89,8 @@ void showMenu(void)
            " 5 - Change Serial Port Baud Rate\n"
            " 6 - Change Neuro-Headset and WheelChair Controller Commands\n"
            " 7 - Start Neuro-Control of the Wheelchair\n\n"
-           " 8 - Exit the program\n\n"
+           " 8 - Create Testing Log File\n"
+           " 9 - Exit the program\n\n"
            "Selection: "
            );
 
