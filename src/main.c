@@ -36,6 +36,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <time.h>
 #include "userInput.h"
 #include "userOutput.h"
 #include "usbSerialComm.h"
@@ -165,6 +166,16 @@ int performMenuAction(char actionNumberFromUser, int* p_baudRate, char portName[
             flagToReturn = 2; //go to neuro-input loop (control wheelchair)
             break;
         case '8':
+            printf("Warning, Testing Log File may cause some delay\n");
+            time_t rawtime;
+            struct tm * timeinfo;
+            time (&rawtime);
+            timeinfo = localtime (&rawtime);
+            fp = fopen("log.txt", "w");
+            fprintf(fp, "%s", asctime(timeinfo)); 
+            fclose(fp);
+            break;            // Need to consider a testing log file deletion
+        case '9':
             flagToReturn = -2; //exit
             break;
         default:
