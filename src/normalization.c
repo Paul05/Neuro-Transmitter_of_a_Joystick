@@ -22,8 +22,8 @@
 
 #define LASTINPUTMEMSIZE 3
 
-int g_count = 0;
-char g_last_userInpt[LASTINPUTMEMSIZE];
+static int g_count;
+static char g_last_userInpt[LASTINPUTMEMSIZE];
 
 
 /**
@@ -69,7 +69,7 @@ int aKey(const char key)
  *                          sent to the wheelchair controller
  */
 void normalizationAlgorithm(const char toSendToController)
-{
+{   
     if(g_count == 0)
     {
         g_last_userInpt[0] = toSendToController;
@@ -114,7 +114,7 @@ void normalizationAlgorithm(const char toSendToController)
  * 
  * @param key a char that needs to be checked and if mapped needs to be normalized. 
  */
-void callNormalizeDirectionFuncs(const char key)
+void callNormalizeDirectionFuncs(const char key, const int normalizeOptFlag)
 {
     if(aKey(key))
     { //confirms if the key is one of your default keys

@@ -20,7 +20,7 @@
 
 HANDLE g_controlDevice = NULL; //global variable that is a file handle to be used for Arduino Connection
 DWORD g_btsIO;   //global variable that is used by the writeFile cmd to record number of bytes written
-DCB g_controDeviceConnectionSettings; //DCB structure(Windows)
+DCB g_controlDeviceConnectionSettings; //DCB structure(Windows)
 int g_connectedFlag = 0; //flag for connection to controller (0 not connected and 1 is connected)
 
 char extG_controllerTestCmd = 't';
@@ -44,59 +44,59 @@ int setBaudRate(const int baudNumber)
     switch(baudNumber)
     {
         case 110:
-            g_controDeviceConnectionSettings.BaudRate = CBR_110;
+            g_controlDeviceConnectionSettings.BaudRate = CBR_110;
             returnedNumber = 1;
             break;
         case 300:
-            g_controDeviceConnectionSettings.BaudRate = CBR_300;
+            g_controlDeviceConnectionSettings.BaudRate = CBR_300;
             returnedNumber = 1;
             break;
         case 600:
-            g_controDeviceConnectionSettings.BaudRate = CBR_600;
+            g_controlDeviceConnectionSettings.BaudRate = CBR_600;
             returnedNumber = 1;
             break;
         case 1200:
-            g_controDeviceConnectionSettings.BaudRate = CBR_1200;
+            g_controlDeviceConnectionSettings.BaudRate = CBR_1200;
             returnedNumber = 1;
             break;
         case 2400:
-            g_controDeviceConnectionSettings.BaudRate = CBR_2400;
+            g_controlDeviceConnectionSettings.BaudRate = CBR_2400;
             returnedNumber = 1;
             break;
         case 4800:
-            g_controDeviceConnectionSettings.BaudRate = CBR_4800;
+            g_controlDeviceConnectionSettings.BaudRate = CBR_4800;
             returnedNumber = 1;
             break;
         case 9600:
-            g_controDeviceConnectionSettings.BaudRate = CBR_9600;
+            g_controlDeviceConnectionSettings.BaudRate = CBR_9600;
             returnedNumber = 1;
             break;
         case 14400:
-            g_controDeviceConnectionSettings.BaudRate = CBR_14400;
+            g_controlDeviceConnectionSettings.BaudRate = CBR_14400;
             returnedNumber = 1;
             break;
         case 19200:
-            g_controDeviceConnectionSettings.BaudRate = CBR_19200;
+            g_controlDeviceConnectionSettings.BaudRate = CBR_19200;
             returnedNumber = 1;
             break;
         case 38400:
-            g_controDeviceConnectionSettings.BaudRate = CBR_38400;
+            g_controlDeviceConnectionSettings.BaudRate = CBR_38400;
             returnedNumber = 1;
             break;
         case 57600:
-            g_controDeviceConnectionSettings.BaudRate = CBR_57600;
+            g_controlDeviceConnectionSettings.BaudRate = CBR_57600;
             returnedNumber = 1;
             break;
         case 115200:
-            g_controDeviceConnectionSettings.BaudRate = CBR_115200;
+            g_controlDeviceConnectionSettings.BaudRate = CBR_115200;
             returnedNumber = 1;
             break;
         case 128000:
-            g_controDeviceConnectionSettings.BaudRate = CBR_128000;
+            g_controlDeviceConnectionSettings.BaudRate = CBR_128000;
             returnedNumber = 1;
             break;
         case 256000:
-            g_controDeviceConnectionSettings.BaudRate = CBR_256000;
+            g_controlDeviceConnectionSettings.BaudRate = CBR_256000;
             returnedNumber = 1;
             break;
         default:
@@ -116,6 +116,8 @@ int setBaudRate(const int baudNumber)
  *
  * For more information on CreateFile see this link:
  * http://msdn.microsoft.com/en-us/library/windows/desktop/aa363858%28v=vs.85%29.aspx
+ * For more information on SetCommTimeouts see this link:
+ * http://msdn.microsoft.com/en-us/library/windows/desktop/aa363437%28v=vs.85%29.aspx
  *
  * @param portName String name of port to open (if COM10+ needs to be DOS name \\.\COM10 etc.)
  * @param portBaudRate Int for the baud rate of connection (serial) to the Arduino 9600 is standard.
@@ -124,43 +126,35 @@ int setBaudRate(const int baudNumber)
 int setupCommunication(const char inPortName[], const int inPortBaudRate)
 {
     int resultFlag = 0;
+    COMMTIMEOUTS controlDeviceTimeOutSettings; //structure for serial i/o timeouts
 
     g_controlDevice = CreateFile(inPortName, GENERIC_READ | GENERIC_WRITE,
             FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, 0); //opens serial port for read and write and locks it
+    
 
     if (g_controlDevice != INVALID_HANDLE_VALUE && g_controlDevice != NULL) //if successfully opened
     {
         printf("\nSerial Port Opened! \n\n");
 
-        g_controDeviceConnectionSettings.DCBlength = sizeof(DCB);   //set length
-        GetCommState(g_controlDevice,&g_controDeviceConnectionSettings); //retrieve current control settings for comm device
-        
+        g_controlDeviceConnectionSettings.DCBlength = sizeof(DCB);   //set length
+        GetCommState(g_controlDevice,&g_controlDeviceConnectionSettings); //retrieve current control settings for comm device
+        GetCommTimeouts(g_controlDevice, &controlDeviceTimeOutSettings); //retrieve timeout settings for comm device
         resultFlag = setBaudRate(inPortBaudRate);
 
         if (resultFlag == 1)
         {
             resultFlag = 0;
             
-            g_controDeviceConnectionSettings.ByteSize = 8;
-            g_controDeviceConnectionSettings.Parity = NOPARITY;   //set parity
-            g_controDeviceConnectionSettings.StopBits = ONESTOPBIT;   //set how many stop bits
+            g_controlDeviceConnectionSettings.ByteSize = 8;  
+            g_controlDeviceConnectionSettings.Parity = NOPARITY;   //set parity
+            g_controlDeviceConnectionSettings.StopBits = ONESTOPBIT;   //set how many stop bits
+            SetCommState(g_controlDevice,&g_controlDeviceConnectionSettings); //set the current control settings for the device
+            
+            controlDeviceTimeOutSettings.ReadIntervalTimeout = 1; //wait for 1 byte (Adding a timeout for read from serial connection)
+            controlDeviceTimeOutSettings.ReadTotalTimeoutConstant = 1000; //the next two say to wait for two seconds total time with 1 byte
+            controlDeviceTimeOutSettings.ReadTotalTimeoutMultiplier = 1000;
+            SetCommTimeouts(g_controlDevice,&controlDeviceTimeOutSettings);
 
-            /*Alternate section once Arduino exhibits failure to communicate, these turn off various port settings
-            controDeviceConnectionSettings.fBinary = FALSE;            // Binary mode; no EOF check
-            controDeviceConnectionSettings.fOutxCtsFlow = TRUE;         // No CTS output flow control
-            controDeviceConnectionSettings.fOutxDsrFlow = FALSE;         // No DSR output flow control
-            controDeviceConnectionSettings.fDtrControl = DTR_CONTROL_ENABLE;  // DTR flow control type
-            controDeviceConnectionSettings.fDsrSensitivity = FALSE;      // DSR sensitivity
-            controDeviceConnectionSettings.fTXContinueOnXoff = TRUE;     // XOFF continues Tx
-            controDeviceConnectionSettings.fOutX = FALSE;                // No XON/XOFF out flow control
-            controDeviceConnectionSettings.fInX = FALSE;                 // No XON/XOFF in flow control
-            controDeviceConnectionSettings.fErrorChar = FALSE;           // Disable error replacement
-            controDeviceConnectionSettings.fNull = FALSE;                // Disable null stripping
-            //lpTest.fRtsControl = RTS_CONTROL_ENABLE; //// RTS flow control
-            controDeviceConnectionSettings.fAbortOnError = TRUE;        // Do not abort reads/writes on error
-            */
-
-            SetCommState(g_controlDevice,&g_controDeviceConnectionSettings); //set the current control settings for the device
             g_connectedFlag = 1; //set flag to say connection established.
 
             printf("\nSerial Port Settings Established! \n");
@@ -220,10 +214,11 @@ int testControllerCommunication(void)
   
     if (g_connectedFlag > 0)
     {
-		printf("\nAttempting to communicate with the controller... ");
+	printf("\nAttempting to communicate with the controller... ");
         delayProgram(2000);
-        WriteFile(g_controlDevice,tempToSend,strlen(tempToSend),&g_btsIO,NULL);        
-		ReadFile(g_controlDevice, &tempToRecieve, strlen(tempToSend), &g_btsIO, NULL); //blocks until input found! (can set timeout if desired)
+        WriteFile(g_controlDevice,tempToSend,strlen(tempToSend),&g_btsIO,NULL);
+        delayProgram(500);
+        ReadFile(g_controlDevice, &tempToRecieve, strlen(tempToSend), &g_btsIO, NULL); //blocks until input found! (can set timeout if desired)
 
         if ( strncmp(tempToRecieve,tempToSend,strlen(tempToSend)) == 0 )
         {
@@ -251,23 +246,23 @@ int testControllerCommunication(void)
  */
 void testWheelChairOperation(void)
 {
-	  printf("\nNow testing wheel chair movement and controller operation..."
+      printf("\nNow testing wheel chair movement and controller operation..."
 			"\n\t Make sure there is a clear area around the wheelchair! \n\n"
-			"Trying left movement... \n\n");
+			"Testing left movement... \n\n");
       sendToWheelChairController(extG_controllerLeftCmd); 
-      delayProgram(2000);
-	  printf("Trying right movement... \n\n");
+      delayProgram(4000);
+	  printf("Testing right movement... \n\n");
       sendToWheelChairController(extG_controllerRightCmd);
-      delayProgram(2000);
-	  printf("Trying forward movement... \n\n");
+      delayProgram(4000);
+	  printf("Testing forward movement... \n\n");
       sendToWheelChairController(extG_controllerForwardCmd);
-      delayProgram(2000);
-	  printf("Trying backward movement... \n\n");
+      delayProgram(4000);
+	  printf("Testing backward movement... \n\n");
       sendToWheelChairController(extG_controllerBackCmd);
-      delayProgram(2000);
+      delayProgram(4000);
 	  printf("Finished testing wheelchair and controller operation.\n"
 			"\tIf the wheelchair did not move as intended please make sure"
-			"the device is connected and functioning properly.\n\n");
+			"\n\tthe device is connected and functioning properly.\n\n");
 
 } //end testOperaiton 
 

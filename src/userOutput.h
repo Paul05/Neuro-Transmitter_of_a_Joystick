@@ -18,6 +18,7 @@ void exitMessage(void);
 void showUserInstructionMessage(void);
 void showMenu(void);
 void showSetupConfiguration(const int baudRate, const char portName[]);
+void showNormalizationOptions(void);
 
 #endif	/* USEROUTPUT_H */
 

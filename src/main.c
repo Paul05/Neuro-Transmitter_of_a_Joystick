@@ -81,7 +81,11 @@ void portAndBaudCheck(const int baud, const char port[])
 void wheelChairControlLoop(void)
 {
     char neuroHeadSetInput = '\0';
-    
+    int normalizeOption = -1;
+
+    showNormalizationOptions();
+    normalizeOption = getCharWithEnter();
+
     printf("\n\nProgram ready for Neuro-Headset Input and Control of a Wheelchair! \n\n");
     printf("\tCommands are:   Forward= %c.  Back= %c.  Left= %c.  Right= %c  and Exit= %c. \n\n",
             extG_controllerForwardCmd, extG_controllerBackCmd,
@@ -92,9 +96,9 @@ void wheelChairControlLoop(void)
     {
         neuroHeadSetInput = getCharNoEnter();
 
-        printf("\nChar recieved: %c. \n\n",neuroHeadSetInput); 
+        printf("%c \n",neuroHeadSetInput);
 
-        callNormalizeDirectionFuncs(neuroHeadSetInput);  //Call respective direction/normalization functions based on input
+        callNormalizeDirectionFuncs(neuroHeadSetInput, normalizeOption);  //Call respective direction/normalization functions based on input
 
     } while( neuroHeadSetInput != extG_controllerExitCmd); //end loop get input from console from emotiv device
 
@@ -194,7 +198,7 @@ void dynamicTestFunction(void)
     showUserInstructionMessage();
     showMenu();
     showSetupConfiguration(testBaud, testPort);
-    callNormalizeDirectionFuncs('t');
+    callNormalizeDirectionFuncs('t',3);
     portAndBaudCheck(testBaud,testPort);
     performMenuAction('0', &testBaud,testPort);
     outputConfigFile(testBaud, testPort);
@@ -270,7 +274,7 @@ int main(int argc, char** argv)
 
                 if (successFlag > 0)
                 {
-                    //successFlag = testControllerCommunication(); //test communication with controller TODO IMPLEMENT ACK!!!S
+                    successFlag = testControllerCommunication(); //test communication with controller TODO IMPLEMENT ACK!!!S
                 }
 
                 if (successFlag > 0)
@@ -279,7 +283,7 @@ int main(int argc, char** argv)
                 }
 
                 if (successFlag > 0)
-                {
+                {                  
                    wheelChairControlLoop(); //actual wheelchair control loop
                 } //end if check setup complete 
 

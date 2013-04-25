@@ -96,7 +96,7 @@ int inputConfigFile(char portName[])
     char buffer[BUFSIZ];
     char *string;
     char *token;
-    int baudRate 0;
+    int baudRate = 0;
     
     gp_filePointer = fopen(g_configFile, "r"); /* open file for reading */
     if(gp_filePointer == NULL)

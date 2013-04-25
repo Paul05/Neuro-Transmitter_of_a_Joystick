@@ -88,8 +88,8 @@ void showMenu(void)
            " 4 - Change Serial Port Name\n"
            " 5 - Change Serial Port Baud Rate\n"
            " 6 - Change Neuro-Headset and WheelChair Controller Commands\n"
-           " 7 - Start Neuro-Control of the Wheelchair\n\n"
-           " 8 - Create Testing Log File\n"
+           " 7 - Start Neuro-Control of the Wheelchair\n"
+           " 8 - Create Testing Log File\n\n"
            " 9 - Exit the program\n\n"
            "Selection: "
            );
@@ -121,4 +121,18 @@ void showSetupConfiguration(const int baudRate, const char portName[])
 
 }//end showConfiguration function
 
+
+/**
+ * Shows the user output to select the different normalization options.
+ */
+void showNormalizationOptions(void)
+{
+      printf("\n\nHow do you want to normalize the input?\n\n"
+           " 0 - No Normalization at All \n"
+           " 1 - Normalize Left and Right Only \n"
+           " 2 - Normalize Front and Back Only\n"
+           " 3 - Normalize Everything \n"
+           "Selection: "
+           );
+}
 //END file userOutput.c.

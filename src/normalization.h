@@ -17,7 +17,7 @@
 #ifndef NORMALIZATION_H
 #define	NORMALIZATION_H
 
-void callNormalizeDirectionFuncs(const char key);
+void callNormalizeDirectionFuncs(const char key, const int normalizeOptFlag);
 
 #endif	/* NORMALIZATION_H */
 
