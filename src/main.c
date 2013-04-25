@@ -40,26 +40,12 @@
 #include "userInput.h"
 #include "userOutput.h"
 #include "usbSerialComm.h"
-#include "neuroInputSetup.h"
 #include "normalization.h"
 #include "configFileIO.h"
 
-#define DYNAMICTESTCMD "dynamicTest"  //command for valgrind to dynamic test the code
+#define DYNAMICTESTCMD "dynamicTest"  //command for valgrind to dynamic analyze the code
 
 FILE *fp;
-
-/**
- * This function is for dynamic testing of the program. This is designed so an 
- * outside testing tool can adequetely test most of the various functions.
- * As testing the normal paths of this program would need a simulated serial port, 
- * and simulated input device, which is not available in our limited test server or scenarios.
- */
-void dynamicTestFunction(void)
-{
-    
-
-} //end dynamicTestFunction
-
 
 /**
  * Checks that the port input and the baud inputs are
@@ -69,7 +55,7 @@ void dynamicTestFunction(void)
  * @param port
  * @param baud
  */
-void portAndBaudCheck(const char port[], const int baud)
+void portAndBaudCheck(const int baud, const char port[])
 {    
     if ( port[0] == '\0' || port == NULL)
     {
@@ -106,7 +92,7 @@ void wheelChairControlLoop(void)
     {
         neuroHeadSetInput = getCharNoEnter();
 
-        printf("\n(DEBUG PURPOSES ONLY) Char recieved: %c. \n\n",neuroHeadSetInput); //TODO: Remove this, for debug purposes only!
+        printf("\nChar recieved: %c. \n\n",neuroHeadSetInput); 
 
         callNormalizeDirectionFuncs(neuroHeadSetInput);  //Call respective direction/normalization functions based on input
 
@@ -193,6 +179,38 @@ int performMenuAction(char actionNumberFromUser, int* p_baudRate, char portName[
 
 
 /**
+ * This function is for dynamic testing of the program. This is designed so an
+ * outside testing tool can adequetely test most of the various functions.
+ * As testing the normal paths of this program would need a simulated serial port,
+ * and simulated input device, which is not available in our limited test server or scenarios.
+ */
+void dynamicTestFunction(void)
+{
+    char testPort[] = "testPortName";
+    int testBaud = 5555;
+    printf("\nStarting Dynamic Analysis Mode!\n\n");
+    welcomeMessage();
+    exitMessage();
+    showUserInstructionMessage();
+    showMenu();
+    showSetupConfiguration(testBaud, testPort);
+    callNormalizeDirectionFuncs('t');
+    portAndBaudCheck(testBaud,testPort);
+    performMenuAction('0', &testBaud,testPort);
+    outputConfigFile(testBaud, testPort);
+    inputConfigFile(testPort);
+    checkForExistingConfigFile();   
+    testControllerCommunication();
+    testWheelChairOperation();
+    sendToWheelChairController('t');
+    closeCommunication();
+    delayProgram(100);
+
+
+} //end dynamicTestFunction
+
+
+/**
 * This is the Main function that 'runs' the program.
 * @param argc
 * @param argv
@@ -232,7 +250,7 @@ int main(int argc, char** argv)
         {
             successFlag = 0;
 
-            portAndBaudCheck(portName, baudRate); //check that portName and baudRate initialized
+            portAndBaudCheck(baudRate, portName); //check that portName and baudRate initialized
             showMenu(); 
             menuInput = getCharWithEnter(); 
             successFlag = performMenuAction(menuInput, &baudRate, portName); //perform action based on menu input

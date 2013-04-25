@@ -28,6 +28,7 @@ int getPortName(char outPortName[]);
 int getBaudRate(void);
 char getCharNoEnter(void);
 char getCharWithEnter(void);
+void changeMovementCommands(void);
 
 #endif	/* USERINPUT_H */
 
