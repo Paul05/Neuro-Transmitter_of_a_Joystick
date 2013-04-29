@@ -217,9 +217,11 @@ int testControllerCommunication(void)
 	printf("\nAttempting to communicate with the controller... ");
         delayProgram(2000);
         WriteFile(g_controlDevice,tempToSend,strlen(tempToSend),&g_btsIO,NULL);
-        delayProgram(500);
-        ReadFile(g_controlDevice, &tempToRecieve, strlen(tempToSend), &g_btsIO, NULL); //blocks until input found! (can set timeout if desired)
+        delayProgram(1000);
+        ReadFile(g_controlDevice, &tempToRecieve, strlen(tempToSend), &g_btsIO, NULL); 
 
+		printf("char= %s",tempToRecieve);
+		
         if ( strncmp(tempToRecieve,tempToSend,strlen(tempToSend)) == 0 )
         {
             resultFlag = 1; //success controller connected and communicating

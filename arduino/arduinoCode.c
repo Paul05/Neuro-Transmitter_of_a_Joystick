@@ -49,7 +49,7 @@ void setup(){							//Initial setup process for pins on input and output.
   FORWARDSERVO.attach(forwardservopin);
   SIDESERVO.attach(sideservopin);
   attachInterrupt(INTERRUPT, buttonPressed, RISING);	//Sets up the interrupt pin, specifices the called function and what mode to use
-  FORWARDSERVO.write(25);
+  FORWARDSERVO.write(20);
   SIDESERVO.write(40);
 }
 
@@ -57,6 +57,7 @@ void loop(){			        //Main loop which is constantly being run on the arduino
   FORWARDSERVO.attach(forwardservopin);
   SIDESERVO.attach(sideservopin);
   number = 0;                         // zero the incoming number ready for a new read
+  
 
   /*
      * BEGIN:
@@ -94,7 +95,7 @@ void loop(){			        //Main loop which is constantly being run on the arduino
 }
 
 void buttonPressed(){				// Function will disable the servo motors for manual override
-  FORWARDSERVO.write(25);
+  FORWARDSERVO.write(20);
   SIDESERVO.write(40);
   SIDESERVO.detach();
   FORWARDSERVO.detach();
@@ -111,9 +112,9 @@ void goRight(){
         break;
       }
       SIDESERVO.write(i);
-      delay(125);
+      delay(250);
     }
-    delay(500);
+    delay(1500);
   
     for(int i = 0; i <= 45; i+= 2)
     {
@@ -163,7 +164,7 @@ void goLeft(){
 
 void goForward(){
 
-     for(int i = 25; i <= 70; i += 2)
+     for(int i = 20; i <= 70; i += 2)
     {
       //If the servo has reached 90 degrees, start to move the other direction to 45 degrees
       if(FORWARDSERVO.read() > 65)
@@ -176,12 +177,12 @@ void goForward(){
     }
     
   
-    for(int i = 70; i >= 25; i-= 2)
+    for(int i = 70; i >= 20; i-= 2)
     {
       //If the servo has reached 0 degrees, start to move the other direction to 90 degrees
-      if(FORWARDSERVO.read() <= 30)
+      if(FORWARDSERVO.read() <= 25)
       {
-        FORWARDSERVO.write(25);//Set the servo to 45 degrees exactly
+        FORWARDSERVO.write(20);//Set the servo to 45 degrees exactly
         break;
       }      
       
@@ -192,7 +193,7 @@ void goForward(){
 }
 
 void goBackward(){
-       for(int i = 25; i >= 0; i -= 2)
+       for(int i = 20; i >= 0; i -= 2)
     {
       //If the servo has reached 90 degrees, start to move the other direction to 45 degrees
       if(FORWARDSERVO.read() < 5)
@@ -203,14 +204,14 @@ void goBackward(){
       FORWARDSERVO.write(i);
       delay(125);
     }
-    delay(1500);
+    delay(2000);
   
-    for(int i = 0; i <= 25; i+= 2)
+    for(int i = 0; i <= 20; i+= 2)
     {
       //If the servo has reached 0 degrees, start to move the other direction to 90 degrees
       if(FORWARDSERVO.read() >= 20)
       {
-        FORWARDSERVO.write(25);//Set the servo to 45 degrees exactly
+        FORWARDSERVO.write(20);//Set the servo to 45 degrees exactly
         break;
       }      
       

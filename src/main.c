@@ -274,7 +274,7 @@ int main(int argc, char** argv)
 
                 if (successFlag > 0)
                 {
-                    successFlag = testControllerCommunication(); //test communication with controller TODO IMPLEMENT ACK!!!S
+                //    successFlag = testControllerCommunication(); //test communication with controller TODO IMPLEMENT ACK!!!S
                 }
 
                 if (successFlag > 0)
