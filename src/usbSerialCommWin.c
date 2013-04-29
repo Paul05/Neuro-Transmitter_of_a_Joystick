@@ -217,16 +217,13 @@ int testControllerCommunication(void)
 	printf("\nAttempting to communicate with the controller... ");
      
 		int idx = 0;
-		delayProgram(8000);
-		for (idx=0; idx < 5; idx++)
+		delayProgram(4000);
+		for (idx=0; idx < 2; idx++)
 		{
-			//delayProgram(2000);
 			WriteFile(g_controlDevice,tempToSend,strlen(tempToSend),&g_btsIO,NULL);
-			//delayProgram(1000);
 			ReadFile(g_controlDevice, &tempToRecieve, strlen(tempToSend), &g_btsIO, NULL); 
-			printf("char= %s",tempToRecieve);
 			
-			if ( strncmp(tempToRecieve,tempToSend,strlen(tempToSend)) == 0 )
+			if ( tempToRecieve[0] == tempToSend[0] )
 			{
 				resultFlag = 1; //success controller connected and communicating
 				printf("\n\nController is connected and communication has been established.\n\n");
