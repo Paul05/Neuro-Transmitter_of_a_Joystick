@@ -118,7 +118,25 @@ void callNormalizeDirectionFuncs(const char key, const int normalizeOptFlag)
 {
     if(aKey(key))
     { //confirms if the key is one of your default keys
-        normalizationAlgorithm(key); //normalizes the input
+        if(normalizeOptFlag == 0){
+            sendToWheelChairController(key);
+        }else if(normalizeOptFlag == 1){
+            if(key == extG_controllerLeftCmd || key == extG_controllerRightCmd){
+                normalizationAlgorithm(key);
+            }else{
+                sendToWheelChairController(key);
+            }
+        }else if(normalizeOptFlag == 2){
+            if(key == extG_controllerBackCmd || key == extG_controllerForwardCmd){
+                normalizationAlgorithm(key);
+            }else{
+                sendToWheelChairController(key);
+            }
+        }else if(normalizeOptFlag == 3){
+            normalizationAlgorithm(key); //normalizes the input
+        }else{
+            printf("\n%d is not a valid normalization flag. Please choose 0, 1, 2, or 3. \n", normalizationAlgorithm);
+        }
     }else
     {
         printf("\n*Error char not recognized! Char input: %c. \n\n", key); //char not recognized print error, will keep going though
