@@ -37,6 +37,9 @@ char inputLeft = 'a';
 char inputRight = 'd';
 char inputForward = 'w';
 char inputBackward = 's';
+char testChar = 't';
+chat exitChar = 'x';
+
 /*
  * *******USER-ADJUSTED INFORMATION*******
  */
@@ -86,6 +89,9 @@ void loop(){			        //Main loop which is constantly being run on the arduino
   }
   else if (number == inputBackward){
     goBackward();
+  }
+  else if (number == testChar){
+	Serial.write(testChar);
   }
 
   Serial.flush();

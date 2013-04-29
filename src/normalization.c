@@ -113,13 +113,16 @@ void normalizationAlgorithm(const char toSendToController)
  * current mapping. If not, the value is extraneous.
  * 
  * @param key a char that needs to be checked and if mapped needs to be normalized. 
+ * @param normalizeOptFlag specifies what directions for normalization
+ *			   0 - No Normalization at All 1 - Normalize Left and Right Only
+ *             2 - Normalize Front and Back Only  3 - Normalize Everything
  */
 void callNormalizeDirectionFuncs(const char key, const int normalizeOptFlag)
-{
+{	
     if(aKey(key))
     { //confirms if the key is one of your default keys
         if(normalizeOptFlag == 0){
-            sendToWheelChairController(key);
+            sendToWheelChairController(key); //direct control (no normalization)
         }else if(normalizeOptFlag == 1){
             if(key == extG_controllerLeftCmd || key == extG_controllerRightCmd){
                 normalizationAlgorithm(key);

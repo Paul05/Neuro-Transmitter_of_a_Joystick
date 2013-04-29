@@ -84,7 +84,7 @@ void wheelChairControlLoop(void)
     int normalizeOption = -1;
 
     showNormalizationOptions();
-    normalizeOption = getCharWithEnter();
+    normalizeOption = getCharWithEnter() - '0'; //convert char to int (this is C specification so should work)
 
     printf("\n\nProgram ready for Neuro-Headset Input and Control of a Wheelchair! \n\n");
     printf("\tCommands are:   Forward= %c.  Back= %c.  Left= %c.  Right= %c  and Exit= %c. \n\n",
@@ -274,7 +274,7 @@ int main(int argc, char** argv)
 
                 if (successFlag > 0)
                 {
-                //    successFlag = testControllerCommunication(); //test communication with controller TODO IMPLEMENT ACK!!!S
+                    successFlag = testControllerCommunication(); //test communication with controller 
                 }
 
                 if (successFlag > 0)

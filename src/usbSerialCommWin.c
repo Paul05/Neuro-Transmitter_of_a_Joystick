@@ -215,18 +215,24 @@ int testControllerCommunication(void)
     if (g_connectedFlag > 0)
     {
 	printf("\nAttempting to communicate with the controller... ");
-        delayProgram(2000);
-        WriteFile(g_controlDevice,tempToSend,strlen(tempToSend),&g_btsIO,NULL);
-        delayProgram(1000);
-        ReadFile(g_controlDevice, &tempToRecieve, strlen(tempToSend), &g_btsIO, NULL); 
-
-		printf("char= %s",tempToRecieve);
-		
-        if ( strncmp(tempToRecieve,tempToSend,strlen(tempToSend)) == 0 )
-        {
-            resultFlag = 1; //success controller connected and communicating
-			printf("\n\nController is connected and communication has been established.\n\n");
-        }
+     
+		int idx = 0;
+		delayProgram(8000);
+		for (idx=0; idx < 5; idx++)
+		{
+			//delayProgram(2000);
+			WriteFile(g_controlDevice,tempToSend,strlen(tempToSend),&g_btsIO,NULL);
+			//delayProgram(1000);
+			ReadFile(g_controlDevice, &tempToRecieve, strlen(tempToSend), &g_btsIO, NULL); 
+			printf("char= %s",tempToRecieve);
+			
+			if ( strncmp(tempToRecieve,tempToSend,strlen(tempToSend)) == 0 )
+			{
+				resultFlag = 1; //success controller connected and communicating
+				printf("\n\nController is connected and communication has been established.\n\n");
+				break;
+			}
+		}     
     }
 
     if (resultFlag == 0)
@@ -249,19 +255,20 @@ int testControllerCommunication(void)
 void testWheelChairOperation(void)
 {
       printf("\nNow testing wheel chair movement and controller operation..."
-			"\n\t Make sure there is a clear area around the wheelchair! \n\n"
-			"Testing left movement... \n\n");
-      sendToWheelChairController(extG_controllerLeftCmd); 
-      delayProgram(4000);
-	  printf("Testing right movement... \n\n");
-      sendToWheelChairController(extG_controllerRightCmd);
-      delayProgram(4000);
+			"\n\t Make sure there is a clear area around the wheelchair! \n\n");
+	  
 	  printf("Testing forward movement... \n\n");
       sendToWheelChairController(extG_controllerForwardCmd);
-      delayProgram(4000);
+      delayProgram(6000);
 	  printf("Testing backward movement... \n\n");
       sendToWheelChairController(extG_controllerBackCmd);
-      delayProgram(4000);
+      delayProgram(6000);
+	  printf("Testing left movement... \n\n");
+      sendToWheelChairController(extG_controllerLeftCmd); 
+      delayProgram(6000);
+	  printf("Testing right movement... \n\n");
+      sendToWheelChairController(extG_controllerRightCmd);
+      delayProgram(6000);
 	  printf("Finished testing wheelchair and controller operation.\n"
 			"\tIf the wheelchair did not move as intended please make sure"
 			"\n\tthe device is connected and functioning properly.\n\n");
