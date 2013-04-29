@@ -150,13 +150,14 @@ void goLeft(){
       //If the servo has reached 0 degrees, start to move the other direction to 90 degrees
       if(SIDESERVO.read() <= 50)
       {
-        SIDESERVO.write(45);//Set the servo to 45 degrees exactly
+        SIDESERVO.write(35);//Set the servo to 45 degrees exactly
         break;
       }      
       
       SIDESERVO.write(i);
-      delay(125);
+      delay(50);
     }
+  SIDESERVO.write(45);
   SIDESERVO.detach();
 }
 
@@ -171,9 +172,9 @@ void goForward(){
         break;
       }
       FORWARDSERVO.write(i);
-      delay(125);
+      delay(75);
     }
-    delay(300);
+    
   
     for(int i = 70; i >= 25; i-= 2)
     {
@@ -185,7 +186,7 @@ void goForward(){
       }      
       
       FORWARDSERVO.write(i);
-      delay(125);
+      delay(75);
     }
   FORWARDSERVO.detach();
 }
