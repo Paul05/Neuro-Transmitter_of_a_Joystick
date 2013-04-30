@@ -37,6 +37,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <time.h>
+#include "main.h"
 #include "userInput.h"
 #include "userOutput.h"
 #include "usbSerialComm.h"

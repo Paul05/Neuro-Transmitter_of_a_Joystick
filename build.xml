@@ -111,6 +111,7 @@
 		<mkdir dir="${test.dir}/build/"/>
 		<cpptasks:cc outtype="executable" subsystem="console" outfile="${test.dir}/RunUnitTests" objdir="${test.dir}/build/">
 			<fileset dir="test/" includes="*.c"/>
+			<fileset dir="src/" includes="*.c" excludes="main.c"/>
 		</cpptasks:cc>	 
 		<exec executable="cmd" dir="${test.dir}" osfamily="windows" failonerror="true">			
 			   <arg value="/C" />
