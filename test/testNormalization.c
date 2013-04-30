@@ -1,5 +1,5 @@
 /*
-* File: testMain.c
+* File: testNormalization.c
 *
 * Author: The Neuro-Transmitter Group
 *         Frank Liu, Darryl Monroe, Michael Berg, Paul Spaude
@@ -18,7 +18,7 @@
 #include "../src/normalization.h"
 
 /**
- * Unit test for performMenuActionTest
+ * Unit test for function aKey
  * @return 1 for success and 0 for failure
  */
 int performTestaKey(void)
@@ -80,7 +80,7 @@ int performTestaKey(void)
 
     return resultFlag;
 
-} //end test for performMenuAction
+} //end test for aKey
 
 
 /**
@@ -107,6 +107,6 @@ int testNormalization(void)
 
     return success;
        
-} //testMain
+} //testNormalization
 
-//END File testMain.c
+//END File testNormalization.c
