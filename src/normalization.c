@@ -138,7 +138,7 @@ void callNormalizeDirectionFuncs(const char key, const int normalizeOptFlag)
         }else if(normalizeOptFlag == 3){
             normalizationAlgorithm(key); //normalizes the input
         }else{
-            printf("\n%d is not a valid normalization flag. Please choose 0, 1, 2, or 3. \n", normalizationAlgorithm);
+            printf("\n%d is not a valid normalization flag. Please choose 0, 1, 2, or 3. \n", normalizeOptFlag);
         }
     }else
     {

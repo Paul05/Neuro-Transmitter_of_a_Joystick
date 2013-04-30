@@ -31,6 +31,7 @@ int main(int argc, char** argv)
             "\n\tAuto-Unit Test Program for our Emotiv Normalization Program!\n\n");
 
     //testMain();   //Commented out due to test integration, doesn't work after put into the suite (two mains), was used for testing and function has not changed.
+    testNormalization();
 		
 	
 	printf("\n\nPlease press 'ENTER' to exit.\n\n\n");
