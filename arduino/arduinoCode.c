@@ -139,25 +139,25 @@ void goRight(){
 
 void goLeft(){
   //Move the vertical (sideways) servo to the left to make the controller go left.
-       for(int i = 45; i <= 90; i += 2)
+       for(int i = 45; i <= 110; i += 2)
     {
       //If the servo has reached 90 degrees, start to move the other direction to 45 degrees
-      if(SIDESERVO.read() > 85)
+      if(SIDESERVO.read() > 105)
       {        
-        SIDESERVO.write(90);//Set the servo to 90 degrees exactly
+        SIDESERVO.write(110);//Set the servo to 90 degrees exactly
         break;
       }
       SIDESERVO.write(i);
-      delay(125);
+      delay(150);
     }
-    delay(500);
+    delay(100);
   
-    for(int i = 90; i >= 45; i-= 2)
+    for(int i = 110; i >= 45; i-= 2)
     {
       //If the servo has reached 0 degrees, start to move the other direction to 90 degrees
       if(SIDESERVO.read() <= 50)
       {
-        SIDESERVO.write(35);//Set the servo to 45 degrees exactly
+        SIDESERVO.write(45);//Set the servo to 45 degrees exactly
         break;
       }      
       
