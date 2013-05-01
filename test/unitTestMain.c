@@ -16,13 +16,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-<<<<<<< HEAD
-#include "testMain.h"
-#include "testNormalization.h"
-#include "testConfigFileIO.h"
-
-=======
->>>>>>> c82f3af8ff553208f0d0d082f855b97d26afea09
 
 /**
 * This is the Main function that 'runs' the test program.
