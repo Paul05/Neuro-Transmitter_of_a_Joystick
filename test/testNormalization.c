@@ -7,7 +7,7 @@
 * Class: CST315 & CST316 ASU Polytechnic
 *        Copyright ASU Polytechnic 2013 All Rights Reserved.
 *
-* Function: Unit tests for the code found in main.c under src.
+* Function: Unit tests for the code found in normalization.c under src.
 *
 * Created: Spring, 2013
 *

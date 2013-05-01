@@ -17,6 +17,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "testMain.h"
+#include "testNormalization.h"
+#include "testConfigFileIO.h"
 
 
 /**
@@ -32,6 +34,7 @@ int main(int argc, char** argv)
 
     //testMain();   //Commented out due to test integration, doesn't work after put into the suite (two mains), was used for testing and function has not changed.
     testNormalization();
+//    testMystrsep(); //Commented out due to ant build errors.
 		
 	
 	printf("\n\nPlease press 'ENTER' to exit.\n\n\n");
