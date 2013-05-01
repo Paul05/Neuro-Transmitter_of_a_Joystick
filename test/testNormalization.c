@@ -43,17 +43,17 @@ int performTestaKey(void)
     failChar[4] = 'g';
     failChar[5] = 'p';
     
-    printf("Testing aKey... \n");
+    printf("\n\tTesting aKey... \n");
 
     for(i=0; i < 6; i++)
     {
-        printf("The key %c should pass as a default working key.\n", passChar[i]);
+        printf("\n\t\tThe key %c should pass as a default working key.\n", passChar[i]);
         result = aKey(passChar[i]); 
 
         if (result < 1)
         {
             resultFlag = 0;
-            printf("\n\t***Failure: didn't recieve expected positive return value!***\n");
+            printf("\n\t\t***Failure: didn't recieve expected positive return value!***\n");
             break;
         }
     }
@@ -63,20 +63,20 @@ int performTestaKey(void)
     {
         for(i=0; i < 6; i++)
         {
-            printf("The key %c should fail as a default working key.\n", failChar[i]);
+            printf("\n\t\tThe key %c should fail as a default working key.\n", failChar[i]);
 			
             result = aKey(failChar[i]);
 
             if (result > 0)
             {
                 resultFlag = 0;
-                printf("\n\t***Failure: didn't recieve expected negative return value!***\n");
+                printf("\n\t\t***Failure: didn't recieve expected negative return value!***\n");
                 break;
             }
         }
     }
 
-    printf("\nFinished testing aKey function\n");
+    printf("\n\tFinished testing aKey function\n");
 
     return resultFlag;
 
@@ -91,18 +91,18 @@ int testNormalization(void)
 {
     int success;
 
-    printf("Testing normalization.c (aKey)... \n");
+    printf("\nTesting normalization.c (aKey)... \n\n");
     success = performTestaKey();
 
     printf("\nnormalization.c suite finished: ");
 
     if (success == 1)
     {
-        printf("success!\n");
+        printf("success!\n\n");
     }
     else
     {
-        printf("failure!\n");
+        printf("failure!\n\n");
     }
 
     return success;

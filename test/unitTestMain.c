@@ -16,10 +16,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+<<<<<<< HEAD
 #include "testMain.h"
 #include "testNormalization.h"
 #include "testConfigFileIO.h"
 
+=======
+>>>>>>> c82f3af8ff553208f0d0d082f855b97d26afea09
 
 /**
 * This is the Main function that 'runs' the test program.
@@ -28,14 +31,20 @@
 * @return
 */
 int main(int argc, char** argv)
-{
+{	
     printf("\nWelcome to the 'Neuro-Transmitter Of A Joystick' Group's "
             "\n\tAuto-Unit Test Program for our Emotiv Normalization Program!\n\n");
 
-    //testMain();   //Commented out due to test integration, doesn't work after put into the suite (two mains), was used for testing and function has not changed.
+	printf("\nStarting unit tests...\n\n");			
+    //testMain();   //Commented out due to test integration, doesn't work after put into the suite (two mains is the obvious reason). 
+							//was used for testing and function has not changed since testing complete.
     testNormalization();
+	printf("\n\n");
+	testUsbSerialComm();
 //    testMystrsep(); //Commented out due to ant build errors.
 		
+	
+	printf("\n\nUnit tests completed. See above for results!\n\n");
 	
 	printf("\n\nPlease press 'ENTER' to exit.\n\n\n");
     fflush(stdout); //need to flush stdout before using getchar
