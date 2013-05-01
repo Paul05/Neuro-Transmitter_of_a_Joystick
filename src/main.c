@@ -82,7 +82,7 @@ void portAndBaudCheck(const int baud, const char port[])
 void wheelChairControlLoop(void)
 {
     char neuroHeadSetInput = '\0';
-    int normalizeOption = -1;
+    int normalizeOption;
 
     showNormalizationOptions();
     normalizeOption = getCharWithEnter() - '0'; //convert char to int (this is C specification so should work)

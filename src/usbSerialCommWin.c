@@ -23,7 +23,7 @@ DWORD g_btsIO;   //global variable that is used by the writeFile cmd to record n
 DCB g_controlDeviceConnectionSettings; //DCB structure(Windows)
 int g_connectedFlag = 0; //flag for connection to controller (0 not connected and 1 is connected)
 
-char extG_controllerTestCmd = 't';
+char extG_controllerTestCmd = 't'; //defaults
 char extG_controllerForwardCmd = 'w';
 char extG_controllerBackCmd = 's';
 char extG_controllerRightCmd = 'd';
