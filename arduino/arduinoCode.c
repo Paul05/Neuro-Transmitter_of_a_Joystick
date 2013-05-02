@@ -107,6 +107,12 @@ void buttonPressed(){				// Function will disable the servo motors for manual ov
   FORWARDSERVO.detach();
 }
 
+/* NOTE: The idea of for loops to steadily control the servo motor angles came from combined inputs on the arduino user forum.
+*  this applies to all the functions goRight(), goLeft(), goForward(), goBackward()
+*  http://arduino.cc/forum/index.php/topic,89408.0.html
+*/
+
+
 void goRight(){
   //Push the vertical servo to the right to have the wheelchair go right.
  for(int i = 45; i >= 0; i -= 2)
